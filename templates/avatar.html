@@ -13,17 +13,22 @@
             overflow: hidden;
             height: 100vh; width: 100vw;
             display: flex;
+            color: #fff;
         }
 
-        /* ─── left panel ─── */
-        #left-panel { flex: 1; position: relative; height: 100vh; }
+        /* ═══ left: avatar (60%) ═══ */
+        #left-panel {
+            flex: 0 0 60%;
+            position: relative;
+            height: 100vh;
+        }
         #avatar-container { width: 100%; height: 100%; }
 
         #status {
             position: absolute; top: 20px; left: 50%;
             transform: translateX(-50%);
-            color: #fff; font-size: 18px;
-            padding: 8px 24px;
+            color: #fff; font-size: 16px;
+            padding: 8px 22px;
             background: rgba(0,0,0,0.55);
             border-radius: 30px; z-index: 100;
             backdrop-filter: blur(10px); white-space: nowrap;
@@ -38,9 +43,9 @@
         }
 
         #vad-meter {
-            position: absolute; top: 64px; left: 50%;
+            position: absolute; top: 60px; left: 50%;
             transform: translateX(-50%);
-            width: 200px; height: 6px;
+            width: 180px; height: 5px;
             background: rgba(255,255,255,0.12);
             border-radius: 3px; z-index: 100; overflow: hidden;
             display: none;
@@ -52,25 +57,14 @@
             transition: width 0.05s;
         }
 
-        #subtitle {
-            position: absolute; bottom: 100px; left: 50%;
-            transform: translateX(-50%);
-            color: #fff; font-size: 20px;
-            padding: 10px 28px;
-            background: rgba(0,0,0,0.65);
-            border-radius: 12px; z-index: 100;
-            max-width: 80%; text-align: center;
-            display: none; backdrop-filter: blur(6px);
-        }
-
         #controls {
-            position: absolute; bottom: 30px; left: 50%;
+            position: absolute; bottom: 96px; left: 50%;
             transform: translateX(-50%); z-index: 100;
             display: flex; gap: 12px;
         }
         .btn {
-            padding: 14px 36px; border: none; border-radius: 50px;
-            font-size: 16px; font-weight: 600; cursor: pointer;
+            padding: 12px 30px; border: none; border-radius: 50px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
             transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         .btn-start { background: linear-gradient(135deg,#4CAF50,#45a049); color:#fff; }
@@ -78,54 +72,150 @@
         .btn:hover { transform: scale(1.05); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* ─── right chat panel ─── */
-        #chat-panel {
-            width: 380px; height: 100vh;
-            background: rgba(0,0,0,0.6);
+        /* ═══ right: services panel (40%, transparent) ═══ */
+        #services-panel {
+            flex: 0 0 40%;
+            height: 100vh;
+            background: rgba(255,255,255,0.04);
             backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column;
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.08);
+            overflow-y: auto;
+            padding: 0 0 90px 0;   /* bottom padding so cards never hide under subtitle bar */
         }
-        #chat-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #fff; font-size: 18px; font-weight: 600;
-            text-align: center;
-        }
-        #chat-messages {
-            flex: 1; overflow-y: auto; padding: 16px;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        #chat-messages::-webkit-scrollbar { width: 4px; }
-        #chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
-
-        .msg {
-            max-width: 90%; padding: 10px 16px; border-radius: 16px;
-            font-size: 14px; line-height: 1.5;
-            animation: slideIn 0.3s ease; word-wrap: break-word;
-        }
-        .msg-user      { align-self: flex-end;   background: #4CAF50; color:#fff; border-bottom-right-radius: 4px; }
-        .msg-assistant { align-self: flex-start; background: rgba(255,255,255,0.12); color:#e0e0e0; border-bottom-left-radius: 4px; }
-        .msg-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 2px; font-weight: 500; }
-        .msg-label-user { text-align: right; }
-        .msg-system {
-            align-self: center;
-            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
-            font-size: 12px; padding: 6px 14px; border-radius: 12px; font-style: italic;
+        #services-panel::-webkit-scrollbar { width: 6px; }
+        #services-panel::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.18);
+            border-radius: 3px;
         }
 
-        @keyframes slideIn {
-            from { opacity:0; transform:translateY(8px); }
-            to   { opacity:1; transform:translateY(0); }
+        #services-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky; top: 0;
+            background: rgba(20,20,40,0.55);
+            backdrop-filter: blur(20px);
+            z-index: 5;
+        }
+        #services-header h2 {
+            font-size: 18px; font-weight: 600;
+            color: #fff;
+        }
+        #services-header .lang-toggle {
+            margin-top: 10px; display: flex; gap: 6px;
+        }
+        .lang-btn {
+            padding: 5px 14px; border-radius: 14px;
+            font-size: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .lang-btn.active {
+            background: #4CAF50; color: #fff;
+            border-color: #4CAF50;
         }
 
-        /* ─── loading overlay ─── */
+        .dept-section { padding: 0; }
+        .dept-header {
+            position: sticky;
+            top: 78px;          /* below #services-header */
+            padding: 10px 22px;
+            background: rgba(20,20,40,0.85);
+            backdrop-filter: blur(15px);
+            font-size: 12px; font-weight: 600;
+            color: #ffd54f;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            z-index: 4;
+        }
+        .dept-meta {
+            font-size: 10px; color: rgba(255,255,255,0.45);
+            margin-left: 6px; font-weight: 400;
+            text-transform: none; letter-spacing: 0;
+        }
+
+        .service-card {
+            padding: 12px 22px;
+            margin: 2px 0;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: background 0.15s, transform 0.1s;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .service-card:hover {
+            background: rgba(76,175,80,0.12);
+        }
+        .service-card:active { transform: scale(0.98); }
+        .service-card.unavailable {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .service-card.unavailable:hover { background: transparent; }
+
+        .service-icon {
+            font-size: 18px; line-height: 1.2;
+            margin-top: 1px;
+            color: #4CAF50;
+        }
+        .service-name {
+            flex: 1;
+            font-size: 14px; line-height: 1.4;
+            color: rgba(255,255,255,0.92);
+        }
+        .service-name.ur {
+            font-size: 16px;
+            direction: rtl; text-align: right;
+            font-family: 'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+        }
+        .service-fee {
+            font-size: 11px; color: rgba(255,255,255,0.5);
+            margin-top: 3px;
+        }
+
+        /* ═══ fixed subtitle bar (bottom, full width) ═══ */
+        #subtitle-bar {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            height: 72px;
+            background: rgba(0,0,0,0.78);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6px 28px;
+            z-index: 200;
+        }
+        #sub-user {
+            font-size: 13px;
+            color: #6dd47e;
+            min-height: 16px;
+            line-height: 1.3;
+            opacity: 0.95;
+        }
+        #sub-user .label { font-weight: 600; margin-right: 6px; }
+        #sub-avatar {
+            font-size: 19px;
+            color: #fff;
+            min-height: 24px;
+            line-height: 1.3;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+        .sub-rtl { direction: rtl; text-align: right; }
+
+        /* ═══ loading overlay ═══ */
         #loading-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.92);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            z-index: 1000; color:#fff; font-size: 20px;
+            z-index: 1000; color:#fff; font-size: 18px;
         }
         .spinner {
             width: 46px; height: 46px;
@@ -148,16 +238,26 @@
         <div id="avatar-container"></div>
         <div id="status">Connecting…</div>
         <div id="vad-meter"><div id="vad-bar"></div></div>
-        <div id="subtitle"></div>
         <div id="controls">
             <button class="btn btn-start" id="btn-start" disabled>Start Conversation</button>
             <button class="btn btn-stop"  id="btn-stop">Stop</button>
         </div>
     </div>
 
-    <div id="chat-panel">
-        <div id="chat-header">{{ avatar_name }}</div>
-        <div id="chat-messages"></div>
+    <div id="services-panel">
+        <div id="services-header">
+            <h2>PAK Center Services</h2>
+            <div class="lang-toggle">
+                <span class="lang-btn active" data-lang="en">English</span>
+                <span class="lang-btn" data-lang="ur">اردو</span>
+            </div>
+        </div>
+        <div id="services-list"></div>
+    </div>
+
+    <div id="subtitle-bar">
+        <div id="sub-user"><span class="label">You:</span><span id="sub-user-text"></span></div>
+        <div id="sub-avatar"></div>
     </div>
 
     <!-- Socket.IO -->
@@ -178,24 +278,26 @@
     // ═══════════════════════════════════════════════════════════════════════
     // DOM refs
     // ═══════════════════════════════════════════════════════════════════════
-    const statusEl   = document.getElementById('status');
-    const subtitleEl = document.getElementById('subtitle');
-    const vadMeter   = document.getElementById('vad-meter');
-    const vadBar     = document.getElementById('vad-bar');
-    const btnStart   = document.getElementById('btn-start');
-    const btnStop    = document.getElementById('btn-stop');
-    const chatMsgs   = document.getElementById('chat-messages');
-    const loadingEl  = document.getElementById('loading-overlay');
+    const statusEl     = document.getElementById('status');
+    const vadMeter     = document.getElementById('vad-meter');
+    const vadBar       = document.getElementById('vad-bar');
+    const btnStart     = document.getElementById('btn-start');
+    const btnStop      = document.getElementById('btn-stop');
+    const loadingEl    = document.getElementById('loading-overlay');
+    const servicesList = document.getElementById('services-list');
+    const subUserText  = document.getElementById('sub-user-text');
+    const subAvatarEl  = document.getElementById('sub-avatar');
 
     // ═══════════════════════════════════════════════════════════════════════
     // State
     // ═══════════════════════════════════════════════════════════════════════
-    let head          = null;   // TalkingHead instance
+    let head          = null;
     let socket        = null;
-    let vadActive     = false;  // VAD loop running?
-    let isSpeaking    = false;  // avatar speaking?
-    let audioQueue    = [];     // pending speak_chunk items
-    let processingQ   = false;  // queue being drained?
+    let vadActive     = false;
+    let isSpeaking    = false;
+    let audioQueue    = [];
+    let processingQ   = false;
+    let uiLang        = 'en';   // 'en' | 'ur'   — UI/voice language toggle
 
     // VAD resources
     let audioCtx      = null;
@@ -204,116 +306,112 @@
     let scriptProc    = null;
 
     // VAD tuning
-    const VAD_THRESHOLD   = 0.012;   // RMS energy to start recording
-    const SILENCE_MS      = 800;     // ms of silence to end utterance
-    const CHUNK_SAMPLES   = 4096;    // ScriptProcessor buffer size
-    const SAMPLE_RATE     = 16000;   // whisper target
+    const VAD_THRESHOLD   = 0.012;
+    const SILENCE_MS      = 800;
+    const CHUNK_SAMPLES   = 4096;
+    const SAMPLE_RATE     = 16000;
 
     // Recording state
     let recording       = false;
     let recordedSamples = [];
     let silenceStart    = null;
 
+    // Barge-in: ring buffer of last 8 RMS frames + cooldown to avoid double fire
+    const BARGE_RING    = new Float32Array(8);
+    let bargeRingIdx    = 0;
+    let bargeCooldown   = false;     // 300ms after a barge-in fires
+    const BARGE_MULT    = 2.5;       // median(ring) > VAD_THRESHOLD * BARGE_MULT
+
+    function pushBargeFrame(rms) {
+        BARGE_RING[bargeRingIdx] = rms;
+        bargeRingIdx = (bargeRingIdx + 1) % BARGE_RING.length;
+    }
+    function bargeMedian() {
+        const arr = Array.from(BARGE_RING).sort((a,b) => a-b);
+        return arr[arr.length >> 1];
+    }
+
     // ═══════════════════════════════════════════════════════════════════════
     // Helpers
     // ═══════════════════════════════════════════════════════════════════════
     function setStatus(txt) { statusEl.textContent = txt; }
+    function setListeningClass(on) { document.body.classList.toggle('listening', on); }
 
-    function setListeningClass(on) {
-        document.body.classList.toggle('listening', on);
+    function isUrdu(text) {
+        if (!text) return false;
+        let arabic = 0, alpha = 0;
+        for (const c of text) {
+            if (c >= '\u0600' && c <= '\u06FF') arabic++;
+            if (/[a-zA-Z\u0600-\u06FF]/.test(c)) alpha++;
+        }
+        return alpha > 0 && (arabic / alpha) > 0.5;
     }
 
-    function addChat(text, isUser) {
-        const labelEl = document.createElement('div');
-        labelEl.className = 'msg-label ' + (isUser ? 'msg-label-user' : '');
-        labelEl.textContent = isUser ? 'You' : '{{ avatar_name }}';
-
-        const msgEl = document.createElement('div');
-        msgEl.className = 'msg ' + (isUser ? 'msg-user' : 'msg-assistant');
-        msgEl.textContent = text;
-
-        chatMsgs.appendChild(labelEl);
-        chatMsgs.appendChild(msgEl);
-        chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    function showUserSubtitle(text) {
+        subUserText.textContent = text || '';
+        subUserText.parentElement.classList.toggle('sub-rtl', isUrdu(text));
     }
-
-    function addSystem(text) {
-        const el = document.createElement('div');
-        el.className = 'msg-system';
-        el.textContent = text;
-        chatMsgs.appendChild(el);
-        chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    function showAvatarSubtitle(text) {
+        subAvatarEl.textContent = text || '';
+        subAvatarEl.classList.toggle('sub-rtl', isUrdu(text));
     }
-
-    function showSubtitle(text) {
-        subtitleEl.textContent = text;
-        subtitleEl.style.display = 'block';
-    }
-    function hideSubtitle() { subtitleEl.style.display = 'none'; }
+    function clearAvatarSubtitle() { subAvatarEl.textContent = ''; }
 
     // ═══════════════════════════════════════════════════════════════════════
     // WAV encoding (PCM float32 → WAV ArrayBuffer)
     // ═══════════════════════════════════════════════════════════════════════
     function encodeWAV(samples, sampleRate) {
-        // Convert float32 to int16
         const pcm = new Int16Array(samples.length);
         for (let i = 0; i < samples.length; i++) {
             const s = Math.max(-1, Math.min(1, samples[i]));
             pcm[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
         }
-
         const dataLen = pcm.byteLength;
         const buf = new ArrayBuffer(44 + dataLen);
         const view = new DataView(buf);
-
-        const w = (off, val, bytes) => {
+        const w  = (off, val, bytes) => {
             if (bytes === 4) view.setUint32(off, val, true);
             else if (bytes === 2) view.setUint16(off, val, true);
             else view.setUint8(off, val);
         };
         const ws = (off, str) => { for (let i=0; i<str.length; i++) view.setUint8(off+i, str.charCodeAt(i)); };
-
-        ws(0, 'RIFF');
-        w(4, 36 + dataLen, 4);
-        ws(8, 'WAVE');
-        ws(12, 'fmt ');
-        w(16, 16, 4);          // chunk size
-        w(20, 1, 2);           // PCM
-        w(22, 1, 2);           // mono
-        w(24, sampleRate, 4);
-        w(28, sampleRate * 2, 4); // byte rate
-        w(32, 2, 2);           // block align
-        w(34, 16, 2);          // bits per sample
-        ws(36, 'data');
-        w(40, dataLen, 4);
-
+        ws(0, 'RIFF'); w(4, 36 + dataLen, 4); ws(8, 'WAVE');
+        ws(12, 'fmt '); w(16, 16, 4); w(20, 1, 2); w(22, 1, 2);
+        w(24, sampleRate, 4); w(28, sampleRate * 2, 4);
+        w(32, 2, 2); w(34, 16, 2);
+        ws(36, 'data'); w(40, dataLen, 4);
         new Int16Array(buf, 44).set(pcm);
         return buf;
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // VAD — energy-based voice activity detection in the browser
+    // VAD — energy-based, with ring-buffer barge-in
     // ═══════════════════════════════════════════════════════════════════════
     async function startVAD() {
         if (vadActive) return;
         try {
-            micStream = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: SAMPLE_RATE, channelCount: 1, echoCancellation: true, noiseSuppression: true }, video: false });
+            micStream = await navigator.mediaDevices.getUserMedia({
+                audio: { sampleRate: SAMPLE_RATE, channelCount: 1,
+                         echoCancellation: true, noiseSuppression: true },
+                video: false
+            });
         } catch (err) {
-            addSystem('Microphone access denied: ' + err.message);
+            setStatus('Mic denied: ' + err.message);
             return;
         }
 
-        audioCtx  = new AudioContext({ sampleRate: SAMPLE_RATE });
-        micSource = audioCtx.createMediaStreamSource(micStream);
+        audioCtx   = new AudioContext({ sampleRate: SAMPLE_RATE });
+        micSource  = audioCtx.createMediaStreamSource(micStream);
         scriptProc = audioCtx.createScriptProcessor(CHUNK_SAMPLES, 1, 1);
 
         micSource.connect(scriptProc);
         scriptProc.connect(audioCtx.destination);
 
-        vadActive     = true;
-        recording     = false;
+        vadActive       = true;
+        recording       = false;
         recordedSamples = [];
-        silenceStart  = null;
+        silenceStart    = null;
+        BARGE_RING.fill(0);
 
         vadMeter.style.display = 'block';
 
@@ -326,51 +424,49 @@
             for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
             const rms = Math.sqrt(sum / input.length);
 
-            // Update meter
             vadBar.style.width = Math.min(100, rms * 2000) + '%';
 
+            // ── Barge-in: median over 8-frame ring buffer ────────────────────
             if (isSpeaking) {
-                // Barge-in: user speaks loudly while avatar is talking
-                if (rms > VAD_THRESHOLD * 2.5) {
-                    console.log('[VAD] barge-in detected');
+                pushBargeFrame(rms);
+                if (!bargeCooldown && bargeMedian() > VAD_THRESHOLD * BARGE_MULT) {
+                    console.log('[VAD] barge-in (median=', bargeMedian().toFixed(4), ')');
+                    bargeCooldown = true;
+                    setTimeout(() => { bargeCooldown = false; }, 300);
+
                     socket.emit('barge_in');
                     head?.stopSpeaking?.();
-                    isSpeaking    = false;
-                    audioQueue    = [];
-                    processingQ   = false;
-                    hideSubtitle();
+                    isSpeaking      = false;
+                    audioQueue      = [];
+                    processingQ     = false;
+                    BARGE_RING.fill(0);
+                    clearAvatarSubtitle();
                     setStatus('Listening…');
                     setListeningClass(true);
-                    recording     = false;
+                    recording       = false;
                     recordedSamples = [];
-                    silenceStart  = null;
+                    silenceStart    = null;
                 }
-                return;  // don't record while speaking unless barge-in triggered
+                return;  // don't record while speaking
             }
 
+            // ── Normal VAD ────────────────────────────────────────────────────
             if (rms > VAD_THRESHOLD) {
-                // Voice detected
                 if (!recording) {
-                    recording     = true;
+                    recording       = true;
                     recordedSamples = [];
                     setStatus('Listening…');
                     setListeningClass(true);
-                    console.log('[VAD] speech start');
                 }
                 silenceStart = null;
-                // Accumulate samples (copy, not reference)
                 recordedSamples.push(new Float32Array(input));
-
             } else if (recording) {
-                // Silence during recording
                 recordedSamples.push(new Float32Array(input));
                 if (silenceStart === null) silenceStart = Date.now();
                 if (Date.now() - silenceStart >= SILENCE_MS) {
-                    // End of utterance
                     recording = false;
                     setStatus('Transcribing…');
                     setListeningClass(false);
-                    console.log('[VAD] speech end, chunks:', recordedSamples.length);
                     sendAudio();
                 }
             }
@@ -389,54 +485,43 @@
         scriptProc?.disconnect();
         micSource?.disconnect();
         micStream?.getTracks().forEach(t => t.stop());
-
         scriptProc = null; micSource = null; micStream = null;
         if (audioCtx) { audioCtx.close(); audioCtx = null; }
 
-        recording     = false;
+        recording       = false;
         recordedSamples = [];
-        silenceStart  = null;
+        silenceStart    = null;
     }
 
     function sendAudio() {
         if (recordedSamples.length === 0) return;
-
-        // Flatten Float32Array[]
         const total = recordedSamples.reduce((s, a) => s + a.length, 0);
         const merged = new Float32Array(total);
         let offset = 0;
-        for (const chunk of recordedSamples) {
-            merged.set(chunk, offset);
-            offset += chunk.length;
-        }
+        for (const chunk of recordedSamples) { merged.set(chunk, offset); offset += chunk.length; }
         recordedSamples = [];
-
         const wavBuf = encodeWAV(merged, SAMPLE_RATE);
         socket.emit('audio_data', wavBuf);
         setStatus('Processing…');
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Audio queue — plays speak_chunk items sequentially
+    // Audio queue
     // ═══════════════════════════════════════════════════════════════════════
     async function drainQueue() {
         if (processingQ) return;
         processingQ = true;
-
         while (audioQueue.length > 0) {
             const item = audioQueue.shift();
             isSpeaking = true;
             setStatus('Speaking…');
-            addChat(item.text, false);
-            showSubtitle(item.text);
-
+            showAvatarSubtitle(item.text);
             if (item.audio && head) {
                 await speakChunk(item);
             }
-            hideSubtitle();
         }
-
-        isSpeaking = false;
+        clearAvatarSubtitle();
+        isSpeaking  = false;
         processingQ = false;
     }
 
@@ -446,7 +531,6 @@
             const bytes  = new Uint8Array(binary.length);
             for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
-            // Need a running AudioContext to decode
             const ctx = new AudioContext();
             const audioBuf = await ctx.decodeAudioData(bytes.buffer.slice(0));
 
@@ -457,15 +541,13 @@
             await new Promise(resolve => {
                 try {
                     head.speakAudio(
-                        { audio: audioBuf, words, wtimes: data.wtimes || [], wdurations: data.wdurations || [] },
+                        { audio: audioBuf, words,
+                          wtimes: data.wtimes || [], wdurations: data.wdurations || [] },
                         { lipsyncLang },
                         resolve
                     );
-                    // Safety timeout: resolve after audio duration + 500ms
                     setTimeout(resolve, (audioBuf.duration * 1000) + 600);
-                } catch {
-                    resolve();
-                }
+                } catch { resolve(); }
             });
             await ctx.close();
         } catch (err) {
@@ -473,7 +555,6 @@
         }
     }
 
-    // Urdu / non-Latin: approximate mouth shape with phonetic syllables
     function adaptWords(words, lang) {
         if (['en','fi','lt'].includes(lang)) return words;
         return words.map(w => {
@@ -485,17 +566,127 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════
+    // Services panel
+    // ═══════════════════════════════════════════════════════════════════════
+    let CATALOG = { departments: [], services: [] };
+
+    async function loadCatalog() {
+        try {
+            const r = await fetch('/api/services');
+            CATALOG = await r.json();
+            renderServices();
+        } catch (err) {
+            console.error('Failed to load catalog:', err);
+            servicesList.innerHTML =
+                '<div style="padding:22px;color:rgba(255,255,255,0.5)">Catalog unavailable.</div>';
+        }
+    }
+
+    function feeText(svc) {
+        const pay = svc.payment_model || {};
+        if (pay.type === 'free') {
+            return uiLang === 'ur' ? 'مفت' : 'Free';
+        }
+        const entries = pay.entries || [];
+        if (entries.length > 0) return entries[0];
+        return '';
+    }
+
+    function renderServices() {
+        servicesList.innerHTML = '';
+        const depts = CATALOG.departments || [];
+        const services = CATALOG.services || [];
+
+        // group services by department id
+        const byDept = {};
+        for (const s of services) {
+            const id = (s.department || {}).id || 'OTHER';
+            (byDept[id] ||= []).push(s);
+        }
+
+        for (const dept of depts) {
+            const deptServices = byDept[dept.id] || [];
+            if (deptServices.length === 0) continue;
+
+            const section = document.createElement('div');
+            section.className = 'dept-section';
+
+            const header = document.createElement('div');
+            header.className = 'dept-header';
+            header.innerHTML =
+                `${dept.code || dept.name} ` +
+                `<span class="dept-meta">${dept.name} · ${deptServices.length} services</span>`;
+            section.appendChild(header);
+
+            for (const svc of deptServices) {
+                section.appendChild(renderCard(svc));
+            }
+            servicesList.appendChild(section);
+        }
+    }
+
+    function renderCard(svc) {
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        const unavailable = svc.availability_status === 'not_available_at_center';
+        if (unavailable) card.classList.add('unavailable');
+
+        const nameObj = svc.service_name || {};
+        const name = (uiLang === 'ur' && nameObj.ur)
+            ? nameObj.ur
+            : (nameObj.en || svc.service_id);
+
+        const fee = feeText(svc);
+
+        card.innerHTML = `
+            <span class="service-icon">›</span>
+            <div style="flex:1;min-width:0">
+              <div class="service-name ${uiLang === 'ur' && nameObj.ur ? 'ur' : ''}">${escapeHtml(name)}</div>
+              ${fee ? `<div class="service-fee">${escapeHtml(fee)}</div>` : ''}
+            </div>
+        `;
+
+        if (!unavailable) {
+            card.addEventListener('click', () => {
+                if (!socket || !socket.connected) return;
+                // visual feedback
+                card.style.background = 'rgba(76,175,80,0.25)';
+                setTimeout(() => { card.style.background = ''; }, 250);
+
+                showUserSubtitle(name);
+                socket.emit('service_selected',
+                            { serviceId: svc.service_id, lang: uiLang });
+            });
+        }
+        return card;
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c =>
+            ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // language toggle
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            uiLang = btn.dataset.lang;
+            renderServices();
+        });
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════
     // Socket.IO
     // ═══════════════════════════════════════════════════════════════════════
     function initSocket() {
         socket = io(window.location.origin);
 
         socket.on('connect', () => {
-            addSystem('Connected to server');
+            setStatus('Connected');
         });
 
         socket.on('server_profile', () => {
-            // Greeting is triggered from the UI (Start button or auto after load)
             socket.emit('request_greeting');
         });
 
@@ -509,7 +700,7 @@
         });
 
         socket.on('user_text', (d) => {
-            addChat(d.text, true);
+            showUserSubtitle(d.text || '');
         });
 
         socket.on('speak_chunk', (d) => {
@@ -518,7 +709,6 @@
         });
 
         socket.on('speak_done', () => {
-            // After queue drains, resume VAD listening
             const waitForQueueAndResume = () => {
                 if (processingQ || isSpeaking) {
                     setTimeout(waitForQueueAndResume, 200);
@@ -533,13 +723,14 @@
         });
 
         socket.on('cannot_hear', () => {
-            addSystem("Couldn't hear you clearly — please try again");
+            showAvatarSubtitle(uiLang === 'ur'
+                ? 'معذرت، آواز واضح نہیں آئی۔ دوبارہ کوشش کریں۔'
+                : "Sorry, I couldn't hear that. Please try again.");
             setStatus('Listening…');
             setListeningClass(vadActive);
         });
 
         socket.on('disconnect', () => {
-            addSystem('Disconnected from server');
             setStatus('Disconnected');
             stopVAD();
         });
@@ -561,12 +752,14 @@
 
         let ok = false;
         try {
-            await head.showAvatar({ url: avatarUrl, body: 'F', avatarMood: 'neutral', lipsyncLang: 'en' });
+            await head.showAvatar({ url: avatarUrl, body: 'F',
+                                    avatarMood: 'neutral', lipsyncLang: 'en' });
             ok = true;
-        } catch { /* try fallback */ }
+        } catch { /* fallback */ }
 
         if (!ok) {
-            await head.showAvatar({ url: avatarFallback, body: 'F', avatarMood: 'neutral', lipsyncLang: 'en' });
+            await head.showAvatar({ url: avatarFallback, body: 'F',
+                                    avatarMood: 'neutral', lipsyncLang: 'en' });
         }
 
         loadingEl.style.display = 'none';
@@ -575,7 +768,7 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Button handlers
+    // Buttons
     // ═══════════════════════════════════════════════════════════════════════
     btnStart.addEventListener('click', async () => {
         btnStart.style.display = 'none';
@@ -591,13 +784,14 @@
         isSpeaking  = false;
         audioQueue  = [];
         processingQ = false;
-        hideSubtitle();
+        clearAvatarSubtitle();
     });
 
     // ═══════════════════════════════════════════════════════════════════════
     // Boot
     // ═══════════════════════════════════════════════════════════════════════
     initSocket();
+    loadCatalog();
     try {
         await initAvatar();
     } catch (err) {
@@ -605,7 +799,6 @@
             Avatar failed to load.<br><small>${err.message}</small></div>`;
         console.error('Avatar init error:', err);
     }
-
     </script>
 </body>
 </html>

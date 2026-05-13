@@ -82,6 +82,27 @@ OCR_ENABLED = True
 OCR_LANG    = "eng+urd"   # Tesseract language packs
 
 # ============================================================
+# STT preprocessing — FFmpeg + Roman Urdu transliteration
+# ============================================================
+
+# FFmpeg cleans noisy kiosk-mic audio before Whisper sees it.
+# Install once:  winget install --id Gyan.FFmpeg
+FFMPEG_ENABLED = os.environ.get("FFMPEG_ENABLED", "true").lower() == "true"
+FFMPEG_PATH    = os.environ.get("FFMPEG_PATH", "ffmpeg")
+
+# Pakistani users speak Roman Urdu ("mujhe passport chahiye"); Whisper often
+# returns Latin characters. UrduHack converts that to Arabic-script Urdu so
+# embeddings + LLM see proper Urdu.
+TRANSLITERATE_ROMAN_URDU = os.environ.get("TRANSLITERATE", "true").lower() == "true"
+
+# ============================================================
+# CONVERSATION LOGGING + SERVICES CATALOG
+# ============================================================
+
+LOG_DIR      = os.path.join(os.path.dirname(__file__), "logs")
+CATALOG_PATH = os.path.join(os.path.dirname(__file__), "services_catalog_canonical.json")
+
+# ============================================================
 # TTS — Microsoft Edge TTS  (free, high quality, no API key)
 # ============================================================
 

@@ -19,7 +19,9 @@ Socket events  (server → client)
 """
 
 import base64
+import json
 import logging
+import os
 import threading
 
 from flask import Flask, jsonify, render_template, request
@@ -28,6 +30,7 @@ from flask_socketio import SocketIO, emit
 
 import config
 import qna_handler
+from conversation_logger import ConversationLogger
 from stt_service import transcribe
 from tts_service import generate_tts
 
@@ -47,8 +50,34 @@ socketio = SocketIO(
     max_http_buffer_size=10 * 1024 * 1024,   # 10 MB — enough for ~30s of 16kHz WAV
 )
 
-# sid → True while a pipeline is allowed to run; False on barge-in / disconnect
+# sid -> True while a pipeline is allowed to run; False on barge-in / disconnect
 _active: dict[str, bool] = {}
+
+# Conversation logger (daily-rotated JSONL in config.LOG_DIR)
+_conv_log = ConversationLogger(config.LOG_DIR)
+
+# Services catalog (loaded once at startup)
+_CATALOG: dict = {"departments": [], "services": []}
+_SERVICE_BY_ID: dict[str, dict] = {}
+
+
+def _load_catalog() -> None:
+    """Load services_catalog_canonical.json once at startup."""
+    global _CATALOG, _SERVICE_BY_ID
+    if not os.path.exists(config.CATALOG_PATH):
+        log.warning("Catalog not found at %s - services panel will be empty", config.CATALOG_PATH)
+        return
+    try:
+        with open(config.CATALOG_PATH, "r", encoding="utf-8") as f:
+            _CATALOG = json.load(f)
+        _SERVICE_BY_ID = {s["service_id"]: s for s in _CATALOG.get("services", [])}
+        log.info(
+            "Loaded catalog: %d departments, %d services",
+            len(_CATALOG.get("departments", [])),
+            len(_SERVICE_BY_ID),
+        )
+    except Exception as exc:
+        log.error("Failed to load catalog: %s", exc)
 
 
 # ── routes ────────────────────────────────────────────────────────────────────
@@ -66,6 +95,14 @@ def index():
 @app.route("/health")
 def health():
     return jsonify({"status": "ok", "model": config.OLLAMA_MODEL})
+
+
+@app.route("/api/services")
+def api_services():
+    """Return the full services catalog (departments + services) as JSON.
+    Browser uses this to populate the services panel on the right side.
+    """
+    return jsonify(_CATALOG)
 
 
 # ── TTS helper ────────────────────────────────────────────────────────────────
@@ -117,8 +154,30 @@ def on_disconnect():
 
 @socketio.on("barge_in")
 def on_barge_in():
-    """User spoke while avatar was talking — cancel current pipeline."""
-    _active[request.sid] = False
+    """User spoke while avatar was talking - cancel current pipeline."""
+    sid = request.sid
+    _active[sid] = False
+    _conv_log.log(sid, role="system", text="barge-in: user interrupted avatar",
+                  lang=qna_handler._SESSION_LANG.get(sid, "en"), event="barge_in")
+
+
+@socketio.on("service_selected")
+def on_service_selected(data):
+    """User clicked a service card on the right panel.
+    data = {"serviceId": "SRV_xxx", "lang": "en" | "ur"}
+    """
+    sid         = request.sid
+    service_id  = (data or {}).get("serviceId", "")
+    lang        = (data or {}).get("lang", "en")
+    if lang not in ("en", "ur"):
+        lang = "en"
+    if not service_id or service_id not in _SERVICE_BY_ID:
+        log.warning("[%s] service_selected: unknown id '%s'", sid[:8], service_id)
+        return
+    _active[sid] = True
+    threading.Thread(
+        target=_service_pipeline, args=(sid, service_id, lang), daemon=True
+    ).start()
 
 
 @socketio.on("request_greeting")
@@ -143,8 +202,81 @@ def on_audio_data(data):
 
 def _greet(sid: str) -> None:
     socketio.emit("status", {"state": "speaking", "message": "Speaking..."}, room=sid)
+    _conv_log.log(sid, role="assistant", text=config.WELCOME_MESSAGE,
+                  lang="en", event="greeting")
     _emit_speak(sid, config.WELCOME_MESSAGE, "en")
     socketio.emit("speak_done", room=sid)
+
+
+# -- service-card pipeline (no LLM, deterministic spoken summary) -------------
+
+def _format_service_response(service: dict, lang: str) -> list[str]:
+    """Build 2-3 short spoken sentences describing the selected service."""
+    name_obj = service.get("service_name", {}) or {}
+    name     = (name_obj.get(lang) or name_obj.get("en") or "this service").strip()
+    summary  = (service.get("summary") or "").strip()
+
+    pay      = service.get("payment_model", {}) or {}
+    pay_type = pay.get("type", "")
+    pay_entries = pay.get("entries") or []
+
+    docs = service.get("required_documents") or []
+
+    if lang == "ur":
+        sentences = [f"آپ نے منتخب کیا: {name}۔"]
+        if pay_type == "free":
+            sentences.append("یہ سروس مفت فراہم کی جاتی ہے۔")
+        elif pay_entries:
+            sentences.append(f"فیس: {pay_entries[0]}۔")
+        if docs:
+            sentences.append(f"کل {len(docs)} دستاویزات درکار ہیں۔ تفصیل کے لیے پوچھیے۔")
+    else:
+        sentences = [f"You selected: {name}."]
+        if summary:
+            short = summary.split(". ")[0].strip().rstrip(".") + "."
+            if len(short) > 200:
+                short = short[:197].rstrip() + "..."
+            sentences.append(short)
+        if pay_type == "free":
+            sentences.append("This service is free of charge.")
+        elif pay_entries:
+            sentences.append(f"Fee: {pay_entries[0]}.")
+        if docs:
+            sentences.append(f"You will need {len(docs)} documents. Ask me for the full list.")
+    return sentences
+
+
+def _service_pipeline(sid: str, service_id: str, lang: str) -> None:
+    try:
+        service = _SERVICE_BY_ID.get(service_id)
+        if not service:
+            return
+
+        # Lock session language so any follow-up question stays in this lang
+        qna_handler._SESSION_LANG[sid] = lang
+
+        name_obj = service.get("service_name", {}) or {}
+        name     = (name_obj.get(lang) or name_obj.get("en") or service_id).strip()
+        _conv_log.log(sid, role="user", text=f"[card] {name}",
+                      lang=lang, event="service_click")
+
+        socketio.emit("user_text", {"text": name}, room=sid)
+        socketio.emit("status", {"state": "speaking", "message": "Speaking..."}, room=sid)
+
+        for sentence in _format_service_response(service, lang):
+            if not _active.get(sid, False):
+                log.info("[%s] service_pipeline cancelled (barge-in)", sid[:8])
+                return
+            _conv_log.log(sid, role="assistant", text=sentence,
+                          lang=lang, event="service_click")
+            _emit_speak(sid, sentence, lang)
+
+        if _active.get(sid, True):
+            socketio.emit("speak_done", room=sid)
+    except Exception as exc:
+        import traceback
+        log.error("[%s] service_pipeline error: %s\n%s",
+                  sid[:8], exc, traceback.format_exc())
 
 
 # ── main pipeline: STT → RAG → LLM → TTS ─────────────────────────────────────
@@ -162,6 +294,7 @@ def _pipeline(sid: str, audio_bytes: bytes) -> None:
             return
 
         socketio.emit("user_text", {"text": text}, room=sid)
+        _conv_log.log(sid, role="user", text=text, lang=lang, event="speech")
         log.info("[%s] STT lang=%s  text=%.80s", sid[:8], lang, text)
 
         # 2. Exit commands
@@ -179,6 +312,8 @@ def _pipeline(sid: str, audio_bytes: bytes) -> None:
                 log.info("[%s] pipeline cancelled (barge-in)", sid[:8])
                 return
             reply_lang = qna_handler._SESSION_LANG.get(sid, lang)
+            _conv_log.log(sid, role="assistant", text=sentence,
+                          lang=reply_lang, event="speech")
             socketio.emit("status", {"state": "speaking", "message": "Speaking..."}, room=sid)
             _emit_speak(sid, sentence, reply_lang)
 
@@ -195,11 +330,14 @@ def _pipeline(sid: str, audio_bytes: bytes) -> None:
 # ── entrypoint ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    log.info("Initializing RAG (PDF → embeddings → FAISS) ...")
+    log.info("Loading services catalog ...")
+    _load_catalog()
+
+    log.info("Initializing RAG (PDF -> embeddings -> FAISS) ...")
     try:
         qna_handler.initialize()
     except Exception as exc:
-        log.error("RAG init failed: %s — server will start, answers will fail", exc)
+        log.error("RAG init failed: %s - server will start, answers will fail", exc)
 
     log.info("Starting PAK Center QnA Bot on http://%s:%s", config.HOST, config.PORT)
     socketio.run(
