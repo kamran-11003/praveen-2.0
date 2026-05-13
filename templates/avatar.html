@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF QnA Avatar</title>
+    <title>PAK Center Assistant</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -11,11 +11,11 @@
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            height: 100vh; width: 100vw;
             display: flex;
         }
 
+        /* ─── left panel ─── */
         #left-panel { flex: 1; position: relative; height: 100vh; }
         #avatar-container { width: 100%; height: 100%; }
 
@@ -24,9 +24,43 @@
             transform: translateX(-50%);
             color: #fff; font-size: 18px;
             padding: 8px 24px;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.55);
             border-radius: 30px; z-index: 100;
             backdrop-filter: blur(10px); white-space: nowrap;
+        }
+        body.listening #status {
+            animation: pulse 1.5s infinite;
+            background: rgba(76,175,80,0.4);
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+            50%      { box-shadow: 0 0 0 14px rgba(76,175,80,0); }
+        }
+
+        #vad-meter {
+            position: absolute; top: 64px; left: 50%;
+            transform: translateX(-50%);
+            width: 200px; height: 6px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 3px; z-index: 100; overflow: hidden;
+            display: none;
+        }
+        #vad-bar {
+            height: 100%; width: 0%;
+            background: #4CAF50;
+            border-radius: 3px;
+            transition: width 0.05s;
+        }
+
+        #subtitle {
+            position: absolute; bottom: 100px; left: 50%;
+            transform: translateX(-50%);
+            color: #fff; font-size: 20px;
+            padding: 10px 28px;
+            background: rgba(0,0,0,0.65);
+            border-radius: 12px; z-index: 100;
+            max-width: 80%; text-align: center;
+            display: none; backdrop-filter: blur(6px);
         }
 
         #controls {
@@ -37,17 +71,17 @@
         .btn {
             padding: 14px 36px; border: none; border-radius: 50px;
             font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .btn-start { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; }
-        .btn-start:hover { transform: scale(1.05); }
-        .btn-stop  { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; display: none; }
-        .btn-stop:hover { transform: scale(1.05); }
+        .btn-start { background: linear-gradient(135deg,#4CAF50,#45a049); color:#fff; }
+        .btn-stop  { background: linear-gradient(135deg,#f44336,#d32f2f); color:#fff; display:none; }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+        /* ─── right chat panel ─── */
         #chat-panel {
             width: 380px; height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(255,255,255,0.1);
             display: flex; flex-direction: column;
@@ -70,45 +104,28 @@
             font-size: 14px; line-height: 1.5;
             animation: slideIn 0.3s ease; word-wrap: break-word;
         }
-        .msg-user      { align-self: flex-end;   background: #4CAF50; color: white; border-bottom-right-radius: 4px; }
-        .msg-assistant { align-self: flex-start; background: rgba(255,255,255,0.12); color: #e0e0e0; border-bottom-left-radius: 4px; }
+        .msg-user      { align-self: flex-end;   background: #4CAF50; color:#fff; border-bottom-right-radius: 4px; }
+        .msg-assistant { align-self: flex-start; background: rgba(255,255,255,0.12); color:#e0e0e0; border-bottom-left-radius: 4px; }
         .msg-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 2px; font-weight: 500; }
         .msg-label-user { text-align: right; }
-        .msg-label-assistant { text-align: left; }
         .msg-system {
-            align-self: center; background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.5); font-size: 12px;
-            padding: 6px 14px; border-radius: 12px; font-style: italic;
-        }
-
-        #subtitle {
-            position: absolute; bottom: 90px; left: 50%;
-            transform: translateX(-50%);
-            color: #fff; font-size: 20px;
-            padding: 10px 28px;
-            background: rgba(0,0,0,0.65);
-            border-radius: 12px; z-index: 100;
-            max-width: 80%; text-align: center;
-            display: none; backdrop-filter: blur(6px);
+            align-self: center;
+            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+            font-size: 12px; padding: 6px 14px; border-radius: 12px; font-style: italic;
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .listening #status { animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
-            50%     { box-shadow: 0 0 0 12px rgba(76,175,80,0); }
+            from { opacity:0; transform:translateY(8px); }
+            to   { opacity:1; transform:translateY(0); }
         }
 
+        /* ─── loading overlay ─── */
         #loading-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9);
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            z-index: 1000; color: white; font-size: 20px;
+            z-index: 1000; color:#fff; font-size: 20px;
         }
         .spinner {
             width: 46px; height: 46px;
@@ -119,389 +136,476 @@
             margin-bottom: 18px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        #tts-badge {
-            position: absolute; top: 60px; left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px; padding: 4px 12px;
-            border-radius: 12px; z-index: 100; opacity: 0.7;
-            background: #0078d4; color: #fff;
-        }
-
-        #debug-panel {
-            position: fixed; bottom: 0; left: 0;
-            width: 100%; max-height: 200px;
-            display: none; overflow-y: auto;
-            background: rgba(0,0,0,0.92); color: #0f0;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 12px; padding: 8px 12px;
-            z-index: 9999; border-top: 1px solid #333;
-        }
-        #debug-panel .dbg-err  { color: #f55; }
-        #debug-panel .dbg-warn { color: #fa0; }
-        #debug-panel .dbg-info { color: #0af; }
-        #debug-toggle {
-            position: fixed; top: 10px; right: 10px;
-            z-index: 10000;
-            background: #333; color: #fff;
-            border: none; padding: 4px 10px;
-            border-radius: 4px; cursor: pointer; font-size: 11px;
-        }
     </style>
 </head>
 <body>
-    <button id="debug-toggle" onclick="document.getElementById('debug-panel').style.display = document.getElementById('debug-panel').style.display === 'none' ? 'block' : 'none'">Toggle Debug</button>
-    <div id="debug-panel"></div>
-
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <div>Loading 3D Avatar...</div>
+        <div>Loading Assistant…</div>
     </div>
 
     <div id="left-panel">
         <div id="avatar-container"></div>
-        <div id="status">Ready</div>
-        <div id="tts-badge">Gemini / Edge TTS</div>
+        <div id="status">Connecting…</div>
+        <div id="vad-meter"><div id="vad-bar"></div></div>
         <div id="subtitle"></div>
         <div id="controls">
-            <button class="btn btn-start" id="btn-start">Start Conversation</button>
+            <button class="btn btn-start" id="btn-start" disabled>Start Conversation</button>
             <button class="btn btn-stop"  id="btn-stop">Stop</button>
         </div>
     </div>
 
     <div id="chat-panel">
-        <div id="chat-header">PDF QnA Assistant</div>
+        <div id="chat-header">{{ avatar_name }}</div>
         <div id="chat-messages"></div>
     </div>
 
+    <!-- Socket.IO -->
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
 
+    <!-- Three.js + TalkingHead import map -->
     <script type="importmap">
-    { "imports":
-      {
+    { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js/+esm",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
         "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.7/modules/talkinghead.mjs"
-      }
-    }
+    } }
     </script>
 
     <script type="module">
-        import { TalkingHead } from 'talkinghead';
+    import { TalkingHead } from 'talkinghead';
 
-        // ============================================================
-        // DEBUG LOGGER
-        // ============================================================
+    // ═══════════════════════════════════════════════════════════════════════
+    // DOM refs
+    // ═══════════════════════════════════════════════════════════════════════
+    const statusEl   = document.getElementById('status');
+    const subtitleEl = document.getElementById('subtitle');
+    const vadMeter   = document.getElementById('vad-meter');
+    const vadBar     = document.getElementById('vad-bar');
+    const btnStart   = document.getElementById('btn-start');
+    const btnStop    = document.getElementById('btn-stop');
+    const chatMsgs   = document.getElementById('chat-messages');
+    const loadingEl  = document.getElementById('loading-overlay');
 
-        const debugEl = document.getElementById('debug-panel');
-        function dbg(msg, level = '') {
-            const ts = new Date().toLocaleTimeString('en-US', {hour12:false});
-            const cls = level === 'err' ? 'dbg-err' : level === 'warn' ? 'dbg-warn' : level === 'info' ? 'dbg-info' : '';
-            const line = document.createElement('div');
-            line.className = cls;
-            line.textContent = `[${ts}] ${msg}`;
-            debugEl.appendChild(line);
-            debugEl.scrollTop = debugEl.scrollHeight;
-            console.log(`[DBG] ${msg}`);
+    // ═══════════════════════════════════════════════════════════════════════
+    // State
+    // ═══════════════════════════════════════════════════════════════════════
+    let head          = null;   // TalkingHead instance
+    let socket        = null;
+    let vadActive     = false;  // VAD loop running?
+    let isSpeaking    = false;  // avatar speaking?
+    let audioQueue    = [];     // pending speak_chunk items
+    let processingQ   = false;  // queue being drained?
+
+    // VAD resources
+    let audioCtx      = null;
+    let micStream     = null;
+    let micSource     = null;
+    let scriptProc    = null;
+
+    // VAD tuning
+    const VAD_THRESHOLD   = 0.012;   // RMS energy to start recording
+    const SILENCE_MS      = 800;     // ms of silence to end utterance
+    const CHUNK_SAMPLES   = 4096;    // ScriptProcessor buffer size
+    const SAMPLE_RATE     = 16000;   // whisper target
+
+    // Recording state
+    let recording       = false;
+    let recordedSamples = [];
+    let silenceStart    = null;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // Helpers
+    // ═══════════════════════════════════════════════════════════════════════
+    function setStatus(txt) { statusEl.textContent = txt; }
+
+    function setListeningClass(on) {
+        document.body.classList.toggle('listening', on);
+    }
+
+    function addChat(text, isUser) {
+        const labelEl = document.createElement('div');
+        labelEl.className = 'msg-label ' + (isUser ? 'msg-label-user' : '');
+        labelEl.textContent = isUser ? 'You' : '{{ avatar_name }}';
+
+        const msgEl = document.createElement('div');
+        msgEl.className = 'msg ' + (isUser ? 'msg-user' : 'msg-assistant');
+        msgEl.textContent = text;
+
+        chatMsgs.appendChild(labelEl);
+        chatMsgs.appendChild(msgEl);
+        chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    }
+
+    function addSystem(text) {
+        const el = document.createElement('div');
+        el.className = 'msg-system';
+        el.textContent = text;
+        chatMsgs.appendChild(el);
+        chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    }
+
+    function showSubtitle(text) {
+        subtitleEl.textContent = text;
+        subtitleEl.style.display = 'block';
+    }
+    function hideSubtitle() { subtitleEl.style.display = 'none'; }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // WAV encoding (PCM float32 → WAV ArrayBuffer)
+    // ═══════════════════════════════════════════════════════════════════════
+    function encodeWAV(samples, sampleRate) {
+        // Convert float32 to int16
+        const pcm = new Int16Array(samples.length);
+        for (let i = 0; i < samples.length; i++) {
+            const s = Math.max(-1, Math.min(1, samples[i]));
+            pcm[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
         }
 
-        // ============================================================
-        // CONFIG (server-injected via Jinja)
-        // ============================================================
+        const dataLen = pcm.byteLength;
+        const buf = new ArrayBuffer(44 + dataLen);
+        const view = new DataView(buf);
 
-        let avatarUrl      = "{{ avatar_url }}";
-        let avatarFallback = "{{ avatar_fallback }}";
-        const ASSISTANT_LABEL = "{{ avatar_name }}";
+        const w = (off, val, bytes) => {
+            if (bytes === 4) view.setUint32(off, val, true);
+            else if (bytes === 2) view.setUint16(off, val, true);
+            else view.setUint8(off, val);
+        };
+        const ws = (off, str) => { for (let i=0; i<str.length; i++) view.setUint8(off+i, str.charCodeAt(i)); };
 
-        const statusEl     = document.getElementById('status');
-        const subtitleEl   = document.getElementById('subtitle');
-        const chatHeader   = document.getElementById('chat-header');
-        const chatMessages = document.getElementById('chat-messages');
-        const btnStart     = document.getElementById('btn-start');
-        const btnStop      = document.getElementById('btn-stop');
-        const loadingOverlay = document.getElementById('loading-overlay');
+        ws(0, 'RIFF');
+        w(4, 36 + dataLen, 4);
+        ws(8, 'WAVE');
+        ws(12, 'fmt ');
+        w(16, 16, 4);          // chunk size
+        w(20, 1, 2);           // PCM
+        w(22, 1, 2);           // mono
+        w(24, sampleRate, 4);
+        w(28, sampleRate * 2, 4); // byte rate
+        w(32, 2, 2);           // block align
+        w(34, 16, 2);          // bits per sample
+        ws(36, 'data');
+        w(40, dataLen, 4);
 
-        let head     = null;
-        let socket   = null;
-        let isActive = false;
-        let audioCtx = null;
+        new Int16Array(buf, 44).set(pcm);
+        return buf;
+    }
 
-        function getAudioContext() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            return audioCtx;
+    // ═══════════════════════════════════════════════════════════════════════
+    // VAD — energy-based voice activity detection in the browser
+    // ═══════════════════════════════════════════════════════════════════════
+    async function startVAD() {
+        if (vadActive) return;
+        try {
+            micStream = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: SAMPLE_RATE, channelCount: 1, echoCancellation: true, noiseSuppression: true }, video: false });
+        } catch (err) {
+            addSystem('Microphone access denied: ' + err.message);
+            return;
         }
 
-        // ============================================================
-        // AVATAR
-        // ============================================================
+        audioCtx  = new AudioContext({ sampleRate: SAMPLE_RATE });
+        micSource = audioCtx.createMediaStreamSource(micStream);
+        scriptProc = audioCtx.createScriptProcessor(CHUNK_SAMPLES, 1, 1);
 
-        async function initAvatar() {
-            try {
-                const opts = {
-                    cameraView: 'upper',
-                    cameraRotateEnable: true,
-                    lipsyncModules: ['en'],
-                    lipsyncLang: 'en'
-                };
+        micSource.connect(scriptProc);
+        scriptProc.connect(audioCtx.destination);
 
-                dbg('Creating TalkingHead instance...', 'info');
-                head = new TalkingHead(document.getElementById('avatar-container'), opts);
+        vadActive     = true;
+        recording     = false;
+        recordedSamples = [];
+        silenceStart  = null;
 
-                let loaded = false;
-                try {
-                    dbg('Loading primary avatar...', 'info');
-                    await head.showAvatar({
-                        url: avatarUrl,
-                        body: 'F',
-                        avatarMood: 'neutral',
-                        lipsyncLang: 'en'
-                    });
-                    loaded = true;
-                    dbg('Primary avatar loaded OK', 'info');
-                } catch (e) {
-                    dbg('Primary avatar FAILED: ' + e.message, 'warn');
+        vadMeter.style.display = 'block';
+
+        scriptProc.onaudioprocess = (e) => {
+            if (!vadActive) return;
+            const input = e.inputBuffer.getChannelData(0);
+
+            // RMS energy
+            let sum = 0;
+            for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
+            const rms = Math.sqrt(sum / input.length);
+
+            // Update meter
+            vadBar.style.width = Math.min(100, rms * 2000) + '%';
+
+            if (isSpeaking) {
+                // Barge-in: user speaks loudly while avatar is talking
+                if (rms > VAD_THRESHOLD * 2.5) {
+                    console.log('[VAD] barge-in detected');
+                    socket.emit('barge_in');
+                    head?.stopSpeaking?.();
+                    isSpeaking    = false;
+                    audioQueue    = [];
+                    processingQ   = false;
+                    hideSubtitle();
+                    setStatus('Listening…');
+                    setListeningClass(true);
+                    recording     = false;
+                    recordedSamples = [];
+                    silenceStart  = null;
                 }
-
-                if (!loaded) {
-                    dbg('Loading fallback avatar...', 'info');
-                    await head.showAvatar({
-                        url: avatarFallback,
-                        body: 'F',
-                        avatarMood: 'neutral',
-                        lipsyncLang: 'en'
-                    });
-                    dbg('Fallback avatar loaded OK', 'info');
-                }
-
-                loadingOverlay.style.display = 'none';
-                setStatus('ready', 'Avatar loaded. Click Start.');
-
-            } catch (err) {
-                dbg('Avatar load error: ' + err.message, 'err');
-                console.error('Avatar load error:', err);
-                loadingOverlay.innerHTML = '<div style="color:#f44336">Failed to load avatar.<br>Check console for details.</div>';
+                return;  // don't record while speaking unless barge-in triggered
             }
+
+            if (rms > VAD_THRESHOLD) {
+                // Voice detected
+                if (!recording) {
+                    recording     = true;
+                    recordedSamples = [];
+                    setStatus('Listening…');
+                    setListeningClass(true);
+                    console.log('[VAD] speech start');
+                }
+                silenceStart = null;
+                // Accumulate samples (copy, not reference)
+                recordedSamples.push(new Float32Array(input));
+
+            } else if (recording) {
+                // Silence during recording
+                recordedSamples.push(new Float32Array(input));
+                if (silenceStart === null) silenceStart = Date.now();
+                if (Date.now() - silenceStart >= SILENCE_MS) {
+                    // End of utterance
+                    recording = false;
+                    setStatus('Transcribing…');
+                    setListeningClass(false);
+                    console.log('[VAD] speech end, chunks:', recordedSamples.length);
+                    sendAudio();
+                }
+            }
+        };
+
+        setStatus('Listening…');
+        setListeningClass(true);
+    }
+
+    function stopVAD() {
+        vadActive = false;
+        setListeningClass(false);
+        vadMeter.style.display = 'none';
+        vadBar.style.width = '0%';
+
+        scriptProc?.disconnect();
+        micSource?.disconnect();
+        micStream?.getTracks().forEach(t => t.stop());
+
+        scriptProc = null; micSource = null; micStream = null;
+        if (audioCtx) { audioCtx.close(); audioCtx = null; }
+
+        recording     = false;
+        recordedSamples = [];
+        silenceStart  = null;
+    }
+
+    function sendAudio() {
+        if (recordedSamples.length === 0) return;
+
+        // Flatten Float32Array[]
+        const total = recordedSamples.reduce((s, a) => s + a.length, 0);
+        const merged = new Float32Array(total);
+        let offset = 0;
+        for (const chunk of recordedSamples) {
+            merged.set(chunk, offset);
+            offset += chunk.length;
         }
+        recordedSamples = [];
 
-        // ============================================================
-        // SOCKET
-        // ============================================================
+        const wavBuf = encodeWAV(merged, SAMPLE_RATE);
+        socket.emit('audio_data', wavBuf);
+        setStatus('Processing…');
+    }
 
-        function initSocket() {
-            return new Promise((resolve) => {
-                socket = io(window.location.origin);
-                let resolved = false;
+    // ═══════════════════════════════════════════════════════════════════════
+    // Audio queue — plays speak_chunk items sequentially
+    // ═══════════════════════════════════════════════════════════════════════
+    async function drainQueue() {
+        if (processingQ) return;
+        processingQ = true;
 
-                socket.on('connect', () => {
-                    addSystemMessage('Connected to server');
-                });
+        while (audioQueue.length > 0) {
+            const item = audioQueue.shift();
+            isSpeaking = true;
+            setStatus('Speaking…');
+            addChat(item.text, false);
+            showSubtitle(item.text);
 
-                socket.on('server_profile', (data) => {
-                    if (data.avatar_url)      avatarUrl      = data.avatar_url;
-                    if (data.avatar_fallback) avatarFallback = data.avatar_fallback;
-                    if (!resolved) { resolved = true; resolve(); }
-                });
-
-                socket.on('status', (data) => setStatus(data.state, data.message || ''));
-
-                socket.on('user_text', (data) => {
-                    addChat(data.text, true);
-                    showSubtitle('You: ' + data.text, 3000);
-                });
-
-                socket.on('assistant_speak', async (data) => {
-                    addChat(data.text, false);
-                    setStatus('speaking', 'Speaking...');
-                    await avatarSpeak(data);
-                    if (isActive) socket.emit('start_listening');
-                });
-
-                socket.on('cannot_hear', async () => {
-                    setStatus('error', "Couldn't hear you");
-                    addSystemMessage("Couldn't hear you clearly");
-                    await avatarSpeakBrowser("I couldn't hear you. Could you repeat that?");
-                    if (isActive) socket.emit('start_listening');
-                });
-
-                socket.on('disconnect', () => {
-                    setStatus('error', 'Disconnected');
-                    addSystemMessage('Disconnected from server');
-                });
-
-                setTimeout(() => { if (!resolved) { resolved = true; resolve(); } }, 1500);
-            });
-        }
-
-        // ============================================================
-        // AVATAR SPEAK
-        // ============================================================
-
-        async function avatarSpeak(data) {
-            showSubtitle(data.text);
-            if (data.audio && data.words) {
-                await avatarSpeakWithAudio(data);
-            } else {
-                await avatarSpeakBrowser(data.text);
+            if (item.audio && head) {
+                await speakChunk(item);
             }
             hideSubtitle();
         }
 
-        const SUPPORTED_LIPSYNC_LANGS = { 'en': 'en', 'fi': 'fi', 'lt': 'lt' };
+        isSpeaking = false;
+        processingQ = false;
+    }
 
-        function isNonLatin(text) {
-            const latinCount = (text.match(/[a-zA-Z]/g) || []).length;
-            const totalAlpha = (text.match(/\p{L}/gu) || []).length;
-            return totalAlpha > 0 && (latinCount / totalAlpha) < 0.5;
-        }
+    async function speakChunk(data) {
+        try {
+            const binary = atob(data.audio);
+            const bytes  = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
-        function adaptWordsForLipsync(words, lang) {
-            if (SUPPORTED_LIPSYNC_LANGS[lang]) return words;
-            return words.map(w => {
-                if (!isNonLatin(w)) return w;
-                const syllables = Math.max(1, Math.ceil(w.length / 2));
-                const patterns = ['ba', 'da', 'ma', 'la', 'na'];
-                let out = '';
-                for (let i = 0; i < syllables; i++) out += patterns[i % patterns.length];
-                return out;
+            // Need a running AudioContext to decode
+            const ctx = new AudioContext();
+            const audioBuf = await ctx.decodeAudioData(bytes.buffer.slice(0));
+
+            const lang = data.lang || 'en';
+            const lipsyncLang = ['en','fi','lt'].includes(lang) ? lang : 'en';
+            const words = adaptWords(data.words || [], lang);
+
+            await new Promise(resolve => {
+                try {
+                    head.speakAudio(
+                        { audio: audioBuf, words, wtimes: data.wtimes || [], wdurations: data.wdurations || [] },
+                        { lipsyncLang },
+                        resolve
+                    );
+                    // Safety timeout: resolve after audio duration + 500ms
+                    setTimeout(resolve, (audioBuf.duration * 1000) + 600);
+                } catch {
+                    resolve();
+                }
             });
+            await ctx.close();
+        } catch (err) {
+            console.error('[speakChunk] error:', err);
         }
+    }
 
-        async function avatarSpeakWithAudio(data) {
-            try {
-                const binaryStr = atob(data.audio);
-                const len = binaryStr.length;
-                const bytes = new Uint8Array(len);
-                for (let i = 0; i < len; i++) bytes[i] = binaryStr.charCodeAt(i);
+    // Urdu / non-Latin: approximate mouth shape with phonetic syllables
+    function adaptWords(words, lang) {
+        if (['en','fi','lt'].includes(lang)) return words;
+        return words.map(w => {
+            if (/^[a-zA-Z]+$/.test(w)) return w;
+            const n = Math.max(1, Math.ceil(w.length / 3));
+            const pats = ['ba','da','ma','la','na'];
+            return Array.from({length: n}, (_,i) => pats[i % pats.length]).join('');
+        });
+    }
 
-                const ctx = getAudioContext();
-                if (ctx.state === 'suspended') await ctx.resume();
-                const audioBuffer = await ctx.decodeAudioData(bytes.buffer.slice(0));
-                dbg('Decoded audio: ' + audioBuffer.duration.toFixed(2) + 's', 'info');
+    // ═══════════════════════════════════════════════════════════════════════
+    // Socket.IO
+    // ═══════════════════════════════════════════════════════════════════════
+    function initSocket() {
+        socket = io(window.location.origin);
 
-                const lang = data.lang || 'en';
-                const lipsyncLang  = SUPPORTED_LIPSYNC_LANGS[lang] || 'en';
-                const lipsyncWords = adaptWordsForLipsync(data.words, lang);
+        socket.on('connect', () => {
+            addSystem('Connected to server');
+        });
 
-                const speakData = {
-                    audio: audioBuffer,
-                    words: lipsyncWords,
-                    wtimes: data.wtimes,
-                    wdurations: data.wdurations
-                };
-
-                await new Promise((resolve) => {
-                    let resolved = false;
-                    const finish = () => { if (!resolved) { resolved = true; resolve(); } };
-                    try {
-                        head.speakAudio(speakData, { lipsyncLang }, () => {});
-                    } catch (e) {
-                        dbg('speakAudio threw: ' + e.message, 'err');
-                        finish(); return;
-                    }
-                    const checkDone = setInterval(() => {
-                        if (!head.isSpeaking) { clearInterval(checkDone); finish(); }
-                    }, 250);
-                    setTimeout(() => {
-                        clearInterval(checkDone); finish();
-                    }, (audioBuffer.duration * 1000) + 5000);
-                });
-
-            } catch (err) {
-                dbg('Audio play error: ' + err.message, 'err');
-                await avatarSpeakBrowser(data.text);
-            }
-        }
-
-        async function avatarSpeakBrowser(text) {
-            window.speechSynthesis.cancel();
-            const words = text.split(/\s+/).filter(w => w.length > 0);
-            if (words.length === 0) return;
-            await new Promise((resolve) => {
-                let resolved = false;
-                const finish = () => { if (!resolved) { resolved = true; resolve(); } };
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 1.0;
-                utterance.onend = utterance.onerror = finish;
-                setTimeout(() => { window.speechSynthesis.cancel(); finish(); }, words.length * 600 + 5000);
-                window.speechSynthesis.speak(utterance);
-            });
-        }
-
-        // ============================================================
-        // UI
-        // ============================================================
-
-        function setStatus(state, message) {
-            const labels = {
-                ready: 'Ready', listening: 'Listening...', processing: 'Processing...',
-                thinking: 'Thinking...', speaking: 'Speaking...', error: 'Error',
-                connected: 'Connected'
-            };
-            statusEl.textContent = message || labels[state] || state;
-            document.body.classList.toggle('listening', state === 'listening');
-        }
-
-        function showSubtitle(text, duration) {
-            subtitleEl.textContent = text;
-            subtitleEl.style.display = 'block';
-            if (duration) setTimeout(hideSubtitle, duration);
-        }
-        function hideSubtitle() { subtitleEl.style.display = 'none'; }
-
-        function addChat(text, isUser) {
-            const label = document.createElement('div');
-            label.className = 'msg-label ' + (isUser ? 'msg-label-user' : 'msg-label-assistant');
-            label.textContent = isUser ? 'You' : ASSISTANT_LABEL;
-            chatMessages.appendChild(label);
-
-            const div = document.createElement('div');
-            div.className = 'msg ' + (isUser ? 'msg-user' : 'msg-assistant');
-            div.textContent = text;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function addSystemMessage(text) {
-            const div = document.createElement('div');
-            div.className = 'msg msg-system';
-            div.textContent = text;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // ============================================================
-        // CONTROLS
-        // ============================================================
-
-        btnStart.addEventListener('click', async () => {
-            isActive = true;
-            btnStart.style.display = 'none';
-            btnStop.style.display  = 'inline-block';
-            addSystemMessage('Conversation started');
-            setStatus('speaking', 'Speaking...');
+        socket.on('server_profile', () => {
+            // Greeting is triggered from the UI (Start button or auto after load)
             socket.emit('request_greeting');
         });
 
-        btnStop.addEventListener('click', () => {
-            isActive = false;
-            btnStart.style.display = 'inline-block';
-            btnStop.style.display  = 'none';
-            setStatus('ready', 'Stopped');
-            socket.emit('stop_listening');
-            addSystemMessage('Conversation stopped');
-            hideSubtitle();
+        socket.on('status', (d) => {
+            const map = {
+                connected: 'Ready', thinking: 'Thinking…',
+                processing: 'Processing…', speaking: 'Speaking…',
+                error: 'Error', listening: 'Listening…'
+            };
+            setStatus(map[d.state] || d.message || d.state);
         });
 
-        // ============================================================
-        // INIT
-        // ============================================================
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            chatHeader.textContent = ASSISTANT_LABEL;
-            await initSocket();
-            await initAvatar();
+        socket.on('user_text', (d) => {
+            addChat(d.text, true);
         });
+
+        socket.on('speak_chunk', (d) => {
+            audioQueue.push(d);
+            drainQueue();
+        });
+
+        socket.on('speak_done', () => {
+            // After queue drains, resume VAD listening
+            const waitForQueueAndResume = () => {
+                if (processingQ || isSpeaking) {
+                    setTimeout(waitForQueueAndResume, 200);
+                    return;
+                }
+                if (vadActive) {
+                    setStatus('Listening…');
+                    setListeningClass(true);
+                }
+            };
+            waitForQueueAndResume();
+        });
+
+        socket.on('cannot_hear', () => {
+            addSystem("Couldn't hear you clearly — please try again");
+            setStatus('Listening…');
+            setListeningClass(vadActive);
+        });
+
+        socket.on('disconnect', () => {
+            addSystem('Disconnected from server');
+            setStatus('Disconnected');
+            stopVAD();
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // Avatar init
+    // ═══════════════════════════════════════════════════════════════════════
+    async function initAvatar() {
+        const avatarUrl      = "{{ avatar_url }}";
+        const avatarFallback = "{{ avatar_fallback }}";
+
+        head = new TalkingHead(document.getElementById('avatar-container'), {
+            cameraView: 'upper',
+            cameraRotateEnable: true,
+            lipsyncModules: ['en'],
+            lipsyncLang: 'en'
+        });
+
+        let ok = false;
+        try {
+            await head.showAvatar({ url: avatarUrl, body: 'F', avatarMood: 'neutral', lipsyncLang: 'en' });
+            ok = true;
+        } catch { /* try fallback */ }
+
+        if (!ok) {
+            await head.showAvatar({ url: avatarFallback, body: 'F', avatarMood: 'neutral', lipsyncLang: 'en' });
+        }
+
+        loadingEl.style.display = 'none';
+        setStatus('Ready — click Start');
+        btnStart.disabled = false;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // Button handlers
+    // ═══════════════════════════════════════════════════════════════════════
+    btnStart.addEventListener('click', async () => {
+        btnStart.style.display = 'none';
+        btnStop.style.display  = 'inline-block';
+        await startVAD();
+    });
+
+    btnStop.addEventListener('click', () => {
+        stopVAD();
+        btnStop.style.display  = 'none';
+        btnStart.style.display = 'inline-block';
+        setStatus('Stopped');
+        isSpeaking  = false;
+        audioQueue  = [];
+        processingQ = false;
+        hideSubtitle();
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // Boot
+    // ═══════════════════════════════════════════════════════════════════════
+    initSocket();
+    try {
+        await initAvatar();
+    } catch (err) {
+        loadingEl.innerHTML = `<div style="color:#f44;text-align:center;padding:20px">
+            Avatar failed to load.<br><small>${err.message}</small></div>`;
+        console.error('Avatar init error:', err);
+    }
+
     </script>
 </body>
 </html>

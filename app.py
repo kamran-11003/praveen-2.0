@@ -1,57 +1,57 @@
-"""Flask + Socket.IO server for the PDF QnA Avatar Bot.
+"""Flask + Socket.IO server — PAK Center QnA Avatar (fully local, single kiosk).
 
-Endpoints
----------
-GET  /        → renders the avatar UI (templates/avatar.html)
-GET  /health  → health check
+Socket events  (client → server)
+─────────────────────────────────
+  connect          → sends greeting metadata
+  disconnect       → clears session state
+  request_greeting → avatar speaks welcome message
+  audio_data       → raw WAV bytes captured by browser VAD
+  barge_in         → user spoke while avatar was talking; stop current pipeline
 
-Socket events (server side)
----------------------------
-connect             → sends greeting metadata
-disconnect          → clears session memory + language lock
-request_greeting    → speaks the welcome line
-start_listening     → spawns mic-capture → STT → RAG → TTS pipeline
-stop_listening      → user pressed Stop
+Socket events  (server → client)
+─────────────────────────────────
+  server_profile   → avatar URL / name
+  status           → UI state label
+  user_text        → what the user said (for chat panel)
+  speak_chunk      → {text, audio(b64), words, wtimes, wdurations, lang}
+  speak_done       → all chunks for this turn have been sent
+  cannot_hear      → STT returned empty
 """
 
 import base64
 import logging
 import threading
 
-import speech_recognition as sr
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 import config
 import qna_handler
-from stt_service import STTService
+from stt_service import transcribe
 from tts_service import generate_tts
 
-
-# ──────────────────────────────────────────────────────────────────────────────
-# App / runtime
-# ──────────────────────────────────────────────────────────────────────────────
+# ── logging ───────────────────────────────────────────────────────────────────
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s")
 log = logging.getLogger("app")
 
+# ── Flask / SocketIO ──────────────────────────────────────────────────────────
+
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    async_mode="threading",
+    max_http_buffer_size=10 * 1024 * 1024,   # 10 MB — enough for ~30s of 16kHz WAV
+)
 
-stt_service = STTService()
-recognizer = sr.Recognizer()
-recognizer.energy_threshold = config.ENERGY_THRESHOLD
-recognizer.dynamic_energy_threshold = config.DYNAMIC_ENERGY_THRESHOLD
-recognizer.pause_threshold = config.PAUSE_THRESHOLD
-
+# sid → True while a pipeline is allowed to run; False on barge-in / disconnect
 _active: dict[str, bool] = {}
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Routes
-# ──────────────────────────────────────────────────────────────────────────────
+# ── routes ────────────────────────────────────────────────────────────────────
 
 @app.route("/")
 def index():
@@ -65,36 +65,34 @@ def index():
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "ok", "model": config.GEMINI_MODEL})
+    return jsonify({"status": "ok", "model": config.OLLAMA_MODEL})
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# TTS helper
-# ──────────────────────────────────────────────────────────────────────────────
+# ── TTS helper ────────────────────────────────────────────────────────────────
 
-def _emit_assistant_speak(sid: str, text: str, lang: str):
+def _emit_speak(sid: str, text: str, lang: str) -> None:
+    """Synthesise one sentence and emit a speak_chunk event."""
     try:
         audio_bytes, words, wtimes, wdurations = generate_tts(text, lang=lang)
         socketio.emit(
-            "assistant_speak",
+            "speak_chunk",
             {
-                "text": text,
-                "audio": base64.b64encode(audio_bytes).decode("ascii"),
-                "words": words,
-                "wtimes": wtimes,
+                "text":       text,
+                "audio":      base64.b64encode(audio_bytes).decode("ascii"),
+                "words":      words,
+                "wtimes":     wtimes,
                 "wdurations": wdurations,
-                "lang": lang,
+                "lang":       lang,
             },
             room=sid,
         )
     except Exception as exc:
-        log.error("TTS failed: %s", exc)
-        socketio.emit("assistant_speak", {"text": text, "lang": lang}, room=sid)
+        log.error("[%s] TTS error: %s", sid[:8], exc)
+        # Emit text-only so the chat panel still updates
+        socketio.emit("speak_chunk", {"text": text, "lang": lang}, room=sid)
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Socket events
-# ──────────────────────────────────────────────────────────────────────────────
+# ── socket events ─────────────────────────────────────────────────────────────
 
 @socketio.on("connect")
 def on_connect():
@@ -102,7 +100,7 @@ def on_connect():
     _active[sid] = True
     emit("server_profile", {
         "assistant_name": config.AVATAR_NAME,
-        "avatar_url": config.AVATAR_URL,
+        "avatar_url":     config.AVATAR_URL,
         "avatar_fallback": config.AVATAR_FALLBACK,
     })
     emit("status", {"state": "connected", "message": "Connected"})
@@ -117,88 +115,97 @@ def on_disconnect():
     log.info("disconnected: %s", sid)
 
 
-@socketio.on("stop_listening")
-def on_stop_listening():
+@socketio.on("barge_in")
+def on_barge_in():
+    """User spoke while avatar was talking — cancel current pipeline."""
     _active[request.sid] = False
 
 
 @socketio.on("request_greeting")
 def on_request_greeting():
-    _emit_assistant_speak(request.sid, config.WELCOME_MESSAGE, "en")
+    sid = request.sid
+    threading.Thread(
+        target=_greet, args=(sid,), daemon=True
+    ).start()
 
 
-@socketio.on("start_listening")
-def on_start_listening():
+@socketio.on("audio_data")
+def on_audio_data(data):
+    """Receive WAV bytes from browser VAD and run the full pipeline."""
     sid = request.sid
     _active[sid] = True
-    threading.Thread(target=_listen_and_respond, args=(sid,), daemon=True).start()
+    threading.Thread(
+        target=_pipeline, args=(sid, bytes(data)), daemon=True
+    ).start()
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Mic → STT → RAG → TTS
-# ──────────────────────────────────────────────────────────────────────────────
+# ── greeting ──────────────────────────────────────────────────────────────────
 
-def _listen_and_respond(sid: str):
+def _greet(sid: str) -> None:
+    socketio.emit("status", {"state": "speaking", "message": "Speaking..."}, room=sid)
+    _emit_speak(sid, config.WELCOME_MESSAGE, "en")
+    socketio.emit("speak_done", room=sid)
+
+
+# ── main pipeline: STT → RAG → LLM → TTS ─────────────────────────────────────
+
+def _pipeline(sid: str, audio_bytes: bytes) -> None:
     try:
-        mic = sr.Microphone()
-    except Exception as exc:
-        socketio.emit("status", {"state": "error", "message": f"Microphone: {exc}"}, room=sid)
-        return
-
-    try:
-        with mic as source:
-            socketio.emit("status", {"state": "listening", "message": "Listening..."}, room=sid)
-            recognizer.adjust_for_ambient_noise(source, duration=0.5)
-            audio = recognizer.listen(
-                source,
-                timeout=config.LISTEN_TIMEOUT,
-                phrase_time_limit=config.PHRASE_TIME_LIMIT,
-            )
-
+        # 1. STT
         socketio.emit("status", {"state": "processing", "message": "Transcribing..."}, room=sid)
-        result = stt_service.transcribe(audio.get_wav_data())
-        text_en = (result.get("text") or "").strip()
-        text_ur = (result.get("text_ur") or text_en).strip()
-        lang = result.get("language", "en")
-        log.info("[%s] STT lang=%s  en=%.80s", sid[:8], lang, text_en)
+        result = transcribe(audio_bytes)
+        text = result["text"].strip()
+        lang = result["language"]
 
-        if not text_en:
+        if not text:
             socketio.emit("cannot_hear", room=sid)
             return
 
-        # Show user's words in their own script
-        socketio.emit("user_text", {"text": text_ur if lang == "ur" else text_en}, room=sid)
+        socketio.emit("user_text", {"text": text}, room=sid)
+        log.info("[%s] STT lang=%s  text=%.80s", sid[:8], lang, text)
 
-        if text_en.lower() in config.EXIT_COMMANDS:
-            _emit_assistant_speak(sid, config.GOODBYE_MESSAGE, lang)
+        # 2. Exit commands
+        if text.lower() in config.EXIT_COMMANDS:
+            reply_lang = qna_handler._SESSION_LANG.get(sid, lang)
+            _emit_speak(sid, config.GOODBYE_MESSAGE, reply_lang)
+            socketio.emit("speak_done", room=sid)
             return
 
+        # 3. LLM + sentence-level TTS streaming
         socketio.emit("status", {"state": "thinking", "message": "Thinking..."}, room=sid)
-        answer = qna_handler.answer(text_en, sid=sid, detected_lang=lang)
 
-        # Use the language locked on this session for the whole reply
-        from qna_handler import _SESSION_LANG
-        reply_lang = _SESSION_LANG.get(sid, lang)
-        _emit_assistant_speak(sid, answer, reply_lang)
+        for sentence in qna_handler.answer_stream(text, sid=sid, detected_lang=lang):
+            if not _active.get(sid, False):
+                log.info("[%s] pipeline cancelled (barge-in)", sid[:8])
+                return
+            reply_lang = qna_handler._SESSION_LANG.get(sid, lang)
+            socketio.emit("status", {"state": "speaking", "message": "Speaking..."}, room=sid)
+            _emit_speak(sid, sentence, reply_lang)
 
-    except sr.WaitTimeoutError:
-        socketio.emit("cannot_hear", room=sid)
+        # Signal client that all chunks are done
+        if _active.get(sid, True):
+            socketio.emit("speak_done", room=sid)
+
     except Exception as exc:
         import traceback
-        log.error("listen_and_respond error: %s\n%s", exc, traceback.format_exc())
+        log.error("[%s] pipeline error: %s\n%s", sid[:8], exc, traceback.format_exc())
         socketio.emit("status", {"state": "error", "message": str(exc)}, room=sid)
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Entrypoint
-# ──────────────────────────────────────────────────────────────────────────────
+# ── entrypoint ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    log.info("Initializing RAG (loading PDF + building/loading FAISS index) ...")
+    log.info("Initializing RAG (PDF → embeddings → FAISS) ...")
     try:
         qna_handler.initialize()
     except Exception as exc:
-        log.error("RAG init failed: %s — server will start, but answers will fail until fixed", exc)
+        log.error("RAG init failed: %s — server will start, answers will fail", exc)
 
-    log.info("Starting QnA Bot on http://%s:%d", config.HOST, config.PORT)
-    socketio.run(app, host=config.HOST, port=config.PORT, debug=False, allow_unsafe_werkzeug=True)
+    log.info("Starting PAK Center QnA Bot on http://%s:%s", config.HOST, config.PORT)
+    socketio.run(
+        app,
+        host=config.HOST,
+        port=config.PORT,
+        debug=False,
+        allow_unsafe_werkzeug=True,
+    )

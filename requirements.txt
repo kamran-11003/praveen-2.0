@@ -3,24 +3,24 @@ flask-cors>=4.0
 flask-socketio>=5.3
 python-dotenv>=1.0
 
-# LLM + RAG
-langchain>=0.3
-langchain-core>=0.3
-langchain-community>=0.3
-langchain-google-genai>=2.0
-langchain-text-splitters>=0.3
+# LLM — Ollama runs as a local service (install separately: https://ollama.com)
+ollama>=0.4
+
+# RAG — fully local, no API needed
+sentence-transformers>=3.0
 faiss-cpu>=1.8
-google-genai>=0.7        # native Gemini TTS (preview)
+numpy>=1.26
 
 # PDF + OCR
 pymupdf>=1.24            # fitz
-pytesseract>=0.3.10      # requires Tesseract binary installed separately
+pytesseract>=0.3.10      # requires Tesseract binary on PATH
 Pillow>=10.0
 
-# Speech
-SpeechRecognition>=3.10
-PyAudio>=0.2.13          # microphone (Windows: pipwin install pyaudio if needed)
-edge-tts>=6.1            # fallback TTS
+# STT — faster-whisper (local GPU inference)
+faster-whisper>=1.0
+
+# TTS
+edge-tts>=6.1
 
 # Misc
 requests>=2.31

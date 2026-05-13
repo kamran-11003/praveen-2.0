@@ -1,97 +1,144 @@
-"""QnA handler — Gemini chat over PDF context + per-session language lock + memory."""
+"""QnA handler — Ollama/Qwen2.5 with per-session memory + sentence streaming.
+
+Key design choices:
+  - Zero temperature → deterministic, no hallucination drift.
+  - Strict system prompt → LLM refuses to answer outside CONTEXT.
+  - RAG threshold → if best chunk < RAG_SCORE_THRESHOLD we skip LLM entirely
+    and return a canned "not found" message.
+  - Sentence streaming → caller gets sentences one by one so TTS can start
+    before the LLM finishes generating.
+"""
 
 import logging
+import re
 from collections import defaultdict
+from typing import Iterator
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+import ollama
 
 import config
 from rag_service import RAGService
 
 log = logging.getLogger("qna")
 
-# Per-session rolling memory (last 8 turns)
+# Per-session rolling message history (last 8 turns = 16 messages)
 _MEMORY: dict[str, list] = defaultdict(list)
 
-# Session language lock (set once on first utterance, never changes)
+# Language locked on first utterance per session
 _SESSION_LANG: dict[str, str] = {}
 
-# Singleton RAG service
 _RAG = RAGService()
+
+# Sentence boundary: ends with . ! ? ۔  followed by whitespace
+_SENT_END = re.compile(r'(?<=[.!?۔])\s+')
 
 
 def initialize() -> None:
-    """Build / load the FAISS index at startup so the first query is fast."""
+    """Build or load FAISS index at startup."""
     _RAG.build_or_load()
 
 
-def _system_prompt(session_lang: str) -> str:
-    lang_label = "Urdu" if session_lang == "ur" else "English"
-    script_rule = (
-        "Use Urdu in Arabic/Nastaliq script (NOT Roman Urdu, NOT Devanagari). "
-        "Keep technical English terms inline as-is."
-        if session_lang == "ur"
-        else "Use clear, simple English."
-    )
+# ── system prompt ─────────────────────────────────────────────────────────────
+
+def _system_prompt(lang: str) -> str:
+    if lang == "ur":
+        return (
+            "آپ PAK Center اسلام آباد کے سرکاری مددگار ہیں۔ "
+            "صرف اور صرف نیچے دیے گئے CONTEXT سے جواب دیں۔ "
+            "اگر CONTEXT میں جواب نہ ہو تو بالکل یہی کہیں: "
+            "'معذرت، یہ معلومات دستاویز میں موجود نہیں۔' "
+            "جواب قدرتی، مختصر (2–3 جملے) اور بول چال کی زبان میں دیں — "
+            "جواب آواز میں بولا جائے گا۔ "
+            "کبھی بھی فیس، دستاویز یا وقت کے بارے میں اندازہ نہ لگائیں۔"
+        )
     return (
-        "You are a friendly assistant answering questions strictly from the provided document.\n"
-        "Speak naturally and warmly — your answer is spoken aloud by a virtual avatar, "
-        "so keep it short, conversational, and easy to listen to.\n\n"
-        f"LANGUAGE: The user is speaking {lang_label}.  "
-        f"You MUST reply ONLY in {lang_label} for this entire conversation.  "
-        f"{script_rule}\n\n"
-        "Rules:\n"
-        " - Use ONLY the information in the CONTEXT below to answer.\n"
-        " - If the context does not contain the answer, say so honestly "
-        "   (e.g. \"I couldn't find that in the document.\").\n"
-        " - Never invent facts.  Never cite page numbers unless the user asks.\n"
-        " - Avoid bullet lists — speak in natural sentences.\n"
+        "You are the official assistant for PAK Center Islamabad — "
+        "a one-stop government service delivery center. "
+        "Answer ONLY using the facts in the CONTEXT block. "
+        "If the answer is not in CONTEXT, say exactly: "
+        "'Sorry, I couldn't find that information in the document.' "
+        "Keep answers conversational and brief (2–3 sentences) — "
+        "they are spoken aloud by an avatar. "
+        "Never invent fees, document names, or processing times."
     )
 
 
-def answer(question_en: str, sid: str, detected_lang: str = "en") -> str:
-    """Answer a question using RAG + Gemini.
+# ── not-found canned responses ─────────────────────────────────────────────────
 
-    Args:
-        question_en: English form of the question (for retrieval + LLM).
-        sid:        Session id (Socket.IO sid).
-        detected_lang: STT-detected language for this turn — locks session on first call.
+_NOT_FOUND = {
+    "en": "Sorry, I couldn't find that information in the document.",
+    "ur": "معذرت، یہ معلومات دستاویز میں موجود نہیں۔",
+}
+
+
+# ── streaming answer ──────────────────────────────────────────────────────────
+
+def answer_stream(question: str, sid: str, detected_lang: str = "en") -> Iterator[str]:
+    """Yield complete sentences one by one as Ollama streams tokens.
+
+    The caller (app.py) sends each sentence to TTS immediately, so the avatar
+    starts speaking the first sentence while the LLM generates the rest.
     """
-    # Lock language on the first call of the session
+    # Lock session language on first call
     if sid not in _SESSION_LANG:
         _SESSION_LANG[sid] = detected_lang
-        log.info("[%s] session language locked → %s", sid[:8], detected_lang)
-    session_lang = _SESSION_LANG[sid]
+        log.info("[%s] language locked → %s", sid[:8], detected_lang)
+    lang = _SESSION_LANG[sid]
 
-    # Retrieve relevant chunks
-    context = _RAG.context_for(question_en)
+    # RAG retrieval with confidence gate
+    context_text, found = _RAG.context_for(question)
+    if not found:
+        log.info("[%s] RAG: no confident match — returning not-found", sid[:8])
+        yield _NOT_FOUND.get(lang, _NOT_FOUND["en"])
+        return
 
-    llm = ChatGoogleGenerativeAI(
-        model=config.GEMINI_MODEL,
-        google_api_key=config.GEMINI_API_KEY,
-        temperature=0.3,
-    )
+    # Build message list
+    messages = [{"role": "system", "content": _system_prompt(lang)}]
+    messages.extend(_MEMORY[sid][-16:])   # last 8 turns
+    messages.append({
+        "role": "user",
+        "content": f"CONTEXT:\n{context_text}\n\nQUESTION:\n{question}",
+    })
 
-    history = _MEMORY[sid][-8:]
-    user_block = (
-        f"CONTEXT (extracted from the document):\n{context}\n\n"
-        f"QUESTION:\n{question_en}"
-    )
+    # Stream tokens from Ollama, yield complete sentences
+    buf = ""
+    full_text = ""
+    try:
+        stream = ollama.chat(
+            model=config.OLLAMA_MODEL,
+            messages=messages,
+            stream=True,
+            options={"temperature": 0.0, "num_predict": 300},
+        )
+        for chunk in stream:
+            token = chunk["message"]["content"]
+            buf += token
+            full_text += token
 
-    messages = [SystemMessage(content=_system_prompt(session_lang))]
-    messages.extend(history)
-    messages.append(HumanMessage(content=user_block))
+            # Emit every complete sentence immediately
+            parts = _SENT_END.split(buf)
+            for sentence in parts[:-1]:
+                sentence = sentence.strip()
+                if sentence:
+                    log.debug("[%s] sentence: %.60s", sid[:8], sentence)
+                    yield sentence
+            buf = parts[-1]
 
-    result = llm.invoke(messages)
-    text = result.content if isinstance(result.content, str) else str(result.content)
-    log.info("[%s] Q: %.80s  →  A: %.80s", sid[:8], question_en, text.replace("\n", " "))
+        # Flush any remaining text
+        if buf.strip():
+            yield buf.strip()
+            full_text = full_text  # already included
 
-    # Update memory with the natural Q (not the context-padded version)
-    _MEMORY[sid].append(HumanMessage(content=question_en))
-    _MEMORY[sid].append(AIMessage(content=text))
+    except ollama.ResponseError as exc:
+        log.error("[%s] Ollama error: %s", sid[:8], exc)
+        yield _NOT_FOUND.get(lang, _NOT_FOUND["en"])
+        return
 
-    return text
+    # Update session memory
+    if full_text.strip():
+        _MEMORY[sid].append({"role": "user",      "content": question})
+        _MEMORY[sid].append({"role": "assistant", "content": full_text.strip()})
+        log.info("[%s] Q: %.60s  A: %.60s", sid[:8], question, full_text.replace("\n", " "))
 
 
 def clear_session(sid: str) -> None:

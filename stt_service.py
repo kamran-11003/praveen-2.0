@@ -1,95 +1,66 @@
-"""Speech-to-text: Colab-hosted Whisper API + Gemini transliteration.
+"""STT service — faster-whisper running locally on GPU.
 
-Pipeline:
-  1. POST WAV bytes to the Colab ngrok endpoint → raw text + detected language
-  2. Gemini transliterates to clean English + Urdu Arabic-script
+Whisper is multilingual: Urdu speech transcribes to Arabic-script Urdu,
+English speech to English text.  No separate transliteration step needed.
 
-Produces:
-  text     — English (for the LLM)
-  text_ur  — Urdu Arabic-script (for UI + TTS)
-  language — "en" | "ur"  (for session lock + voice)
+Returns:
+    {"text": str, "language": "en" | "ur"}
 """
 
-import json
-import re
+import logging
+import os
+import tempfile
 
-import requests
-
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage
+from faster_whisper import WhisperModel
 
 import config
 
+log = logging.getLogger("stt")
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Gemini transliteration
-# ──────────────────────────────────────────────────────────────────────────────
-
-_TRANSLITERATION_PROMPT = (
-    "You are a transliterator for a Pakistani QnA kiosk.  "
-    "The input is raw Whisper output: Urdu (Arabic), English, Hindi (Devanagari), "
-    "Roman Urdu, regional dialect, or a mix.\n\n"
-    "Return ONLY a single-line JSON object:\n"
-    '{"en": "<clean English translation>", '
-    '"ur": "<Urdu Arabic-script, keep English words inline>", '
-    '"lang": "en"|"ur"}\n\n'
-    "Rules:\n"
-    " - 'lang' is decided by counting Urdu/South-Asian words vs English words "
-    "in the original input.\n"
-    " - In 'ur', keep English words (technical terms, names) inline as-is."
-)
+_model: WhisperModel | None = None
 
 
-def _transliterate(raw_text: str) -> dict:
-    if not raw_text.strip():
-        return {"en": "", "ur": "", "lang": "en"}
-    try:
-        llm = ChatGoogleGenerativeAI(
-            model=config.GEMINI_MODEL,
-            google_api_key=config.GEMINI_API_KEY,
-            temperature=0.0,
+def _load() -> WhisperModel:
+    global _model
+    if _model is None:
+        log.info(
+            "Loading faster-whisper '%s' (%s on %s) ...",
+            config.WHISPER_MODEL, config.WHISPER_COMPUTE, config.WHISPER_DEVICE,
         )
-        result = llm.invoke([
-            SystemMessage(content=_TRANSLITERATION_PROMPT),
-            HumanMessage(content=raw_text),
-        ])
-        raw = re.sub(r"^```[a-z]*\n?", "", result.content.strip())
-        raw = re.sub(r"\n?```$", "", raw)
-        parsed = json.loads(raw)
-        return {
-            "en":   (parsed.get("en")   or raw_text).strip(),
-            "ur":   (parsed.get("ur")   or raw_text).strip(),
-            "lang": "ur" if (parsed.get("lang") or "en").lower() == "ur" else "en",
-        }
-    except Exception as exc:
-        print(f"[stt] Gemini transliteration failed: {exc}")
-        return {"en": raw_text, "ur": raw_text, "lang": "en"}
+        _model = WhisperModel(
+            config.WHISPER_MODEL,
+            device=config.WHISPER_DEVICE,
+            compute_type=config.WHISPER_COMPUTE,
+        )
+        log.info("faster-whisper ready")
+    return _model
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# STT service
-# ──────────────────────────────────────────────────────────────────────────────
+def transcribe(audio_bytes: bytes) -> dict:
+    """Transcribe raw audio bytes (WAV from browser).
 
-class STTService:
-    def transcribe(self, wav_data: bytes) -> dict:
-        """POST WAV to the Colab Whisper API and return transliterated result."""
-        try:
-            resp = requests.post(
-                config.WHISPER_API_URL,
-                files={"audio": ("audio.wav", wav_data, "audio/wav")},
-                timeout=60,
-                headers={"ngrok-skip-browser-warning": "true"},
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            raw_text = (data.get("text") or "").strip()
-        except Exception as exc:
-            print(f"[stt] Whisper API error: {exc}")
-            return {"text": "", "text_ur": "", "language": "en"}
+    Returns {"text": str, "language": "en" | "ur"}
+    """
+    model = _load()
 
-        translated = _transliterate(raw_text)
-        return {
-            "text":     translated["en"],
-            "text_ur":  translated["ur"],
-            "language": translated["lang"],
-        }
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+        f.write(audio_bytes)
+        path = f.name
+
+    try:
+        segments, info = model.transcribe(
+            path,
+            beam_size=3,
+            language=None,       # auto-detect (en / ur / etc.)
+            vad_filter=True,     # built-in Silero VAD removes silence
+            vad_parameters={"min_silence_duration_ms": 300},
+        )
+        text = " ".join(s.text for s in segments).strip()
+        lang = info.language     # "en", "ur", "hi", ...
+        # Map non-en / non-ur to en by default so the LLM prompt is correct
+        if lang not in ("en", "ur"):
+            lang = "en"
+        log.info("STT lang=%s  text=%.80s", lang, text)
+        return {"text": text, "language": lang}
+    finally:
+        os.unlink(path)

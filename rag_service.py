@@ -1,66 +1,54 @@
-"""RAG service: PDF text extraction (with OCR fallback) + FAISS vector store + retrieval.
+"""RAG service — PDF extraction + FAISS + local multilingual embeddings.
 
-Flow at startup:
-  1. Load PDF (PyMuPDF / fitz).
-  2. For each page: extract embedded text. If empty/sparse → OCR the page image.
-  3. Split combined text into overlapping chunks.
-  4. Embed chunks with Gemini embeddings.
-  5. Build / load a FAISS index (cached on disk).
+No cloud APIs.  Everything runs locally.
+
+Flow (first run):
+  1. Extract text from PDF via PyMuPDF; OCR image-only pages via Tesseract.
+  2. Split into overlapping chunks.
+  3. Embed with sentence-transformers (paraphrase-multilingual-MiniLM-L12-v2).
+     This model handles English AND Urdu Arabic-script in one embedding space,
+     so a Urdu query retrieves English chunks without translation.
+  4. Build a cosine-similarity FAISS index; cache it to disk.
 
 Per query:
-  retrieve(query) → list[str]   top-K chunks, concatenated context for the LLM.
+  context_for(query) → (context_text: str, found: bool)
 """
 
+import logging
 import os
+import pickle
 import shutil
 
+import faiss
 import fitz  # PyMuPDF
-
-from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
+import numpy as np
+from sentence_transformers import SentenceTransformer
 
 import config
 
+log = logging.getLogger("rag")
 
-_TEXT_THRESHOLD = 40   # chars — below this we treat a page as "image only" and OCR it
+_TEXT_THRESHOLD = 40   # chars — below this, treat the page as image-only and OCR it
 
-_EMBED_BATCH = 80      # chunks per batch (free tier: 100 req/min)
-_RATE_LIMIT_WAIT = 65  # seconds to wait when rate-limited
+_INDEX_FILE  = os.path.join(config.INDEX_DIR, "index.faiss")
+_CHUNKS_FILE = os.path.join(config.INDEX_DIR, "chunks.pkl")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Batched embedding with rate-limit retry
+# Text splitting  (no langchain needed)
 # ──────────────────────────────────────────────────────────────────────────────
 
-def _embed_with_retry(chunks: list, embeddings) -> FAISS:
-    """Embed `chunks` in small batches, retrying on 429 rate-limit errors."""
-    import time
-
-    texts = [c.page_content for c in chunks]
-    metas = [c.metadata for c in chunks]
-
-    all_vecs: list = []
-    i = 0
-    while i < len(texts):
-        batch_texts = texts[i:i + _EMBED_BATCH]
-        try:
-            vecs = embeddings.embed_documents(batch_texts)
-            all_vecs.extend(vecs)
-            print(f"[rag]   Embedded {min(i + _EMBED_BATCH, len(texts))}/{len(texts)} chunks")
-            i += _EMBED_BATCH
-        except Exception as exc:
-            if "429" in str(exc) or "RESOURCE_EXHAUSTED" in str(exc):
-                print(f"[rag]   Rate limited — waiting {_RATE_LIMIT_WAIT}s ...")
-                time.sleep(_RATE_LIMIT_WAIT)
-            else:
-                raise
-
-    # Build FAISS from pre-computed vectors
-    text_embedding_pairs = list(zip(texts, all_vecs))
-    store = FAISS.from_embeddings(text_embedding_pairs, embeddings, metadatas=metas)
-    return store
+def _split(text: str, size: int, overlap: int) -> list[str]:
+    """Naive recursive character splitter."""
+    chunks: list[str] = []
+    start = 0
+    while start < len(text):
+        end = min(start + size, len(text))
+        chunks.append(text[start:end])
+        if end == len(text):
+            break
+        start = end - overlap
+    return chunks
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -68,23 +56,20 @@ def _embed_with_retry(chunks: list, embeddings) -> FAISS:
 # ──────────────────────────────────────────────────────────────────────────────
 
 def _ocr_page(page) -> str:
-    """OCR a PyMuPDF page using Tesseract.  Returns "" if OCR is unavailable."""
     if not config.OCR_ENABLED:
         return ""
     try:
+        import io
         import pytesseract
         from PIL import Image
-        import io
-
-        # Render page at 300 DPI for decent OCR accuracy
         pix = page.get_pixmap(dpi=300)
         img = Image.open(io.BytesIO(pix.tobytes("png")))
         return pytesseract.image_to_string(img, lang=config.OCR_LANG) or ""
     except ImportError:
-        print("[rag] OCR skipped: install pytesseract + Pillow and Tesseract binary")
+        log.warning("OCR skipped — install pytesseract + Pillow + Tesseract binary")
         return ""
     except Exception as exc:
-        print(f"[rag] OCR failed on page: {exc}")
+        log.warning("OCR failed on page: %s", exc)
         return ""
 
 
@@ -92,41 +77,27 @@ def _ocr_page(page) -> str:
 # PDF loader
 # ──────────────────────────────────────────────────────────────────────────────
 
-def _load_pdf_text(pdf_path: str) -> list[Document]:
-    """Extract text from every page; OCR pages that have no embedded text.
-
-    Returns a list of LangChain Documents (one per page) with metadata.
-    """
-    if not os.path.exists(pdf_path):
+def _load_pdf() -> list[dict]:
+    """Return list of {text, page} dicts, one per non-empty page."""
+    if not os.path.exists(config.PDF_PATH):
         raise FileNotFoundError(
-            f"PDF not found at {pdf_path}.  "
-            f"Drop your knowledge PDF there or set QNA_PDF_PATH."
+            f"PDF not found: {config.PDF_PATH}\n"
+            "Drop knowledge.pdf into the data/ folder or set QNA_PDF_PATH."
         )
-
-    docs: list[Document] = []
-    doc = fitz.open(pdf_path)
-    print(f"[rag] Loading PDF: {pdf_path}  ({len(doc)} pages)")
-
-    ocr_pages = 0
+    doc = fitz.open(config.PDF_PATH)
+    log.info("Loading PDF: %s  (%d pages)", config.PDF_PATH, len(doc))
+    pages, ocr_count = [], 0
     for i, page in enumerate(doc, start=1):
         text = (page.get_text() or "").strip()
-        source = "embedded"
         if len(text) < _TEXT_THRESHOLD:
-            ocr_text = _ocr_page(page).strip()
-            if ocr_text:
-                text = ocr_text
-                source = "ocr"
-                ocr_pages += 1
-        if not text:
-            continue
-        docs.append(Document(
-            page_content=text,
-            metadata={"page": i, "source": source},
-        ))
-
+            ocr = _ocr_page(page).strip()
+            if ocr:
+                text, ocr_count = ocr, ocr_count + 1
+        if text:
+            pages.append({"text": text, "page": i})
     doc.close()
-    print(f"[rag] Extracted {len(docs)} pages  ({ocr_pages} via OCR)")
-    return docs
+    log.info("Extracted %d pages  (%d via OCR)", len(pages), ocr_count)
+    return pages
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -134,72 +105,99 @@ def _load_pdf_text(pdf_path: str) -> list[Document]:
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RAGService:
-    """PDF-backed retrieval service with FAISS + Gemini embeddings."""
+    """Cosine-similarity retrieval over a local FAISS index."""
 
     def __init__(self):
-        self._vectorstore: FAISS | None = None
-        self._embeddings = None
+        self._index:  faiss.IndexFlatIP | None = None
+        self._chunks: list[dict] = []         # [{text, page}, ...]
+        self._model:  SentenceTransformer | None = None
 
-    def _get_embeddings(self):
-        if self._embeddings is None:
-            self._embeddings = GoogleGenerativeAIEmbeddings(
-                model=config.GEMINI_EMBED_MODEL,
-                google_api_key=config.GEMINI_API_KEY,
-            )
-        return self._embeddings
+    # ── embedding model ──────────────────────────────────────────────────────
+
+    def _embed(self, texts: list[str]) -> np.ndarray:
+        """Return L2-normalised float32 vectors, shape (N, dim)."""
+        if self._model is None:
+            log.info("Loading embedding model '%s' on %s ...", config.EMBED_MODEL, config.EMBED_DEVICE)
+            self._model = SentenceTransformer(config.EMBED_MODEL, device=config.EMBED_DEVICE)
+            log.info("Embedding model ready")
+        vecs = self._model.encode(
+            texts,
+            normalize_embeddings=True,
+            batch_size=64,
+            show_progress_bar=False,
+        )
+        return vecs.astype("float32")
+
+    # ── index build / load ───────────────────────────────────────────────────
 
     def build_or_load(self, force_rebuild: bool = False) -> None:
-        """Load cached FAISS index or build a fresh one from the PDF."""
-        embeddings = self._get_embeddings()
-
-        if not force_rebuild and os.path.isdir(config.INDEX_DIR):
+        if not force_rebuild and os.path.isfile(_INDEX_FILE) and os.path.isfile(_CHUNKS_FILE):
             try:
-                self._vectorstore = FAISS.load_local(
-                    config.INDEX_DIR, embeddings, allow_dangerous_deserialization=True
-                )
-                print(f"[rag] Loaded cached FAISS index from {config.INDEX_DIR}")
+                self._index = faiss.read_index(_INDEX_FILE)
+                with open(_CHUNKS_FILE, "rb") as f:
+                    self._chunks = pickle.load(f)
+                log.info("Loaded FAISS index (%d chunks) from %s", len(self._chunks), config.INDEX_DIR)
                 return
             except Exception as exc:
-                print(f"[rag] Failed to load cached index ({exc}) — rebuilding")
+                log.warning("Failed to load cached index (%s) — rebuilding", exc)
 
-        # Fresh build
-        page_docs = _load_pdf_text(config.PDF_PATH)
-        if not page_docs:
-            raise RuntimeError("PDF produced no extractable text (even after OCR)")
+        # ── fresh build ──────────────────────────────────────────────────────
+        pages = _load_pdf()
+        if not pages:
+            raise RuntimeError("PDF yielded no extractable text (even after OCR)")
 
-        # Separators ordered from coarsest → finest. Urdu uses "۔" as sentence
-        # terminator and "،" as comma — including these prevents mid-sentence
-        # splits in Urdu / OCR'd pages.
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=config.CHUNK_SIZE,
-            chunk_overlap=config.CHUNK_OVERLAP,
-            separators=["\n\n", "\n", "۔ ", "۔", ". ", "? ", "! ", "، ", ", ", " ", ""],
-            keep_separator=True,
-            length_function=len,
+        self._chunks = []
+        for p in pages:
+            for chunk_text in _split(p["text"], config.CHUNK_SIZE, config.CHUNK_OVERLAP):
+                chunk_text = chunk_text.strip()
+                if chunk_text:
+                    self._chunks.append({"text": chunk_text, "page": p["page"]})
+
+        log.info(
+            "Split into %d chunks (size=%d, overlap=%d)",
+            len(self._chunks), config.CHUNK_SIZE, config.CHUNK_OVERLAP,
         )
-        chunks = splitter.split_documents(page_docs)
-        print(f"[rag] Split into {len(chunks)} chunks (size={config.CHUNK_SIZE}, overlap={config.CHUNK_OVERLAP})")
 
-        print("[rag] Embedding chunks with Gemini (batched to respect rate limits) ...")
-        self._vectorstore = _embed_with_retry(chunks, embeddings)
+        log.info("Embedding %d chunks with '%s' ...", len(self._chunks), config.EMBED_MODEL)
+        vecs = self._embed([c["text"] for c in self._chunks])
+
+        dim = vecs.shape[1]
+        self._index = faiss.IndexFlatIP(dim)   # inner product = cosine on normalised vecs
+        self._index.add(vecs)
 
         if os.path.isdir(config.INDEX_DIR):
             shutil.rmtree(config.INDEX_DIR)
         os.makedirs(config.INDEX_DIR, exist_ok=True)
-        self._vectorstore.save_local(config.INDEX_DIR)
-        print(f"[rag] FAISS index saved to {config.INDEX_DIR}")
+        faiss.write_index(self._index, _INDEX_FILE)
+        with open(_CHUNKS_FILE, "wb") as f:
+            pickle.dump(self._chunks, f)
+        log.info("FAISS index saved to %s", config.INDEX_DIR)
 
-    def retrieve(self, query: str, k: int | None = None) -> list[Document]:
-        """Return top-K most relevant chunks for `query`."""
-        if self._vectorstore is None:
+    # ── retrieval ────────────────────────────────────────────────────────────
+
+    def retrieve(self, query: str) -> list[tuple[dict, float]]:
+        """Return [(chunk, score), ...] sorted best-first.  score ∈ [0, 1]."""
+        if self._index is None:
             self.build_or_load()
-        return self._vectorstore.similarity_search(query, k=k or config.TOP_K)
+        q_vec = self._embed([query])                        # shape (1, dim)
+        scores, indices = self._index.search(q_vec, config.TOP_K)
+        results = []
+        for score, idx in zip(scores[0], indices[0]):
+            if idx >= 0:
+                results.append((self._chunks[idx], float(score)))
+        return results
 
-    def context_for(self, query: str) -> str:
-        """Concatenate top-K chunks into a single context block for the LLM."""
-        docs = self.retrieve(query)
-        parts = []
-        for d in docs:
-            page = d.metadata.get("page", "?")
-            parts.append(f"[page {page}]\n{d.page_content}")
-        return "\n\n---\n\n".join(parts)
+    def context_for(self, query: str) -> tuple[str, bool]:
+        """Build a context string for the LLM.
+
+        Returns (context_text, found).
+        found=False means no chunk exceeded RAG_SCORE_THRESHOLD — caller should
+        reply "not in document" instead of hallucinating.
+        """
+        hits = self.retrieve(query)
+        if not hits or hits[0][1] < config.RAG_SCORE_THRESHOLD:
+            log.info("RAG: no confident match (best=%.3f, threshold=%.3f)",
+                     hits[0][1] if hits else 0.0, config.RAG_SCORE_THRESHOLD)
+            return "", False
+        parts = [f"[page {c['page']}]\n{c['text']}" for c, _ in hits]
+        return "\n\n---\n\n".join(parts), True
