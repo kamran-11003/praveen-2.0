@@ -26,7 +26,7 @@ PORT = int(os.environ.get("QNA_PORT", "5005"))
 # ============================================================
 
 OLLAMA_URL   = os.environ.get("OLLAMA_URL",   "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct")
 
 # ============================================================
 # STT — faster-whisper  (runs on GPU alongside Ollama)
@@ -34,7 +34,7 @@ OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b")
 # If you get OOM errors, switch to "small" or "base".
 # ============================================================
 
-WHISPER_MODEL   = os.environ.get("WHISPER_MODEL",   "medium")
+WHISPER_MODEL   = os.environ.get("WHISPER_MODEL",   "large-v3")
 WHISPER_DEVICE  = os.environ.get("WHISPER_DEVICE",  "cuda")   # "cpu" if no GPU
 WHISPER_COMPUTE = os.environ.get("WHISPER_COMPUTE", "int8")   # int8 saves VRAM
 
