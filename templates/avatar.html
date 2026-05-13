@@ -13,6 +13,7 @@
             overflow: hidden;
             height: 100vh; width: 100vw;
             display: flex;
+            flex-direction: row;   /* avatar left, services right */
             color: #fff;
         }
 
@@ -21,6 +22,7 @@
             flex: 0 0 60%;
             position: relative;
             height: 100vh;
+            overflow: hidden;
         }
         #avatar-container { width: 100%; height: 100%; }
 
@@ -60,19 +62,17 @@
         #controls {
             position: absolute; bottom: 96px; left: 50%;
             transform: translateX(-50%); z-index: 100;
-            display: flex; gap: 12px;
         }
-        .btn {
-            padding: 12px 30px; border: none; border-radius: 50px;
-            font-size: 15px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        .btn-new-session {
+            padding: 10px 26px; border: none; border-radius: 50px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            background: linear-gradient(135deg,#ef5350,#b71c1c); color:#fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: all 0.25s;
         }
-        .btn-start { background: linear-gradient(135deg,#4CAF50,#45a049); color:#fff; }
-        .btn-stop  { background: linear-gradient(135deg,#f44336,#d32f2f); color:#fff; display:none; }
-        .btn:hover { transform: scale(1.05); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-new-session:hover { transform: scale(1.04); opacity: 0.9; }
 
-        /* ═══ right: services panel (40%, transparent) ═══ */
+        /* ═══ right: services wizard panel (40%) ═══ */
         #services-panel {
             flex: 0 0 40%;
             height: 100vh;
@@ -80,101 +80,304 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-left: 1px solid rgba(255,255,255,0.08);
-            overflow-y: auto;
-            padding: 0 0 90px 0;   /* bottom padding so cards never hide under subtitle bar */
-        }
-        #services-panel::-webkit-scrollbar { width: 6px; }
-        #services-panel::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.18);
-            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        #services-header {
-            padding: 18px 22px;
+        /* ── Breadcrumb ── */
+        #wizard-crumb {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(20,20,40,0.75);
+            backdrop-filter: blur(20px);
+            display: flex; align-items: center; gap: 5px;
+            min-height: 44px; flex-wrap: wrap;
+        }
+        .crumb-btn {
+            background: none; border: none; cursor: pointer;
+            color: rgba(255,255,255,0.5); font-size: 12px;
+            padding: 3px 7px; border-radius: 5px;
+            transition: color 0.15s, background 0.15s;
+        }
+        .crumb-btn:hover { color:#fff; background:rgba(255,255,255,0.1); }
+        .crumb-sep { color:rgba(255,255,255,0.22); font-size:11px; user-select:none; }
+        .crumb-current { font-size:12px; color:#ffd54f; font-weight:700; }
+
+        /* ── Wizard step container ── */
+        .wizard-step {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 10px;
+        }
+        .wizard-step::-webkit-scrollbar { width: 5px; }
+        .wizard-step::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:3px; }
+
+        /* ── Session footer ── */
+        #session-footer {
+            flex-shrink: 0;
+            padding: 9px 14px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            background: rgba(8,8,20,0.9);
+        }
+        #btn-end-session {
+            width: 100%; padding: 9px;
+            background: rgba(244,67,54,0.1);
+            border: 1px solid rgba(244,67,54,0.28);
+            color: #ef9a9a; border-radius: 8px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        #btn-end-session:hover { background: rgba(244,67,54,0.26); color:#fff; }
+
+        /* ── Step 1: Language selection ── */
+        .lang-select-wrap {
+            padding: 30px 18px; text-align: center;
+        }
+        .lang-select-title {
+            font-size: 16px; font-weight: 700; color:#fff;
+            margin-bottom: 6px; line-height:1.4;
+        }
+        .lang-select-sub {
+            font-size: 13px; color:rgba(255,255,255,0.5);
+            margin-bottom: 26px;
+        }
+        .lang-cards { display:flex; gap:14px; }
+        .lang-card-btn {
+            flex:1; padding:20px 10px;
+            background:rgba(255,255,255,0.05);
+            border:2px solid rgba(255,255,255,0.12);
+            border-radius:14px; cursor:pointer;
+            display:flex; flex-direction:column; align-items:center; gap:10px;
+            color:#fff; transition:all 0.2s;
+        }
+        .lang-card-btn:hover {
+            background:rgba(76,175,80,0.15); border-color:#4CAF50;
+            transform:translateY(-3px);
+        }
+        .lang-flag { font-size:32px; }
+        .lang-card-label { font-size:16px; font-weight:700; }
+        .lang-card-label.ur-label {
+            font-size:20px;
+            font-family:'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+        }
+        .lang-card-sub { font-size:11px; color:rgba(255,255,255,0.45); }
+
+        /* ── Step 2: Department grid ── */
+        .dept-grid { padding:12px 14px 0; display:flex; flex-direction:column; gap:7px; }
+        .dept-card {
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:10px; cursor:pointer;
+            padding:13px 14px;
+            display:flex; justify-content:space-between; align-items:center;
+            text-align:left; color:#fff; transition:all 0.18s; width:100%;
+        }
+        .dept-card:hover {
+            background:rgba(76,175,80,0.12); border-color:rgba(76,175,80,0.4);
+            transform:translateX(3px);
+        }
+        .dept-card-left { flex:1; }
+        .dept-card-name { font-size:13px; font-weight:600; line-height:1.3; }
+        .dept-card-code { font-size:10px; color:#ffd54f; font-weight:700; margin-top:2px; }
+        .dept-card-count { font-size:11px; color:rgba(255,255,255,0.38); flex-shrink:0; }
+        .dept-card-arrow { font-size:16px; color:rgba(255,255,255,0.35); margin-left:8px; }
+
+        /* ── Step 3: Service list ── */
+        .svc-list { padding:10px 14px 0; display:flex; flex-direction:column; gap:5px; }
+        .svc-item {
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:8px; cursor:pointer;
+            padding:11px 13px; text-align:left; color:#fff;
+            transition:all 0.18s; width:100%;
+        }
+        .svc-item:hover:not(.unavailable) {
+            background:rgba(76,175,80,0.12); border-color:rgba(76,175,80,0.35);
+        }
+        .svc-item.unavailable { opacity:0.38; cursor:not-allowed; }
+        .svc-item-name { font-size:13px; line-height:1.4; }
+        .svc-item-name.ur-text {
+            font-size:15px; direction:rtl; text-align:right;
+            font-family:'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+        }
+        .svc-item-fee { font-size:11px; color:rgba(255,255,255,0.4); margin-top:3px; }
+        .svc-item-na  { font-size:10px; color:#e57373; margin-top:2px; }
+
+        /* (dept/service-card styles replaced by wizard step styles above) */
+
+        /* ═══ step 4: service detail (re-uses .detail-top / .detail-section etc.) ═══ */
+        #step-detail {
+            background: rgba(12,12,30,0.6);
+        }
+        #step-detail::-webkit-scrollbar { width: 5px; }
+        #step-detail::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+        .detail-top {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 18px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             position: sticky; top: 0;
-            background: rgba(20,20,40,0.55);
-            backdrop-filter: blur(20px);
+            background: rgba(12,12,30,0.97);
+            backdrop-filter: blur(16px);
             z-index: 5;
         }
-        #services-header h2 {
-            font-size: 18px; font-weight: 600;
-            color: #fff;
-        }
-        #services-header .lang-toggle {
-            margin-top: 10px; display: flex; gap: 6px;
-        }
-        .lang-btn {
-            padding: 5px 14px; border-radius: 14px;
-            font-size: 12px; cursor: pointer;
+        .btn-back {
             background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.7);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; border-radius: 50%;
+            width: 32px; height: 32px;
+            font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s;
         }
-        .lang-btn.active {
-            background: #4CAF50; color: #fff;
-            border-color: #4CAF50;
+        .btn-back:hover { background: rgba(255,255,255,0.18); }
+        .detail-title-wrap { flex: 1; min-width: 0; }
+        .detail-title-en {
+            font-size: 14px; font-weight: 600;
+            color: #fff; line-height: 1.3;
         }
-
-        .dept-section { padding: 0; }
-        .dept-header {
-            position: sticky;
-            top: 78px;          /* below #services-header */
-            padding: 10px 22px;
-            background: rgba(20,20,40,0.85);
-            backdrop-filter: blur(15px);
-            font-size: 12px; font-weight: 600;
-            color: #ffd54f;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            z-index: 4;
-        }
-        .dept-meta {
-            font-size: 10px; color: rgba(255,255,255,0.45);
-            margin-left: 6px; font-weight: 400;
-            text-transform: none; letter-spacing: 0;
-        }
-
-        .service-card {
-            padding: 12px 22px;
-            margin: 2px 0;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            transition: background 0.15s, transform 0.1s;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .service-card:hover {
-            background: rgba(76,175,80,0.12);
-        }
-        .service-card:active { transform: scale(0.98); }
-        .service-card.unavailable {
-            opacity: 0.45;
-            cursor: not-allowed;
-        }
-        .service-card.unavailable:hover { background: transparent; }
-
-        .service-icon {
-            font-size: 18px; line-height: 1.2;
-            margin-top: 1px;
-            color: #4CAF50;
-        }
-        .service-name {
-            flex: 1;
-            font-size: 14px; line-height: 1.4;
-            color: rgba(255,255,255,0.92);
-        }
-        .service-name.ur {
-            font-size: 16px;
+        .detail-title-ur {
+            font-size: 16px; color: rgba(255,255,255,0.75);
             direction: rtl; text-align: right;
             font-family: 'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+            line-height: 1.5; margin-top: 3px;
         }
-        .service-fee {
-            font-size: 11px; color: rgba(255,255,255,0.5);
+
+        .avail-badge {
+            font-size: 10px; font-weight: 700;
+            padding: 3px 9px; border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .avail-badge.ok  { background: rgba(76,175,80,0.2); color: #81c784; border: 1px solid #4CAF5060; }
+        .avail-badge.no  { background: rgba(244,67,54,0.2); color: #e57373; border: 1px solid #f4433660; }
+
+        .detail-dept {
+            font-size: 10px; color: #ffd54f;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 8px 18px 0;
+        }
+
+        .detail-section {
+            padding: 14px 18px 6px;
+        }
+        .section-label {
+            font-size: 10px; font-weight: 700;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase; letter-spacing: 0.7px;
+            margin-bottom: 8px;
+        }
+        .section-label .ur-label {
+            color: rgba(255,255,255,0.28);
+            font-weight: 400; margin-left: 6px;
+            direction: rtl;
+            font-family: 'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+        }
+        .summary-text {
+            font-size: 13px; line-height: 1.6;
+            color: rgba(255,255,255,0.78);
+        }
+
+        .fee-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .fee-row {
+            display: flex; align-items: baseline; gap: 6px;
+            font-size: 12px; color: rgba(255,255,255,0.82);
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .fee-row:last-child { border-bottom: none; }
+        .fee-dot { width: 5px; height: 5px; border-radius: 50%; background: #4CAF50; flex-shrink: 0; margin-top: 4px; }
+        .fee-free { color: #81c784; font-weight: 600; }
+
+        .doc-list { list-style: none; padding: 0; margin: 0; }
+        .doc-item {
+            display: flex; gap: 8px; align-items: flex-start;
+            font-size: 12px; color: rgba(255,255,255,0.80);
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            line-height: 1.5;
+        }
+        .doc-item:last-child { border-bottom: none; }
+        .doc-num {
+            flex-shrink: 0; width: 20px; height: 20px;
+            border-radius: 50%;
+            background: rgba(76,175,80,0.2);
+            color: #81c784; font-size: 10px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: 1px;
+        }
+
+        .steps-list { display: flex; flex-direction: column; gap: 8px; }
+        .step-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex; gap: 10px; align-items: flex-start;
+        }
+        .step-num {
+            flex-shrink: 0; width: 24px; height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: #fff; font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .step-body { flex: 1; }
+        .step-title {
+            font-size: 11px; font-weight: 600;
+            color: #ffd54f; margin-bottom: 3px;
+        }
+        .step-desc {
+            font-size: 12px; color: rgba(255,255,255,0.75);
+            line-height: 1.5;
+        }
+        .step-time {
+            font-size: 10px; color: rgba(255,255,255,0.4);
             margin-top: 3px;
+        }
+
+        .duration-pill {
+            display: inline-block;
+            background: rgba(255,213,79,0.12);
+            border: 1px solid rgba(255,213,79,0.3);
+            color: #ffd54f;
+            font-size: 12px; border-radius: 6px;
+            padding: 5px 12px;
+            margin-bottom: 4px;
+        }
+
+        .notes-list { list-style: none; padding: 0; margin: 0; }
+        .note-item {
+            font-size: 12px; color: rgba(255,255,255,0.6);
+            padding: 4px 0 4px 14px;
+            position: relative; line-height: 1.5;
+        }
+        .note-item::before {
+            content: '•'; position: absolute; left: 0;
+            color: #ffd54f;
+        }
+
+        .btn-ask-svc {
+            display: block; width: calc(100% - 36px);
+            margin: 14px 18px;
+            padding: 12px;
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: #fff; border: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-ask-svc:hover { opacity: 0.88; }
+        .btn-ask-svc.ur {
+            direction: rtl;
+            font-family: 'Noto Nastaliq Urdu','Segoe UI',sans-serif;
+            font-size: 16px;
         }
 
         /* ═══ fixed subtitle bar (bottom, full width) ═══ */
@@ -239,20 +442,26 @@
         <div id="status">Connecting…</div>
         <div id="vad-meter"><div id="vad-bar"></div></div>
         <div id="controls">
-            <button class="btn btn-start" id="btn-start" disabled>Start Conversation</button>
-            <button class="btn btn-stop"  id="btn-stop">Stop</button>
+            <button class="btn-new-session" id="btn-new-session" style="display:none">↺ New Session
+            </button>
         </div>
     </div>
 
     <div id="services-panel">
-        <div id="services-header">
-            <h2>PAK Center Services</h2>
-            <div class="lang-toggle">
-                <span class="lang-btn active" data-lang="en">English</span>
-                <span class="lang-btn" data-lang="ur">اردو</span>
-            </div>
+        <!-- Breadcrumb -->
+        <div id="wizard-crumb"></div>
+        <!-- Step 1: Language -->
+        <div id="step-lang" class="wizard-step"></div>
+        <!-- Step 2: Department/Office -->
+        <div id="step-dept" class="wizard-step" style="display:none"></div>
+        <!-- Step 3: Service/Task list -->
+        <div id="step-svc"  class="wizard-step" style="display:none"></div>
+        <!-- Step 4: Service detail -->
+        <div id="step-detail" class="wizard-step" style="display:none"></div>
+        <!-- Session footer -->
+        <div id="session-footer">
+            <button id="btn-end-session">↺ End Session / نئی گفتگو</button>
         </div>
-        <div id="services-list"></div>
     </div>
 
     <div id="subtitle-bar">
@@ -281,10 +490,8 @@
     const statusEl     = document.getElementById('status');
     const vadMeter     = document.getElementById('vad-meter');
     const vadBar       = document.getElementById('vad-bar');
-    const btnStart     = document.getElementById('btn-start');
-    const btnStop      = document.getElementById('btn-stop');
+    const btnNewSession= document.getElementById('btn-new-session');
     const loadingEl    = document.getElementById('loading-overlay');
-    const servicesList = document.getElementById('services-list');
     const subUserText  = document.getElementById('sub-user-text');
     const subAvatarEl  = document.getElementById('sub-avatar');
 
@@ -295,9 +502,15 @@
     let socket        = null;
     let vadActive     = false;
     let isSpeaking    = false;
-    let audioQueue    = [];
-    let processingQ   = false;
-    let uiLang        = 'en';   // 'en' | 'ur'   — UI/voice language toggle
+    let audioQueue        = [];
+    let processingQ       = false;
+    let currentSpeakResolve = null;  // lets barge-in abort the current speakChunk immediately
+    let uiLang        = 'en';   // 'en' | 'ur'   — tracks selected language
+
+    // Wizard state
+    let wizardLang    = null;   // null = Step 1 visible
+    let wizardDept    = null;   // selected department object
+    let sessionStarted = false; // true after first greeting finishes
 
     // VAD resources
     let audioCtx      = null;
@@ -436,6 +649,8 @@
 
                     socket.emit('barge_in');
                     head?.stopSpeaking?.();
+                    // Resolve the pending speakChunk promise immediately
+                    if (currentSpeakResolve) { currentSpeakResolve(); currentSpeakResolve = null; }
                     isSpeaking      = false;
                     audioQueue      = [];
                     processingQ     = false;
@@ -539,15 +754,17 @@
             const words = adaptWords(data.words || [], lang);
 
             await new Promise(resolve => {
+                const done = () => { currentSpeakResolve = null; resolve(); };
+                currentSpeakResolve = done;
                 try {
                     head.speakAudio(
                         { audio: audioBuf, words,
                           wtimes: data.wtimes || [], wdurations: data.wdurations || [] },
                         { lipsyncLang },
-                        resolve
+                        done
                     );
-                    setTimeout(resolve, (audioBuf.duration * 1000) + 600);
-                } catch { resolve(); }
+                    setTimeout(done, (audioBuf.duration * 1000) + 600);
+                } catch { done(); }
             });
             await ctx.close();
         } catch (err) {
@@ -566,99 +783,329 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Services panel
+    // Wizard — Step 1 (Lang) → Step 2 (Dept) → Step 3 (Service) → Step 4 (Detail)
     // ═══════════════════════════════════════════════════════════════════════
     let CATALOG = { departments: [], services: [] };
+
+    // ── i18n labels ──────────────────────────────────────────────────────────
+    const LABELS = {
+        en: {
+            step1: 'Select Language', step2: 'Select Office', step3: 'Select Service',
+            summary: 'About', fee: 'Fee', docs: 'Required Documents',
+            steps: 'Step-by-Step Process', duration: 'Processing Time', notes: 'Notes',
+            available: 'Available', unavailable: 'Not at Center',
+            free: 'Free', ask: 'Ask about this service', noInfo: 'No information available.',
+            endSession: '↺ End Session / New Session',
+        },
+        ur: {
+            step1: 'زبان منتخب کریں', step2: 'دفتر منتخب کریں', step3: 'سروس منتخب کریں',
+            summary: 'تفصیل', fee: 'فیس', docs: 'ضروری دستاویزات',
+            steps: 'مرحلہ وار عمل', duration: 'وقت', notes: 'نوٹس',
+            available: 'دستیاب', unavailable: 'مرکز پر نہیں',
+            free: 'مفت', ask: 'اس سروس کے بارے میں پوچھیں', noInfo: 'معلومات دستیاب نہیں۔',
+            endSession: '↺ نئی گفتگو',
+        },
+    };
+    const L = () => LABELS[uiLang] || LABELS.en;
 
     async function loadCatalog() {
         try {
             const r = await fetch('/api/services');
             CATALOG = await r.json();
-            renderServices();
+            initWizard();
         } catch (err) {
             console.error('Failed to load catalog:', err);
-            servicesList.innerHTML =
+            document.getElementById('step-lang').innerHTML =
                 '<div style="padding:22px;color:rgba(255,255,255,0.5)">Catalog unavailable.</div>';
         }
     }
 
-    function feeText(svc) {
-        const pay = svc.payment_model || {};
-        if (pay.type === 'free') {
-            return uiLang === 'ur' ? 'مفت' : 'Free';
-        }
-        const entries = pay.entries || [];
-        if (entries.length > 0) return entries[0];
-        return '';
+    // ── Wizard navigation ────────────────────────────────────────────────────
+    function showStep(step) {
+        ['lang','dept','svc','detail'].forEach(s => {
+            const el = document.getElementById(`step-${s}`);
+            if (el) el.style.display = s === step ? '' : 'none';
+        });
+        updateCrumb(step);
     }
 
-    function renderServices() {
-        servicesList.innerHTML = '';
-        const depts = CATALOG.departments || [];
-        const services = CATALOG.services || [];
+    function updateCrumb(currentStep) {
+        const crumb = document.getElementById('wizard-crumb');
+        const parts = [];
 
-        // group services by department id
-        const byDept = {};
-        for (const s of services) {
-            const id = (s.department || {}).id || 'OTHER';
-            (byDept[id] ||= []).push(s);
+        if (wizardLang) {
+            parts.push({ label: wizardLang === 'ur' ? 'اردو' : 'English',
+                          step: 'lang', clickable: true });
+        }
+        if (wizardDept) {
+            parts.push({ label: wizardDept.code || wizardDept.name,
+                          step: 'dept', clickable: true });
+        }
+        if (currentStep === 'detail') {
+            parts.push({ label: L().step3, step: 'svc', clickable: true });
         }
 
-        for (const dept of depts) {
-            const deptServices = byDept[dept.id] || [];
-            if (deptServices.length === 0) continue;
+        let html = '';
+        const stepTitleMap = { lang: L().step1, dept: L().step2, svc: L().step3, detail: 'Info' };
+        const currentLabel = stepTitleMap[currentStep] || '';
 
-            const section = document.createElement('div');
-            section.className = 'dept-section';
-
-            const header = document.createElement('div');
-            header.className = 'dept-header';
-            header.innerHTML =
-                `${dept.code || dept.name} ` +
-                `<span class="dept-meta">${dept.name} · ${deptServices.length} services</span>`;
-            section.appendChild(header);
-
-            for (const svc of deptServices) {
-                section.appendChild(renderCard(svc));
+        if (parts.length === 0) {
+            html = `<span class="crumb-current">${escapeHtml(currentLabel)}</span>`;
+        } else {
+            for (let i = 0; i < parts.length; i++) {
+                const p = parts[i];
+                html += `<button class="crumb-btn" data-step="${escapeHtml(p.step)}">${escapeHtml(p.label)}</button>`;
+                html += `<span class="crumb-sep">›</span>`;
             }
-            servicesList.appendChild(section);
+            html += `<span class="crumb-current">${escapeHtml(currentLabel)}</span>`;
+        }
+        crumb.innerHTML = html;
+        crumb.querySelectorAll('.crumb-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.step;
+                if (target === 'lang') { wizardLang = null; wizardDept = null; initWizard(); }
+                else if (target === 'dept') { wizardDept = null; renderDeptStep(); showStep('dept'); }
+                else if (target === 'svc') { renderSvcStep(); showStep('svc'); }
+            });
+        });
+    }
+
+    function initWizard() {
+        renderLangStep();
+        showStep('lang');
+    }
+
+    // ── Step 1: Language ──────────────────────────────────────────────────────
+    function renderLangStep() {
+        const el = document.getElementById('step-lang');
+        el.innerHTML = `
+        <div class="lang-select-wrap">
+            <div class="lang-select-title">Welcome to PAK Center<br>خوش آمدید</div>
+            <div class="lang-select-sub">Select your preferred language<br>اپنی زبان منتخب کریں</div>
+            <div class="lang-cards">
+                <button class="lang-card-btn" data-lang="en">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-card-label">English</span>
+                    <span class="lang-card-sub">English</span>
+                </button>
+                <button class="lang-card-btn" data-lang="ur">
+                    <span class="lang-flag">🇵🇰</span>
+                    <span class="lang-card-label ur-label">اردو</span>
+                    <span class="lang-card-sub">Urdu</span>
+                </button>
+            </div>
+        </div>`;
+        el.querySelectorAll('.lang-card-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                wizardLang = btn.dataset.lang;
+                uiLang     = wizardLang;
+                wizardDept = null;
+                // Tell server about language preference
+                if (socket && socket.connected) socket.emit('set_language', { lang: uiLang });
+                renderDeptStep();
+                showStep('dept');
+            });
+        });
+    }
+
+    // ── Step 2: Department ────────────────────────────────────────────────────
+    function renderDeptStep() {
+        const el   = document.getElementById('step-dept');
+        const depts = CATALOG.departments || [];
+        let html = '<div class="dept-grid">';
+        for (const d of depts) {
+            const count = (CATALOG.services || []).filter(
+                s => (s.department || {}).id === d.id
+            ).length;
+            html += `<button class="dept-card" data-id="${escapeHtml(d.id)}">
+                <div class="dept-card-left">
+                    <div class="dept-card-name">${escapeHtml(d.name)}</div>
+                    <div class="dept-card-code">${escapeHtml(d.code || '')}</div>
+                </div>
+                <span class="dept-card-count">${count}</span>
+                <span class="dept-card-arrow">›</span>
+            </button>`;
+        }
+        html += '</div>';
+        el.innerHTML = html;
+        el.querySelectorAll('.dept-card').forEach(btn => {
+            btn.addEventListener('click', () => {
+                wizardDept = (CATALOG.departments || []).find(d => d.id === btn.dataset.id);
+                if (!wizardDept) return;
+                renderSvcStep();
+                showStep('svc');
+            });
+        });
+    }
+
+    // ── Step 3: Service list ──────────────────────────────────────────────────
+    function renderSvcStep() {
+        const el  = document.getElementById('step-svc');
+        const svcs = (CATALOG.services || []).filter(
+            s => wizardDept && (s.department || {}).id === wizardDept.id
+        );
+        if (!svcs.length) {
+            el.innerHTML = `<div style="padding:22px;color:rgba(255,255,255,0.45);font-size:13px">${L().noInfo}</div>`;
+            return;
+        }
+        let html = '<div class="svc-list">';
+        for (const svc of svcs) {
+            const nameObj = svc.service_name || {};
+            const name = (uiLang === 'ur' && nameObj.ur) ? nameObj.ur : (nameObj.en || svc.service_id);
+            const unavail = svc.availability_status === 'not_available_at_center';
+            const fee = feeText(svc);
+            html += `<button class="svc-item${unavail ? ' unavailable' : ''}" data-id="${escapeHtml(svc.service_id)}">
+                <div class="svc-item-name${uiLang === 'ur' && nameObj.ur ? ' ur-text' : ''}">${escapeHtml(name)}</div>
+                ${fee ? `<div class="svc-item-fee">${escapeHtml(fee)}</div>` : ''}
+                ${unavail ? `<div class="svc-item-na">${L().unavailable}</div>` : ''}
+            </button>`;
+        }
+        html += '</div>';
+        el.innerHTML = html;
+        el.querySelectorAll('.svc-item:not(.unavailable)').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const svc = (CATALOG.services || []).find(s => s.service_id === btn.dataset.id);
+                if (!svc) return;
+                renderDetailStep(svc);
+                showStep('detail');
+            });
+        });
+    }
+
+    // ── Step 4: Detail ────────────────────────────────────────────────────────
+    // renderDetailStep: builds UI AND emits service_navigated (card-click path)
+    function renderDetailStep(svc) {
+        _showServiceDetail(svc);
+        // Notify server: user navigated to this service — speak its summary
+        if (socket && socket.connected) {
+            socket.emit('service_navigated', { serviceId: svc.service_id });
         }
     }
 
-    function renderCard(svc) {
-        const card = document.createElement('div');
-        card.className = 'service-card';
-        const unavailable = svc.availability_status === 'not_available_at_center';
-        if (unavailable) card.classList.add('unavailable');
+    // _showServiceDetail: UI only, no server event (used by navigate_panel handler)
+    function _showServiceDetail(svc) {
+        const el       = document.getElementById('step-detail');
+        const nameObj  = svc.service_name || {};
+        const nameEn   = nameObj.en || svc.service_id;
+        const nameUr   = nameObj.ur || '';
+        const isAvail  = svc.availability_status !== 'not_available_at_center';
+        const pay      = svc.payment_model || {};
+        const docs     = svc.required_documents || [];
+        const stages   = svc.process_stages || [];
+        const duration = svc.duration_model || {};
+        const notes    = svc.notes || [];
+        const deptName = (svc.department || {}).name || '';
+        const lbl      = L();
 
-        const nameObj = svc.service_name || {};
-        const name = (uiLang === 'ur' && nameObj.ur)
-            ? nameObj.ur
-            : (nameObj.en || svc.service_id);
-
-        const fee = feeText(svc);
-
-        card.innerHTML = `
-            <span class="service-icon">›</span>
-            <div style="flex:1;min-width:0">
-              <div class="service-name ${uiLang === 'ur' && nameObj.ur ? 'ur' : ''}">${escapeHtml(name)}</div>
-              ${fee ? `<div class="service-fee">${escapeHtml(fee)}</div>` : ''}
+        let html = `
+        <div class="detail-top">
+            <button class="btn-back" id="btn-back-detail">&#8592;</button>
+            <div class="detail-title-wrap">
+                <div class="detail-title-en">${escapeHtml(nameEn)}</div>
+                ${nameUr ? `<div class="detail-title-ur">${escapeHtml(nameUr)}</div>` : ''}
             </div>
-        `;
+            <span class="avail-badge ${isAvail ? 'ok' : 'no'}">${isAvail ? lbl.available : lbl.unavailable}</span>
+        </div>
+        ${deptName ? `<div class="detail-dept">${escapeHtml(deptName)}</div>` : ''}`;
 
-        if (!unavailable) {
-            card.addEventListener('click', () => {
+        if (svc.summary) {
+            const short = svc.summary.replace(/\s*List of required documents\s*$/i, '').trim();
+            html += `<div class="detail-section">
+                <div class="section-label">${lbl.summary}</div>
+                <div class="summary-text">${escapeHtml(short)}</div>
+            </div>`;
+        }
+
+        // Fee
+        html += `<div class="detail-section"><div class="section-label">${lbl.fee}</div><div class="fee-box">`;
+        if (pay.type === 'free') {
+            html += `<div class="fee-row"><span class="fee-dot"></span><span class="fee-free">${lbl.free}</span></div>`;
+            for (const e of (pay.entries || []))
+                html += `<div class="fee-row"><span class="fee-dot"></span>${escapeHtml(e)}</div>`;
+        } else {
+            const entries = pay.entries || [];
+            if (entries.length) {
+                for (const e of entries) html += `<div class="fee-row"><span class="fee-dot"></span>${escapeHtml(e)}</div>`;
+            } else {
+                html += `<div class="fee-row" style="color:rgba(255,255,255,0.4)">—</div>`;
+            }
+        }
+        html += `</div></div>`;
+
+        // Documents
+        if (docs.length) {
+            html += `<div class="detail-section"><div class="section-label">${lbl.docs}</div><ul class="doc-list">`;
+            docs.forEach((d, i) => {
+                const txt = typeof d === 'string' ? d : d.text || '';
+                html += `<li class="doc-item"><span class="doc-num">${i + 1}</span><span>${escapeHtml(txt)}</span></li>`;
+            });
+            html += `</ul></div>`;
+        }
+
+        // Process stages
+        if (stages.length) {
+            html += `<div class="detail-section"><div class="section-label">${lbl.steps}</div><div class="steps-list">`;
+            for (const s of stages) {
+                html += `<div class="step-card">
+                    <div class="step-num">${s.stage_no}</div>
+                    <div class="step-body">
+                        <div class="step-title">${escapeHtml(s.title || `Stage ${s.stage_no}`)}</div>
+                        <div class="step-desc">${escapeHtml(s.description || '')}</div>
+                        ${s.expected_time ? `<div class="step-time">⏱ ${escapeHtml(s.expected_time)}</div>` : ''}
+                    </div>
+                </div>`;
+            }
+            html += `</div></div>`;
+        }
+
+        // Duration
+        const durEntries = duration.entries || [];
+        if (durEntries.length) {
+            html += `<div class="detail-section"><div class="section-label">${lbl.duration}</div>
+                ${durEntries.map(e => `<span class="duration-pill">⏱ ${escapeHtml(e)}</span>`).join(' ')}
+            </div>`;
+        }
+
+        // Notes
+        if (notes.length) {
+            html += `<div class="detail-section"><div class="section-label">${lbl.notes}</div><ul class="notes-list">`;
+            for (const n of notes) html += `<li class="note-item">${escapeHtml(n)}</li>`;
+            html += `</ul></div>`;
+        }
+
+        // Ask avatar button
+        if (isAvail) {
+            html += `<button class="btn-ask-svc${uiLang === 'ur' ? ' ur' : ''}" id="btn-ask-svc">
+                ${escapeHtml(lbl.ask)}
+            </button>`;
+        }
+
+        el.innerHTML = html;
+        el.scrollTop = 0;
+
+        document.getElementById('btn-back-detail').addEventListener('click', () => {
+            renderSvcStep();
+            showStep('svc');
+        });
+
+        const askBtn = document.getElementById('btn-ask-svc');
+        if (askBtn) {
+            askBtn.addEventListener('click', () => {
                 if (!socket || !socket.connected) return;
-                // visual feedback
-                card.style.background = 'rgba(76,175,80,0.25)';
-                setTimeout(() => { card.style.background = ''; }, 250);
-
-                showUserSubtitle(name);
-                socket.emit('service_selected',
-                            { serviceId: svc.service_id, lang: uiLang });
+                askBtn.style.opacity = '0.5';
+                showUserSubtitle(nameEn);
+                socket.emit('service_selected', { serviceId: svc.service_id, lang: uiLang });
+                setTimeout(() => { askBtn.style.opacity = ''; }, 600);
             });
         }
-        return card;
+    }
+
+    // ── Fee text helper ───────────────────────────────────────────────────────
+    function feeText(svc) {
+        const pay = svc.payment_model || {};
+        if (pay.type === 'free') return uiLang === 'ur' ? 'مفت' : 'Free';
+        const entries = pay.entries || [];
+        return entries.length ? entries[0] : '';
     }
 
     function escapeHtml(s) {
@@ -666,15 +1113,39 @@
             ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
-    // language toggle
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            uiLang = btn.dataset.lang;
-            renderServices();
-        });
-    });
+    // ═══════════════════════════════════════════════════════════════════════
+    // Session reset
+    // ═══════════════════════════════════════════════════════════════════════
+    async function resetSession() {
+        stopVAD();
+        if (head) head.stopSpeaking?.();
+        isSpeaking   = false;
+        audioQueue   = [];
+        processingQ  = false;
+        sessionStarted = false;
+        clearAvatarSubtitle();
+        showUserSubtitle('');
+
+        // Tell server to clear conversation memory
+        if (socket && socket.connected) socket.emit('reset_session');
+
+        // Reset wizard to Step 1
+        wizardLang = null;
+        wizardDept = null;
+        uiLang     = 'en';
+        initWizard();
+
+        // Hide the session button until next greeting finishes
+        btnNewSession.style.display = 'none';
+
+        // Request new greeting then restart VAD
+        if (socket && socket.connected) socket.emit('request_greeting');
+        setStatus('Ready');
+        await startVAD();
+    }
+
+    btnNewSession.addEventListener('click', resetSession);
+    document.getElementById('btn-end-session').addEventListener('click', resetSession);
 
     // ═══════════════════════════════════════════════════════════════════════
     // Socket.IO
@@ -708,7 +1179,24 @@
             drainQueue();
         });
 
-        socket.on('speak_done', () => {
+        socket.on('speak_done', (d) => {
+            d = d || {};
+            // Show new-session button once the avatar has spoken at least once
+            if (!sessionStarted) {
+                sessionStarted = true;
+                btnNewSession.style.display = 'inline-block';
+            }
+
+            // Server requested full session reset (user said goodbye/no thanks)
+            if (d.resetSession) {
+                const waitAndReset = () => {
+                    if (processingQ || isSpeaking) { setTimeout(waitAndReset, 200); return; }
+                    resetSession();
+                };
+                waitAndReset();
+                return;
+            }
+
             const waitForQueueAndResume = () => {
                 if (processingQ || isSpeaking) {
                     setTimeout(waitForQueueAndResume, 200);
@@ -720,6 +1208,22 @@
                 }
             };
             waitForQueueAndResume();
+        });
+
+        // Server wants client to navigate the wizard to a service detail page
+        // NOTE: we use _showServiceDetail here (NOT renderDetailStep) to avoid
+        // emitting service_navigated back to the server and creating a feedback loop.
+        socket.on('navigate_panel', (d) => {
+            const svcId = (d || {}).serviceId;
+            if (!svcId) return;
+            const svc = (CATALOG.services || []).find(s => s.service_id === svcId);
+            if (!svc) return;
+            const dept = (CATALOG.departments || []).find(
+                dep => dep.id === (svc.department || {}).id
+            );
+            if (dept) wizardDept = dept;
+            _showServiceDetail(svc);   // UI only — no server roundtrip
+            showStep('detail');
         });
 
         socket.on('cannot_hear', () => {
@@ -763,29 +1267,12 @@
         }
 
         loadingEl.style.display = 'none';
-        setStatus('Ready — click Start');
-        btnStart.disabled = false;
+        setStatus('Ready');
+        // Kiosk mode: auto-start mic + VAD (no button needed)
+        await startVAD();
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // Buttons
-    // ═══════════════════════════════════════════════════════════════════════
-    btnStart.addEventListener('click', async () => {
-        btnStart.style.display = 'none';
-        btnStop.style.display  = 'inline-block';
-        await startVAD();
-    });
-
-    btnStop.addEventListener('click', () => {
-        stopVAD();
-        btnStop.style.display  = 'none';
-        btnStart.style.display = 'inline-block';
-        setStatus('Stopped');
-        isSpeaking  = false;
-        audioQueue  = [];
-        processingQ = false;
-        clearAvatarSubtitle();
-    });
+    // (kiosk mode — VAD auto-starts in initAvatar; session reset via resetSession())
 
     // ═══════════════════════════════════════════════════════════════════════
     // Boot

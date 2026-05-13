@@ -103,13 +103,18 @@ def _ffmpeg_preprocess(input_path: str) -> str:
 
 def _is_roman_urdu(text: str) -> bool:
     """True if text is mostly Latin characters (Roman Urdu style).
-    Threshold: fewer than 25% of alphabetic characters are Arabic-script.
+    Requires BOTH: >50% of alpha chars are Latin AND <25% are Arabic-script.
+    This prevents Devanagari/Hindi text from being misidentified as Roman Urdu.
     """
     if not text:
         return False
     arabic = sum(1 for c in text if "\u0600" <= c <= "\u06FF")
+    latin  = sum(1 for c in text if ("a" <= c <= "z") or ("A" <= c <= "Z"))
     alpha  = sum(1 for c in text if c.isalpha())
-    return alpha > 0 and (arabic / alpha) < 0.25
+    if alpha == 0:
+        return False
+    # Must be mostly Latin AND have very few Arabic-script chars
+    return (latin / alpha) > 0.5 and (arabic / alpha) < 0.25
 
 
 def _transliterate_to_urdu(text: str) -> str:
@@ -151,20 +156,49 @@ def transcribe(audio_bytes: bytes) -> dict:
 
         segments, info = model.transcribe(
             clean_path,
-            beam_size=3,
+            beam_size=config.WHISPER_BEAM_SIZE,
             language=None,
             vad_filter=True,
-            vad_parameters={"min_silence_duration_ms": 300},
+            vad_parameters={"min_silence_duration_ms": config.WHISPER_MIN_SILENCE_MS},
+            condition_on_previous_text=False,
+            temperature=0,
         )
         text = " ".join(s.text for s in segments).strip()
         lang = info.language
 
+        # This kiosk only supports English and Urdu.
+        # If Whisper detects anything other than English (Hindi, Punjabi, French,
+        # etc.) it is almost certainly a Pakistani user speaking Urdu — so force
+        # re-transcription with language="ur" to get proper Arabic-script output.
+        if lang != "en":
+            log.info(
+                "STT: Whisper detected '%s' (not English) — re-transcribing forced to Urdu", lang
+            )
+            segments_ur, _ = model.transcribe(
+                clean_path,
+                beam_size=config.WHISPER_BEAM_SIZE,
+                language="ur",
+                vad_filter=True,
+                vad_parameters={"min_silence_duration_ms": config.WHISPER_MIN_SILENCE_MS},
+                condition_on_previous_text=False,
+                temperature=0,
+            )
+            text = " ".join(s.text for s in segments_ur).strip()
+            lang = "ur"
+            log.info("STT: forced-Urdu text: %.80s", text)
+
         if config.TRANSLITERATE_ROMAN_URDU and _is_roman_urdu(text):
-            log.info("STT: Roman Urdu detected (whisper_lang=%s) - transliterating", lang)
+            log.info(
+                "STT: Roman Urdu detected (whisper_lang=%s) - transliterating", lang
+            )
             text = _transliterate_to_urdu(text)
             lang = "ur"
 
+        # Enforce only English or Urdu
         if lang not in ("en", "ur"):
+            log.info(
+                "STT: unsupported language '%s' (text=%.40s) — mapping to 'en'", lang, text
+            )
             lang = "en"
 
         log.info("STT lang=%s  text=%.80s", lang, text)

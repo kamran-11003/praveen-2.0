@@ -14,6 +14,7 @@ Per query:
   context_for(query) → (context_text: str, found: bool)
 """
 
+import json
 import logging
 import os
 import pickle
@@ -101,6 +102,86 @@ def _load_pdf() -> list[dict]:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Catalog JSON → text chunks  (fees, documents, process stages)
+# ──────────────────────────────────────────────────────────────────────────────
+
+def _load_catalog_chunks() -> list[dict]:
+    """Convert services_catalog_canonical.json into searchable text chunks.
+
+    Each service becomes one chunk containing its name, department, summary,
+    fees, required documents, processing time, and process stages — so RAG
+    can answer specific questions like "what documents do I need for a CNIC?"
+    """
+    if not os.path.exists(config.CATALOG_PATH):
+        log.warning("Catalog not found at %s — skipping catalog indexing", config.CATALOG_PATH)
+        return []
+    try:
+        with open(config.CATALOG_PATH, "r", encoding="utf-8") as f:
+            catalog = json.load(f)
+    except Exception as exc:
+        log.warning("Failed to load catalog for indexing: %s", exc)
+        return []
+
+    chunks: list[dict] = []
+    for svc in catalog.get("services", []):
+        svc_id   = svc.get("service_id", "")
+        name_obj = svc.get("service_name", {}) or {}
+        name_en  = (name_obj.get("en") or "").strip()
+        name_ur  = (name_obj.get("ur") or "").strip()
+        dept     = ((svc.get("department") or {}).get("name") or "").strip()
+        summary  = (svc.get("summary") or "").strip()
+
+        lines: list[str] = [f"Service: {name_en}"]
+        if name_ur:
+            lines.append(f"Urdu name: {name_ur}")
+        if dept:
+            lines.append(f"Department: {dept}")
+        if summary:
+            lines.append(f"Description: {summary}")
+
+        pay         = svc.get("payment_model", {}) or {}
+        pay_type    = pay.get("type", "")
+        pay_entries = pay.get("entries") or []
+        if pay_type == "free":
+            lines.append("Fee: Free of charge")
+        elif pay_entries:
+            lines.append("Fee: " + "; ".join(str(e) for e in pay_entries[:5]))
+
+        docs = svc.get("required_documents") or []
+        if docs:
+            lines.append("Required documents:")
+            for d in docs[:12]:
+                doc_text = (d.get("text", "") if isinstance(d, dict) else str(d)).strip()
+                if doc_text:
+                    lines.append(f"  - {doc_text}")
+
+        duration    = svc.get("duration_model", {}) or {}
+        dur_entries = duration.get("entries") or []
+        if dur_entries:
+            lines.append("Processing time: " + "; ".join(str(e) for e in dur_entries[:3]))
+
+        stages = svc.get("process_stages") or []
+        if stages:
+            lines.append("Process stages:")
+            for stage in stages[:6]:
+                title = stage.get("title", "").strip()
+                desc  = stage.get("description", "").strip()
+                time  = stage.get("expected_time", "").strip()
+                if desc:
+                    entry = f"  {title}: {desc}"
+                    if time:
+                        entry += f" ({time})"
+                    lines.append(entry)
+
+        text = "\n".join(l for l in lines if l.strip())
+        if text:
+            chunks.append({"text": text, "page": f"service:{svc_id}"})
+
+    log.info("Generated %d chunks from services catalog", len(chunks))
+    return chunks
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # RAG service
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -153,9 +234,15 @@ class RAGService:
                 if chunk_text:
                     self._chunks.append({"text": chunk_text, "page": p["page"]})
 
+        pdf_count = len(self._chunks)
+
+        # Add structured catalog chunks (fees, documents, process stages)
+        catalog_chunks = _load_catalog_chunks()
+        self._chunks.extend(catalog_chunks)
+
         log.info(
-            "Split into %d chunks (size=%d, overlap=%d)",
-            len(self._chunks), config.CHUNK_SIZE, config.CHUNK_OVERLAP,
+            "Index: %d PDF chunks + %d catalog chunks = %d total",
+            pdf_count, len(catalog_chunks), len(self._chunks),
         )
 
         log.info("Embedding %d chunks with '%s' ...", len(self._chunks), config.EMBED_MODEL)

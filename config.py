@@ -37,6 +37,8 @@ OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct")
 WHISPER_MODEL   = os.environ.get("WHISPER_MODEL",   "large-v3")
 WHISPER_DEVICE  = os.environ.get("WHISPER_DEVICE",  "cuda")   # "cpu" if no GPU
 WHISPER_COMPUTE = os.environ.get("WHISPER_COMPUTE", "int8")   # int8 saves VRAM
+WHISPER_BEAM_SIZE      = int(os.environ.get("WHISPER_BEAM_SIZE",      "5"))
+WHISPER_MIN_SILENCE_MS = int(os.environ.get("WHISPER_MIN_SILENCE_MS", "300"))
 
 # ============================================================
 # EMBEDDINGS — sentence-transformers  (CPU, downloaded on first run ~420 MB)
@@ -48,7 +50,7 @@ EMBED_DEVICE = os.environ.get("EMBED_DEVICE", "cpu")
 
 # Minimum cosine similarity to accept a retrieved chunk (0–1).
 # Below this threshold we tell the user the answer is not in the document.
-RAG_SCORE_THRESHOLD = float(os.environ.get("RAG_SCORE_THRESHOLD", "0.30"))
+RAG_SCORE_THRESHOLD = float(os.environ.get("RAG_SCORE_THRESHOLD", "0.25"))
 
 # ============================================================
 # AVATAR

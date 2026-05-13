@@ -7,10 +7,14 @@ Returns: (audio_bytes, words, wtimes_ms, wdurations_ms)
 """
 
 import asyncio
+import threading
 
 import edge_tts
 
 import config
+
+# Cap concurrent TTS calls to avoid Edge TTS 429 rate-limit
+_TTS_SEMAPHORE = threading.Semaphore(3)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -36,11 +40,8 @@ async def _edge_tts_async(text: str, voice: str):
 def generate_tts(text: str, lang: str = "en") -> tuple[bytes, list[str], list[int], list[int]]:
     """Synthesise `text` and return (audio_bytes, words, wtimes_ms, wdurations_ms)."""
     voice = config.EDGE_TTS_VOICE_UR if lang == "ur" else config.EDGE_TTS_VOICE_EN
-    loop = asyncio.new_event_loop()
-    try:
-        audio_bytes, boundaries = loop.run_until_complete(_edge_tts_async(text, voice))
-    finally:
-        loop.close()
+    with _TTS_SEMAPHORE:
+        audio_bytes, boundaries = asyncio.run(_edge_tts_async(text, voice))
 
     words      = [b["text"] for b in boundaries]
     wtimes     = [int(b["offset"]   / 10_000) for b in boundaries]   # 100ns → ms
