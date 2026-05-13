@@ -1,0 +1,887 @@
+{
+  "services": [
+    {
+      "id": "SRV_MOFA_001",
+      "serviceName": {
+        "en": "Apostille Attestation",
+        "ur": "اپوسٹیل تصدیق",
+        "ps": "اپوسٹیل صدقہ"
+      },
+      "department": {
+        "id": "DEPT_MOFA",
+        "name": "Ministry of Foreign Affairs",
+        "nameUr": "وزارت خارجہ",
+        "code": "MOFA"
+      },
+      "shortDescription": {
+        "en": "Hague Convention certification for international document use",
+        "ur": "بین الاقوامی دستاویزات کے لیے ہیگ کنونشن کی تصدیق"
+      },
+      "longDescription": {
+        "en": "A formal authentication issued by MOFA certifying the validity of public documents under the Hague Apostille Convention (1961) for use abroad.",
+        "ur": "وزارت خارجہ کی طرف سے جاری شدہ رسمی تصدیق جو ہیگ اپوسٹیل کنونشن (1961) کے تحت بیرون ملک استعمال کے لیے سرکاری دستاویزات کی تصحیح کی تصدیق کرتی ہے۔"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_M001",
+          "name": "Original Document",
+          "nameUr": "اصل دستاویز",
+          "description": "Original document requiring Apostille attestation",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_M002",
+          "name": "CNIC/Passport",
+          "nameUr": "شناخت کارڈ / پاسپورٹ",
+          "description": "Applicant's ID Card or Passport",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_M003",
+          "name": "Authorization Letter",
+          "nameUr": "اختیار نامہ",
+          "description": "Signed authorization letter (if representative applies)",
+          "isMandatory": false
+        }
+      ],
+      "paymentInfo": {
+        "baseFee": 3000,
+        "currency": "PKR",
+        "variations": [
+          {
+            "type": "Personal Document",
+            "amount": 3000
+          },
+          {
+            "type": "Educational Document",
+            "amount": 3000
+          },
+          {
+            "type": "Legal Document",
+            "amount": 4500
+          },
+          {
+            "type": "Commercial Document",
+            "amount": 12000
+          },
+          {
+            "type": "Experience Certificate",
+            "amount": 3000
+          }
+        ]
+      },
+      "applicationStages": [
+        {
+          "stageNumber": 1,
+          "name": "Online Application",
+          "nameUr": "آن لائن درخواست",
+          "description": "Application through Apostille Portal and submission of original documents",
+          "duration": "15 minutes"
+        },
+        {
+          "stageNumber": 2,
+          "name": "Verification",
+          "nameUr": "تصدیق",
+          "description": "Verification and confirmation of document authenticity and prior attestations",
+          "duration": "2-3 hours"
+        },
+        {
+          "stageNumber": 3,
+          "name": "Issuance & Collection",
+          "nameUr": "جاری اور حاصل کرنا",
+          "description": "Apostille certificate is affixed and document returned to applicant",
+          "duration": "Same day"
+        }
+      ],
+      "processingTime": {
+        "value": 3,
+        "unit": "hours",
+        "type": "same_day"
+      },
+      "keyHighlights": {
+        "estimatedWaitTime": "3-4 hours",
+        "successRate": "98%",
+        "requiresAppointment": false,
+        "onlineApplicationRequired": true
+      },
+      "contactInfo": {
+        "helpline": "+92-51-XXXXXX",
+        "office": "Ministry of Foreign Affairs, Islamabad",
+        "website": "www.mofa.gov.pk"
+      },
+      "eligibilityRequirements": {
+        "minAge": 0,
+        "maxAge": null,
+        "citizenship": "Pakistani and Foreign nationals",
+        "residencyRequired": false
+      },
+      "importantNotes": [
+        "Apostille is affixed only to original documents; photocopies not accepted",
+        "Online application mandatory (except legal documents - physical visit only)",
+        "Apostille remains valid indefinitely unless document expires",
+        "MOFA does not retain original documents after attestation"
+      ]
+    },
+    {
+      "id": "SRV_MOFA_002",
+      "serviceName": {
+        "en": "General Attestation",
+        "ur": "عمومی تصدیق",
+        "ps": "عمومی صدقہ"
+      },
+      "department": {
+        "id": "DEPT_MOFA",
+        "name": "Ministry of Foreign Affairs",
+        "code": "MOFA"
+      },
+      "shortDescription": {
+        "en": "Authenticate signatures, seals, and stamps on public documents",
+        "ur": "سرکاری دستاویزات پر دستخطوں، مہروں اور ٹمپوں کی تصدیق"
+      },
+      "paymentInfo": {
+        "baseFee": 0,
+        "currency": "PKR",
+        "notes": "Post-Office sticker charge only (10-120 PKR)"
+      },
+      "processingTime": {
+        "value": 1,
+        "unit": "working_days",
+        "min": 1,
+        "max": 2
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_G001",
+          "name": "Original Document",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_G002",
+          "name": "CNIC/Passport",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_G003",
+          "name": "Post Office Sticker",
+          "isMandatory": true,
+          "notes": "Must be pasted on document before submission"
+        }
+      ]
+    },
+    {
+      "id": "SRV_IESCO_001",
+      "serviceName": {
+        "en": "IESCO Bill Payment",
+        "ur": "آئیسکو بل کی ادائیگی",
+        "ps": "آئیسکو بل ادا کول"
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "shortDescription": {
+        "en": "Pay your monthly electricity bills through multiple channels",
+        "ur": "مختلف ذرائع کے ذریعے اپنے ماہانہ بجلی کے بل کی ادائیگی کریں"
+      },
+      "paymentInfo": {
+        "baseFee": 0,
+        "currency": "PKR",
+        "paymentMethods": ["Online", "Bank Transfer", "ATM", "Mobile Banking", "Partner Apps"]
+      },
+      "processingTime": {
+        "value": 0,
+        "unit": "immediate",
+        "estimatedDuration": "Immediately"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_IE001",
+          "name": "Reference Number (14-digit)",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_IE002",
+          "name": "CNIC of Consumer",
+          "isMandatory": true
+        }
+      ],
+      "importantNotes": [
+        "Manual bill payment not available at IESCO service counter",
+        "Multiple payment channels available for convenience",
+        "Consumers should use reference number/customer ID for identification"
+      ]
+    },
+    {
+      "id": "SRV_DGI_001",
+      "serviceName": {
+        "en": "New Passport Application",
+        "ur": "نیا پاسپورٹ درخواست",
+        "ps": "نیا پاسپورٹ غوښتنه"
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "shortDescription": {
+        "en": "Apply for a new Pakistani passport (e-Passport or MRP)",
+        "ur": "نیا پاکستانی پاسپورٹ کے لیے درخواست دیں"
+      },
+      "paymentInfo": {
+        "baseFee": 9000,
+        "currency": "PKR",
+        "variations": [
+          {
+            "type": "e-Passport 36 pages, 5 years",
+            "normal": 9000,
+            "urgent": 15000
+          },
+          {
+            "type": "e-Passport 36 pages, 10 years",
+            "normal": 13500,
+            "urgent": 22500
+          },
+          {
+            "type": "MRP 36 pages, 5 years",
+            "normal": 4500,
+            "urgent": 7500,
+            "fastTrack": 12500
+          }
+        ]
+      },
+      "processingTime": {
+        "normal": 21,
+        "urgent": 5,
+        "fastTrack": 2,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_DG001",
+          "name": "Original Valid CNIC",
+          "isMandatory": true,
+          "count": 2,
+          "notes": "With two photocopies"
+        },
+        {
+          "id": "DOC_DG002",
+          "name": "Fee Payment Receipt",
+          "isMandatory": true,
+          "notes": "Online or bank fee"
+        },
+        {
+          "id": "DOC_DG003",
+          "name": "NOC (if applicable)",
+          "isMandatory": false,
+          "notes": "For government employees"
+        }
+      ]
+    },
+    {
+      "id": "SRV_POLICE_001",
+      "serviceName": {
+        "en": "Police Verification",
+        "ur": "پولیس کی تصدیق",
+        "ps": "پولیس تصدیق"
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "shortDescription": {
+        "en": "Get background verification certificate from police",
+        "ur": "پولیس سے پس منظر کی تصدیق کا سرٹیفکیٹ حاصل کریں"
+      },
+      "paymentInfo": {
+        "baseFee": 1000,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "value": 3,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_PO001",
+          "name": "CNIC/B-Form",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_PO002",
+          "name": "Affidavit",
+          "isMandatory": false,
+          "notes": "If no residential proof"
+        }
+      ]
+    },
+    {
+      "id": "SRV_POLICE_002",
+      "serviceName": {
+        "en": "Character Certificate",
+        "ur": "کردار کا سرٹیفکیٹ",
+        "ps": "کارکتر سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "paymentInfo": {
+        "baseFee": 1000,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "value": 3,
+        "unit": "working_days"
+      }
+    },
+    {
+      "id": "SRV_POLICE_003",
+      "serviceName": {
+        "en": "Tenant Registration",
+        "ur": "کرائے دار کی رجسٹریشن",
+        "ps": "کرائے کار ثبت کول"
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "paymentInfo": {
+        "baseFee": 500,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "value": 0,
+        "unit": "immediate",
+        "estimatedDuration": "Immediately"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_TR001",
+          "name": "Tenant CNIC",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_TR002",
+          "name": "Owner CNIC",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_TR003",
+          "name": "Rent Agreement",
+          "isMandatory": true,
+          "format": "On affidavit"
+        }
+      ]
+    },
+    {
+      "id": "SRV_DL_001",
+      "serviceName": {
+        "en": "Driving License Renewal",
+        "ur": "ڈرائینگ لائسنس کی تجدید",
+        "ps": "موتر چلاوې اجازت تازه کول"
+      },
+      "department": {
+        "id": "DEPT_TRAFFIC",
+        "name": "Islamabad Traffic Police",
+        "code": "TRAFFIC"
+      },
+      "paymentInfo": {
+        "baseFee": 4000,
+        "currency": "PKR",
+        "variations": [
+          {
+            "condition": "Within 30 days of expiry",
+            "amount": 4000,
+            "medicalFee": 500
+          },
+          {
+            "condition": "Within 1 year of expiry",
+            "amount": 4500,
+            "medicalFee": 500
+          },
+          {
+            "condition": "Within 3 years of expiry",
+            "amount": 5000,
+            "medicalFee": 500
+          }
+        ]
+      },
+      "processingTime": {
+        "normal": 10,
+        "urgent": 1,
+        "unit": "days",
+        "notes": "Normal processing from Faizabad office"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_DL001",
+          "name": "CNIC with Photocopy",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_DL002",
+          "name": "Medical Certificate",
+          "isMandatory": true,
+          "notes": "Attested by government doctor"
+        },
+        {
+          "id": "DOC_DL003",
+          "name": "Current Driving License",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_DL004",
+          "name": "Passport Size Picture",
+          "isMandatory": true
+        }
+      ]
+    },
+    {
+      "id": "SRV_CDA_001",
+      "serviceName": {
+        "en": "Approval of Building Plans",
+        "ur": "تعمیراتی منصوبوں کی منظوری",
+        "ps": "د ودانۍ پلان تایید"
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "paymentInfo": {
+        "baseFee": 0,
+        "currency": "PKR",
+        "notes": "Scrutiny Fee: 6 PKR per square feet for both residential and commercial"
+      },
+      "processingTime": {
+        "value": 21,
+        "unit": "days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_CDA001",
+          "name": "Structural & Architectural Drawings",
+          "isMandatory": true,
+          "count": "6 copies each"
+        },
+        {
+          "id": "DOC_CDA002",
+          "name": "Allotment Letter",
+          "isMandatory": true,
+          "format": "Attested photocopy"
+        },
+        {
+          "id": "DOC_CDA003",
+          "name": "CNIC",
+          "isMandatory": true,
+          "format": "Attested photocopy"
+        }
+      ]
+    },
+    {
+      "id": "SRV_CDA_002",
+      "serviceName": {
+        "en": "Birth Registration",
+        "ur": "پیدائش کی رجسٹریشن",
+        "ps": "زیږون ثبت کول"
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "paymentInfo": {
+        "baseFee": 50,
+        "currency": "PKR",
+        "variations": [
+          {
+            "condition": "Certificate fee",
+            "amount": 50
+          },
+          {
+            "condition": "Beyond 1 month but within 1 year",
+            "amount": 60
+          },
+          {
+            "condition": "After 1 year but within 5 years",
+            "amount": 180
+          }
+        ]
+      },
+      "processingTime": {
+        "normal": 7,
+        "urgent": 3,
+        "unit": "working_days"
+      }
+    },
+    {
+      "id": "SRV_CDA_003",
+      "serviceName": {
+        "en": "Death Registration",
+        "ur": "موت کی رجسٹریشن",
+        "ps": "مرګ ثبت کول"
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "paymentInfo": {
+        "baseFee": 210,
+        "currency": "PKR",
+        "variations": [
+          {
+            "condition": "Beyond 1 month but within 1 year",
+            "normal": 210,
+            "urgent": 420
+          }
+        ]
+      },
+      "processingTime": {
+        "normal": 7,
+        "urgent": 3,
+        "unit": "working_days"
+      }
+    },
+    {
+      "id": "SRV_NADRA_001",
+      "serviceName": {
+        "en": "New CNIC Application",
+        "ur": "نیا شناخت کارڈ درخواست",
+        "ps": "نیا شناختي کارت غوښتنه"
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "paymentInfo": {
+        "baseFee": 0,
+        "currency": "PKR",
+        "notes": "Smart NIC: Normal 750 PKR, Urgent 1500 PKR"
+      },
+      "processingTime": {
+        "normalSmartNIC": 31,
+        "urgentSmartNIC": 15,
+        "executiveSmartNIC": 9,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_NAD001",
+          "name": "Child B-Form",
+          "isMandatory": true,
+          "notes": "For new CNIC for minors"
+        },
+        {
+          "id": "DOC_NAD002",
+          "name": "CNIC of Parent/Guardian",
+          "isMandatory": true
+        }
+      ]
+    },
+    {
+      "id": "SRV_NADRA_002",
+      "serviceName": {
+        "en": "Family Registration Certificate",
+        "ur": "خاندانی رجسٹریشن سرٹیفکیٹ",
+        "ps": "کورنۍ ثبت کول سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "paymentInfo": {
+        "baseFee": 1000,
+        "currency": "PKR",
+        "variations": [
+          {
+            "type": "By Birth, Marriage, Adoption",
+            "amount": 1000
+          },
+          {
+            "type": "By All categories",
+            "amount": 1000
+          }
+        ]
+      },
+      "processingTime": {
+        "immediate": "Immediately",
+        "standard": 24,
+        "unit": "hours"
+      }
+    },
+    {
+      "id": "SRV_NADRA_003",
+      "serviceName": {
+        "en": "Child Registration Certificate (CRC)",
+        "ur": "بچے کی رجسٹریشن سرٹیفکیٹ",
+        "ps": "د ماشوم ثبت کول سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "paymentInfo": {
+        "normal": 50,
+        "executive": 500,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "normal": 7,
+        "executive": 1,
+        "unit": "days"
+      }
+    },
+    {
+      "id": "SRV_DC_001",
+      "serviceName": {
+        "en": "Domicile Certificate",
+        "ur": "وطن کا سرٹیفکیٹ",
+        "ps": "د کور سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "shortDescription": {
+        "en": "Official document certifying permanent residence in Islamabad Capital Territory",
+        "ur": "اسلام آباد کیپیٹل ٹیریٹری میں مستقل رہائش کی تصدیق کرنے والی سرکاری دستاویز"
+      },
+      "paymentInfo": {
+        "baseFee": 320,
+        "currency": "PKR",
+        "breakdown": {
+          "serviceCharge": 200,
+          "biometricVerification": 120
+        }
+      },
+      "processingTime": {
+        "value": 3,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_DC001",
+          "name": "CNIC",
+          "isMandatory": true,
+          "notes": "Date of issue should be one year old, Islamabad address required"
+        },
+        {
+          "id": "DOC_DC002",
+          "name": "Utility Bill",
+          "isMandatory": true,
+          "notes": "Electricity or Gas bill of residence"
+        },
+        {
+          "id": "DOC_DC003",
+          "name": "Passport Size Photograph",
+          "isMandatory": true,
+          "count": 1
+        },
+        {
+          "id": "DOC_DC004",
+          "name": "Affidavit",
+          "isMandatory": true,
+          "notes": "Check specimen for major (above 18 years)"
+        }
+      ],
+      "eligibility": {
+        "minAge": 21,
+        "residencyRequirement": "Must have Islamabad address on CNIC",
+        "oneYearWaitAfterCancellation": true
+      },
+      "importantNotes": [
+        "A person cannot hold a domicile from more than one city at a time",
+        "If applicant has two addresses on CNIC, must obtain NOC from other district",
+        "Individuals relocating from other provinces with updated CNIC must complete 1 year waiting period",
+        "Certificate may be required for jobs, admissions, and legal processes"
+      ]
+    },
+    {
+      "id": "SRV_DC_002",
+      "serviceName": {
+        "en": "Marriage Registration Certificate",
+        "ur": "شادی کا رجسٹریشن سرٹیفکیٹ",
+        "ps": "د واده ثبت کول سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "paymentInfo": {
+        "baseFee": 320,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "value": 1,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_MAR001",
+          "name": "CNIC (Bride and Groom)",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_MAR002",
+          "name": "Father's CNIC",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_MAR003",
+          "name": "Nikah Nama",
+          "isMandatory": true,
+          "notes": "Must be registered in Islamabad sectors"
+        }
+      ],
+      "eligibility": {
+        "minAge": 18
+      },
+      "importantNotes": [
+        "No applications entertained for those under 18 years old"
+      ]
+    },
+    {
+      "id": "SRV_DC_003",
+      "serviceName": {
+        "en": "Divorce Registration Certificate",
+        "ur": "طلاق کا رجسٹریشن سرٹیفکیٹ",
+        "ps": "د طلاق ثبت کول سرٹیفکیٹ"
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "paymentInfo": {
+        "baseFee": 320,
+        "currency": "PKR"
+      },
+      "processingTime": {
+        "value": 1,
+        "unit": "working_days"
+      },
+      "requiredDocuments": [
+        {
+          "id": "DOC_DIV001",
+          "name": "CNIC (Bride and Groom)",
+          "isMandatory": true
+        },
+        {
+          "id": "DOC_DIV002",
+          "name": "Divorce Effectiveness Certificate",
+          "isMandatory": true
+        }
+      ]
+    },
+    {
+      "id": "SRV_DC_004",
+      "serviceName": {
+        "en": "Motor Vehicle Token Tax",
+        "ur": "موٹر گاڑی ٹوکن ٹیکس",
+        "ps": "د موتر ټوکن مالیہ"
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "shortDescription": {
+        "en": "Annual tax on registered motor vehicles for legal road-use status",
+        "ur": "رجسٹرڈ موٹرگاڑیوں پر سالانہ ٹیکس"
+      },
+      "processingTime": {
+        "value": 0,
+        "unit": "immediate",
+        "estimatedDuration": "Processed on the spot"
+      },
+      "eligibility": {
+        "vehicleOwners": "Owners of registered motor vehicles with Islamabad Excise and Taxation"
+      }
+    }
+  ],
+  "departments": [
+    {
+      "id": "DEPT_MOFA",
+      "name": "Ministry of Foreign Affairs",
+      "nameUr": "وزارت خارجہ",
+      "code": "MOFA",
+      "contactPhone": "+92-51-XXXXXX",
+      "website": "www.mofa.gov.pk",
+      "serviceCount": 2
+    },
+    {
+      "id": "DEPT_IESCO",
+      "name": "IESCO Utility Bills",
+      "nameUr": "آئیسکو یوٹیلٹی بلز",
+      "code": "IESCO",
+      "serviceCount": 1
+    },
+    {
+      "id": "DEPT_DGIP",
+      "name": "Directorate General of Immigration & Passports",
+      "nameUr": "ڈائریکٹوریٹ جنرل امیگریشن اور پاسپورٹس",
+      "code": "DGIP",
+      "contactPhone": "+92-51-XXXXXX",
+      "website": "www.dgip.gov.pk",
+      "serviceCount": 6
+    },
+    {
+      "id": "DEPT_POLICE",
+      "name": "Islamabad Capital Territory Police",
+      "nameUr": "اسلام آباد پولیس",
+      "code": "POLICE",
+      "contactPhone": "+92-51-XXXXXX",
+      "website": "www.islamabadpolice.gov.pk",
+      "serviceCount": 12
+    },
+    {
+      "id": "DEPT_TRAFFIC",
+      "name": "Islamabad Traffic Police",
+      "nameUr": "اسلام آباد ٹریفک پولیس",
+      "code": "TRAFFIC",
+      "serviceCount": 4
+    },
+    {
+      "id": "DEPT_CDA",
+      "name": "Capital Development Authority",
+      "nameUr": "کیپیٹل ڈیولپمنٹ اتھارٹی",
+      "code": "CDA",
+      "contactPhone": "+92-51-XXXXXX",
+      "website": "www.cda.gov.pk",
+      "serviceCount": 7
+    },
+    {
+      "id": "DEPT_NADRA",
+      "name": "National Database and Registration Authority",
+      "nameUr": "نادرا",
+      "code": "NADRA",
+      "contactPhone": "+92-51-111-786-100",
+      "website": "www.nadra.gov.pk",
+      "serviceCount": 5
+    },
+    {
+      "id": "DEPT_DC",
+      "name": "Deputy Commissioner Office Islamabad",
+      "nameUr": "ڈپٹی کمشنر آفس اسلام آباد",
+      "code": "DCO",
+      "serviceCount": 5
+    }
+  ],
+  "metadata": {
+    "totalServices": 50,
+    "totalDepartments": 8,
+    "supportedLanguages": ["English", "Urdu", "Pashto"],
+    "lastUpdated": "February 2026",
+    "catalog_version": "1.0"
+  }
+}

@@ -1,0 +1,3860 @@
+{
+  "metadata": {
+    "source_file": "Services Catalog Feb, 2026.pdf",
+    "extracted_pages": 79,
+    "catalog_version": "2026-02",
+    "generated_by": "build_canonical_catalog.py",
+    "total_services_parsed": 44,
+    "expected_services_from_department_lists": 44,
+    "departments_parsed": 7,
+    "notes": [
+      "Auto-parsed from extracted_output.txt with heuristic mapping.",
+      "Rows with needs_manual_review=true must be validated by content team."
+    ]
+  },
+  "departments": [
+    {
+      "id": "DEPT_MOFA",
+      "name": "Ministry of Foreign Affairs",
+      "code": "MOFA",
+      "service_count": 2
+    },
+    {
+      "id": "DEPT_IESCO",
+      "name": "IESCO Utility Bills",
+      "code": "IESCO",
+      "service_count": 7
+    },
+    {
+      "id": "DEPT_DGIP",
+      "name": "Directorate General of Immigration & Passports",
+      "code": "DGIP",
+      "service_count": 6
+    },
+    {
+      "id": "DEPT_POLICE",
+      "name": "Islamabad Capital Territory Police",
+      "code": "POLICE",
+      "service_count": 12
+    },
+    {
+      "id": "DEPT_CDA",
+      "name": "Capital Development Authority",
+      "code": "CDA",
+      "service_count": 7
+    },
+    {
+      "id": "DEPT_NADRA",
+      "name": "National Database and Registration Authority",
+      "code": "NADRA",
+      "service_count": 5
+    },
+    {
+      "id": "DEPT_DC",
+      "name": "Deputy Commissioner Office Islamabad",
+      "code": "DCO",
+      "service_count": 5
+    }
+  ],
+  "services": [
+    {
+      "service_id": "SRV_004",
+      "service_name": {
+        "en": "Apostille Attestation (Not Available at PAKC)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_MOFA",
+        "name": "Ministry of Foreign Affairs",
+        "code": "MOFA"
+      },
+      "availability_status": "not_available_at_center",
+      "summary": "A formal authentication issued by the Ministry of Foreign Affairs (MOFA), Islamabad, certifying the validity of a public document under the Hague Apostille Convention (1961) for its use abroad. List of required documents",
+      "required_documents": [
+        {
+          "text": "Original document requiring Apostille attestation Applicant’s ID Card or Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Signed authorization letter (if representative applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney / Special Power of Attorney (if legal representative applies —",
+          "is_mandatory": true
+        },
+        {
+          "text": "Authorization afNidavit (if immediate family member applies on behalf)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Proof of relationship (if applying for minors or family-based representation) - for",
+          "is_mandatory": true
+        },
+        {
+          "text": "Prior veriNication/attestation from the issuing authority CertiNied translation (if",
+          "is_mandatory": true
+        },
+        {
+          "text": "B-Form",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicant (document holder) Legal Representative (on behalf)",
+        "Immediate Family Member (on behalf)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Personal Document – 3,000 PKR",
+          "Educational Document – 3,000 PKR",
+          "Legal Document – 4,500 PKR Commercial Document – 12,000 PKR",
+          "Experience CertiNicate – 3,000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Application for the service through the Apostille Portal and submission of",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of the document and any prior",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of the completed document, with the Apostille certiNicate afNixed and",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Same day (3-4 hours)"
+        ]
+      },
+      "notes": [
+        "Apostille is afNixed only to original documents; photocopies are not accepted.",
+        "Apostille remains valid indeNinitely unless the document itself expires"
+      ],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 4
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_006",
+      "service_name": {
+        "en": "Normal/General Attestation",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_MOFA",
+        "name": "Ministry of Foreign Affairs",
+        "code": "MOFA"
+      },
+      "availability_status": "available",
+      "summary": "A formal attestation issued by the Ministry of Foreign Affairs (MOFA), Islamabad, certifying the authenticity of signatures, seals, and stamps on public documents for legal and administrative use within Pakistan and abroad (non-Apostille). List of required documents",
+      "required_documents": [
+        {
+          "text": "Original document requiring attestation",
+          "is_mandatory": true
+        },
+        {
+          "text": "Applicant’s ID Card or Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Signed authorization letter (if representative applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney / Special Power of Attorney (if legal representative applies —",
+          "is_mandatory": true
+        },
+        {
+          "text": "Authorization afNidavit (if immediate family member applies on behalf)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copies of supporting documents (e.g., CNIC, birth certiNicate, educational",
+          "is_mandatory": true
+        },
+        {
+          "text": "Prior veriNication/attestation from the issuing authority (mandatory for many",
+          "is_mandatory": true
+        },
+        {
+          "text": "CertiNied translation (if required by the receiving authority) Family Registration",
+          "is_mandatory": true
+        },
+        {
+          "text": "B-Form",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicant (document holder)",
+        "Immediate Family Member (on behalf)",
+        "Legal Representative (on behalf)"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge (Post-OfNice sticker charge only - 10-120 PKR)"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Firstly paste the sticker from post-ofNice on document",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application for the service by submitting original documents at the service",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "VeriNication and conNirmation of document authenticity and required prior",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 4,
+          "title": "Stage 4",
+          "description": "Issuance of the completed document, with MOFA attestation stamp afNixed and",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 6
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "duration"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_011",
+      "service_name": {
+        "en": "IESCO bill payment",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "This service enables IESCO customers to pay their monthly electricity bills. IESCO provides multiple convenient payment methods, including online payment, internet banking, mobile banking, ATMs, and partner banks/apps. List of required documents",
+      "required_documents": [
+        {
+          "text": "Reference Number (14-digit)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Customer (CNIC)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Paid copy of bill",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The IESCO consumer (bill holder)",
+        "Anyone acting on behalf of the consumer"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application recorded in the IESCO system",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of a completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Consumers should use their reference number / customer ID for payment",
+        "Multiple payment channels - including bank internet/mobile banking, ATMs,"
+      ],
+      "regulations": [
+        "IESCO’s billing and consumer services manual (CSM)"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/2a539d5d-a012-4db4-9d6f-ac0cfc29ed13",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 11
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_012",
+      "service_name": {
+        "en": "IESCO New Connection/Change of the Name/Change of the Tarriff Load",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "IESCO (Islamabad Electric Supply Company) provides online services for new electricity connections and changes to existing connections, including change of consumer name, change of tariff category, and increase or decrease of sanctioned load. List of required documents",
+      "required_documents": [
+        {
+          "text": "CNIC orignal/ Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Property Ownership CertiNicate",
+          "is_mandatory": true
+        },
+        {
+          "text": "AfNidavit",
+          "is_mandatory": true
+        },
+        {
+          "text": "Wiring test report from contrctor (for new connection only)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Allotment Letter in case of Government Employee",
+          "is_mandatory": true
+        },
+        {
+          "text": "Attested Power of Attorney (if the legal representative applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Division 1, Islamabad ( F-6, F-7, Tarlai, Nilore, G-7, Blue Area, Khanna Dak)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Division 2, Islamabad (F-8, F-11, G-9, G-11, I-9, 1-10, E-11, Shah Alladitta, Golra",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicants themselves / Legal representative",
+        "Fee varies depending on location, load, category, material estimates etc"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": []
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applying to service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Application recorded in the IESCO system and routed to the relevant SDO ofNice",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 4,
+          "title": "Stage 4",
+          "description": "The Applicant is provided with a tracking ID",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 5,
+          "title": "Stage 5",
+          "description": "Issuance of site visit",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 6,
+          "title": "Stage 6",
+          "description": "Issuance of a demand notice",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 7,
+          "title": "Stage 7",
+          "description": "Payment is made",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 8,
+          "title": "Stage 8",
+          "description": "Installation of new meter",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "10 days for site visit and preparing demand notice (after payment is made)",
+          "At least 30 days (after demand notice is prepared"
+        ]
+      },
+      "notes": [
+        "Application initially submitted online; processing tracked via app and web portal",
+        "Service is handled by multiple sections of relevant SDO OfNice."
+      ],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 12
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "payment"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_014",
+      "service_name": {
+        "en": "IESCO Installment of electricity bills",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "The service allows IESCO consumers to pay their electricity bills in installments. The procedures, required documents, payment conditions, and timelines follow IESCO’s internal rules and regulations. List of required documents",
+      "required_documents": [
+        {
+          "text": "Electricity bill",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Anyone",
+        "Upto 200,000 Rs."
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center Customer submits bill information",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application recorded in the IESCO system",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Installment plan prepared according to IESCO rules and customer’s demand",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Complaints handled through IESCO’s complaint management structure"
+      ],
+      "regulations": [
+        "Electricity bill",
+        "Anyone",
+        "Upto 200,000 Rs.",
+        "Free of charge",
+        "The applicant applies to the service center Customer submits bill information",
+        "Application recorded in the IESCO system",
+        "Installment plan prepared according to IESCO rules and customer’s demand",
+        "Immediately",
+        "Complaints handled through IESCO’s complaint management structure",
+        "IESCO internal procedures and documents",
+        "IESCO’s installments of bill payment by following consumer services manual"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/ff43417f-60a0-47c1-aNb9-556205ebe08a",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 14
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_015",
+      "service_name": {
+        "en": "IESCO extension in due date",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "The service allows IESCO consumers to request an extension of the due date for their electricity bill. The procedure, required documents, payment conditions and deadlines follow IESCO’s internal rules and regulations. List of required documents",
+      "required_documents": [
+        {
+          "text": "Electricity bills",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Anyone"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center Application recorded in the IESCO",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "IESCO processes request for extension of 3 days according to internal rules",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "A new due date is stamped on the bill",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Complaints handled through IESCO complaint management system"
+      ],
+      "regulations": [
+        "Electricity bills",
+        "Anyone",
+        "Free of charge",
+        "The applicant applies to the service center Application recorded in the IESCO",
+        "IESCO processes request for extension of 3 days according to internal rules",
+        "A new due date is stamped on the bill",
+        "Immediately",
+        "Complaints handled through IESCO complaint management system",
+        "IESCO internal procedures and documents",
+        "IESCO’s extension in due date of bill payment by following consumer services"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/28b3227a-8c8b-471b-9547-7b49dfab5a46",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 15
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_016",
+      "service_name": {
+        "en": "IESCO payment adjustment (Not Available at PAKC)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "not_available_at_center",
+      "summary": "The service allows IESCO consumers to request adjustment of payments related to electricity bills. The procedures, required documents, payment rules, deadlines, and veriNication steps follow IESCO’s internal regulations. List of required documents",
+      "required_documents": [
+        {
+          "text": "Paid electricity bill",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Anyone"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center Customer submits bill/payment",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application recorded in the IESCO system",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Adjustment processed according to IESCO internal rules Payment is adjusted into",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "No biometric data collected",
+        "NotiNications issued via SMS, letter, mobile app, and web portal",
+        "Complaints handled through IESCO’s complaint management structure"
+      ],
+      "regulations": [
+        "Paid electricity bill",
+        "Anyone",
+        "Free of charge",
+        "The applicant applies to the service center Customer submits bill/payment",
+        "Application recorded in the IESCO system",
+        "Adjustment processed according to IESCO internal rules Payment is adjusted into",
+        "Immediately",
+        "No biometric data collected",
+        "NotiNications issued via SMS, letter, mobile app, and web portal",
+        "Complaints handled through IESCO’s complaint management structure",
+        "IESCO internal procedures and documents",
+        "IESCO’s Payment adjustment of bill payment by following consumer services"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/f504e3b3-11bd-4a38-95b1-b47c7a3efd2a",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 16
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_017",
+      "service_name": {
+        "en": "IESCO Correction of wrong reading",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "The Correction of Wrong Reading service enables IESCO consumers to request adjustments when an incorrect meter reading has been recorded. After the consumer submits the required identiNication, IESCO veriNies the information, conducts any necessary Nield checks, and updates the billing record to reNlect the correct meter",
+      "required_documents": [
+        {
+          "text": "Reference Number (14-digit)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Proof of wrong reading by consumer (Upto 500 units)",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Anyone"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center for the adjusment of current billing",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application recorded in the IESCO system Revised bill is issued",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Complaints managed through IESCO’s complaint-handling channels"
+      ],
+      "regulations": [
+        "IESCO internal regulations IESCO’s Correction of wrong reading of bill payment by following consumer services manual (CSM)"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/c7a6fe36-6173-46fd-9d4a-6f9873f2eb46",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 17
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_018",
+      "service_name": {
+        "en": "IESCO Customer Complaints",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_IESCO",
+        "name": "IESCO Utility Bills",
+        "code": "IESCO"
+      },
+      "availability_status": "available",
+      "summary": "This service allows IESCO consumers to submit electricity-related complaints. Complaint handling follows IESCO’s internal regulations and procedures. Complaints may relate to billing, metering, connection, technical issues, or service delivery. List of required documents",
+      "required_documents": [
+        {
+          "text": "Electricity bill",
+          "is_mandatory": true
+        },
+        {
+          "text": "Mobile number",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Anyone"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Application is recorded through IESCO system Complaint is processed according",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "The customer is provided with the response",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Depends on the nature of the complaint"
+        ]
+      },
+      "notes": [
+        "No biometric data collected",
+        "Complaint management handled by IESCO’s designated"
+      ],
+      "regulations": [
+        "Electricity bill",
+        "Mobile number",
+        "Anyone",
+        "Free of charge",
+        "The applicant applies to the service center",
+        "Application is recorded through IESCO system Complaint is processed according",
+        "The customer is provided with the response",
+        "Depends on the nature of the complaint",
+        "No biometric data collected",
+        "Complaint management handled by IESCO’s designated",
+        "IESCO internal procedures and documents",
+        "IESCO’s Customer complaints by following consumer services manual (CSM)"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/8b1b2a57-e8a8-46f2-91cc-f0904d56f738",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 18
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_021",
+      "service_name": {
+        "en": "New Passport Application",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "The New Passport Application service is managed by the Directorate General of Immigration & Passports (DGI&P). Citizens can apply either online through the DGI&P e-Services portal or in person. Applicants need to submit personal and biometric information, provide required documents, and pay the prescribed fee. The passport is",
+      "required_documents": [
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicants themselves.",
+        "Parents or Guardians with Minors (under 18 years)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ordinary e-Passport (36 pages, 5 years validity): 9,000 (normal) PKR, 15,000",
+          "Ordinary e-Passport (36 pages, 10 years validity): 13,500 (normal) PKR, 22,500",
+          "Ordinary e-Passport (72 pages, 5 years validity): 16,500 (normal) PKR, 27,000",
+          "Ordinary e-Passport (72 pages, 10 years validity): 24,750 (normal) PKR, 40,500"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 21
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_023",
+      "service_name": {
+        "en": "Passport Renewal",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "Passport renewal service allows citizens to extend the validity of their expired or soon- to-expire passports. The process is completed at a Regional Passport OfNice, requiring presentation of the current passport, updated personal information if needed, and payment of the prescribed fee. Renewed passports are issued with the same features as",
+      "required_documents": [
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicants themselves",
+        "Minors (under 18 years), in which case the application must be submitted by"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ordinary e-Passport (36 pages, 5 years validity): 9,000 (normal) PKR, 15,000",
+          "Ordinary e-Passport (36 pages, 10 years validity): 13,500 (normal) PKR, 22,500",
+          "Ordinary e-Passport (72 pages, 5 years validity): 16,500 (normal) PKR, 27,000",
+          "Ordinary e-Passport (72 pages, 10 years validity): 24,750 (normal) PKR, 40,500",
+          "Ordinary MRP (36 pages, 5 years validity): 4500 (normal) PKR, 75,00 (urgent)"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 23
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_025",
+      "service_name": {
+        "en": "Passport ModiLication",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "The Passport ModiNication service allows Pakistani citizens to update or correct personal information in their existing passports, such as name, father’s name, or date of birth. Applicants must Nirst ensure that the changes are reNlected in their CNIC/NICOP before applying for modiNication. Additional documents, such as a birth certiNicate or",
+      "required_documents": [
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Pakistani citizens who wish to update or correct personal information in their",
+        "Minors, whose modiNication applications must be submitted by parents or legal",
+        "Overseas Pakistanis, who can apply through a Pakistan mission abroad with"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ordinary e-Passport (36 pages, 5 years validity): 9,000 (normal) PKR, 15,000",
+          "Ordinary e-Passport (36 pages, 10 years validity): 13,500 (normal) PKR, 22,500",
+          "Ordinary e-Passport (72 pages, 5 years validity): 16,500 (normal) PKR, 27,000",
+          "Ordinary e-Passport (72 pages, 10 years validity): 24,750 (normal) PKR, 40,500"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 25
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_027",
+      "service_name": {
+        "en": "Lost/ Stolen Passport",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "The Lost or Stolen Passport service allows Pakistani citizens to report and replace a passport that has been lost or stolen. Applicants must submit a formal police report mentioning Passport Number along with an application at the nearest Regional Passport OfNice or Pakistan mission abroad. The replacement process involves veriNication of the",
+      "required_documents": [
+        {
+          "text": "Police Report (FIR)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Old Passport Copy (if available)",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "Original Valid CNIC/NICOP with two photocopies/Passport (if the parent is",
+          "is_mandatory": true
+        },
+        {
+          "text": "Fee payment receipt",
+          "is_mandatory": true
+        },
+        {
+          "text": "No Objection Certi?icate (NOC) (in case of government, semi-government or",
+          "is_mandatory": true
+        },
+        {
+          "text": "Foreign Passport along with its photocopy (for Dual-Nationals only) Family",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Pakistani citizens whose passport has been lost or stolen.",
+        "Minors, whose applications must be submitted by parents or legal guardians."
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "First loss: double the normal passport fee",
+          "Second loss: four times the normal fee",
+          "Third: eight times the normal fee (The Passport Of.ice will refer 3rd-time lost cases to the"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the Service Center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Prescribed Fee deposited (online or through the bank - National Bank of",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Biometric data are taken (Ningerprints and photograph) and live data entry is",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 27
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "duration"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_029",
+      "service_name": {
+        "en": "Exausted Passport",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "If you are a frequent traveler and pages on your passport are exhausted then you can apply for a fresh passport. List of required documents • If applicant is above 18 years old:",
+      "required_documents": [
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Pakistani citizens whose passport has been exausted.",
+        "Minors, whose applications must be submitted by parents or legal guardians.",
+        "Overseas Pakistanis, who can apply through a Pakistan mission abroad."
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ordinary e-Passport (36 pages, 5 years validity): 9,000 (normal) PKR, 15,000",
+          "Ordinary e-Passport (36 pages, 10 years validity): 13,500 (normal) PKR, 22,500",
+          "Ordinary e-Passport (72 pages, 5 years validity): 16,500 (normal) PKR, 27,000",
+          "Ordinary e-Passport (72 pages, 10 years validity): 24,750 (normal) PKR, 40,500",
+          "Ordinary MRP (36 pages, 5 years validity): 4500 (normal) PKR, 75,00 (urgent)",
+          "Ordinary MRP (72 pages, 5 years validity): 8200 (normal) PKR, 13,500 (urgent)",
+          "Ordinary MRP (100 pages, 5 years validity): 9000 (normal) PKR, 18,000 (urgent)"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 29
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_031",
+      "service_name": {
+        "en": "Damaged Passport",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DGIP",
+        "name": "Directorate General of Immigration & Passports",
+        "code": "DGIP"
+      },
+      "availability_status": "available",
+      "summary": "List of required documents • If applicant is above 18 years old: xi. Current Passport (orignal+photocopy of full passport) xii. Original Valid CNIC/NICOP with two photocopies/Passport (if the parent is",
+      "required_documents": [
+        {
+          "text": "If applicant is above 18 years old:",
+          "is_mandatory": true
+        },
+        {
+          "text": "If applicant is under 18 years old:",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Pakistani citizens whose passport has been damaged.",
+        "Minors, whose applications must be submitted by parents or legal guardians.",
+        "Overseas Pakistanis, who can apply through a Pakistan mission abroad."
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ordinary e-Passport (36 pages, 5 years validity): 9,000 (normal) PKR, 15,000",
+          "Ordinary e-Passport (36 pages, 10 years validity): 13,500 (normal) PKR, 22,500",
+          "Ordinary e-Passport (72 pages, 5 years validity): 16,500 (normal) PKR, 27,000",
+          "Ordinary e-Passport (72 pages, 10 years validity): 24,750 (normal) PKR, 40,500",
+          "Ordinary MRP (36 pages, 5 years validity): 4500 (normal) PKR, 75,00 (urgent)",
+          "Ordinary MRP (72 pages, 5 years validity): 8200 (normal) PKR, 13,500 (urgent)",
+          "Ordinary MRP (100 pages, 5 years validity): 9000 (normal) PKR, 18,000 (urgent)",
+          "Ordinary MRP (36 pages, 10 years validity): 6700 (normal) PKR, 11,200 (urgent)"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 31
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_035",
+      "service_name": {
+        "en": "Police VeriLication Service",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Police VeriNication Service offered by the Islamabad Police enables employers and individuals to obtain a veriNied certiNicate of an applicant’s background and record before employment or deployment. The process requires submission of original CNIC/B-Form and, if the applicant does not reside in Islamabad, an accompanying",
+      "required_documents": [
+        {
+          "text": "CNIC/ B-Form (if applicant is under 18 years old)",
+          "is_mandatory": true
+        },
+        {
+          "text": "AfNidavit (in case of no residential proof)",
+          "is_mandatory": true
+        },
+        {
+          "text": "",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicants themselves"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "General Police VeriNication service - 1,000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "The application is sent to the police department through the system",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "VeriNication and conNirmation of the applicant`s criminal record",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 4,
+          "title": "Stage 4",
+          "description": "Issuance of a completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Up to 3 working days"
+        ]
+      },
+      "notes": [
+        "Service delivery timelines may be extended in exceptional cases requiring further",
+        "If the applicant fails to fulNil the required documentation, the time for issuance of",
+        "This is a paid service and the fee is Nixed",
+        "The Ninal document will be issued in hard printed form",
+        "Citizen is informed about readiness of the document via SMS"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980 ICT Police Rules &"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/cb4ae3b0-9f52-45bb-8bdd-7adedc0a4223",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 35
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_036",
+      "service_name": {
+        "en": "Character Certi?icate Service",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Character CertiNicate service issues an ofNicial certiNicate conNirming an individual’s good character and criminal-record status, useful for travelling abroad, jobs in foreign organizations, immigration etc. List of required documents",
+      "required_documents": [
+        {
+          "text": "*CNIC / B-Form + Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Authority letter (if the applicant is abroad) with embassy stamp / attestation by",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant",
+        "An authorized blood relative of the applicant (brother, father, mother, sister)",
+        "Legal representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Character CertiNicate Service - 1,000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Up to 3 working days"
+        ]
+      },
+      "notes": [
+        "If applicant lives abroad, the process can be done via an authorized blood relative"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "ICT Police Rules & Standing Orders (internal operational rules used for service"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/7c391beb-31a2-47a5-850f-5f6e4362273d",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 36
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_037",
+      "service_name": {
+        "en": "Driving License (Renewal)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "This service allows eligible residents of the Islamabad Capital Territory to apply for a new driving licence or renew an existing one. The online portal simpliNies the application and renewal process for various vehicle categories. List of required documents",
+      "required_documents": [
+        {
+          "text": "CNIC along with Photocopy/ Passport ( for foreigners)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Approved Medical CertiNicate attested by a government doctor with PMDC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Current driving license",
+          "is_mandatory": true
+        },
+        {
+          "text": "Passport size picture",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant themselves"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Renewal within 30 days from expiry date - 4,000 PKR + 500 PKR (Medical",
+          "Renewal within 1 year from expiry date - 4,500 PKR + 500 PKR (Medical",
+          "Renewal within 3 year from expiry date - 5,000 PKR + 500 PKR (Medical",
+          "Renewal after 3 year from expiry date - 10,000 PKR + 500 PKR (Medical",
+          "License of motoring (LTV, HTV and PSV) after 3 years- 150,000 PKR",
+          "The applicant should pay an additional 2000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Urgent - Within a day",
+          "Normal - Within 10 days (from Faizabad of?ice)"
+        ]
+      },
+      "notes": [
+        "Online license renewal portals are available, only for overseas Pakistanis"
+      ],
+      "regulations": [
+        "Motor Vehicles Ordinance, 1965 Motor Vehicle Rules, 1969",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "Islamabad TrafNic Police Licensing Rules & Standing Orders"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/1330855f-5ac1-49ba-97b8-3ad3c7cc1612",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 37
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_038",
+      "service_name": {
+        "en": "Duplicate Driving License",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "This service allows eligible residents of the Islamabad Capital Territory to apply for a new driving licence or renew an existing one. The online portal simpliNies the application and renewal process for various vehicle categories. List of required documents",
+      "required_documents": [
+        {
+          "text": "Lost Report",
+          "is_mandatory": true
+        },
+        {
+          "text": "CNIC along with Photocopy",
+          "is_mandatory": true
+        },
+        {
+          "text": "Approved Medical CertiNicate attested by a government doctor with PMDC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Passport Size Photograph",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant themselves"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Valid license: 5000 PKR + 500 PKR (Medical certiNicate)",
+          "Expired:",
+          "within 30 days from expiry date - 7,000 PKR + 500 PKR (Medical certiNicate)",
+          "within 1 year from expiry date – 7,500 PKR + 500 PKR (Medical certiNicate)",
+          "within 3 year from expiry date – 8,000 PKR + 500 PKR (Medical certiNicate)",
+          "after 3 year from expiry date -10,000PKR + 500 PKR (Medical certiNicate)",
+          "The applicant should pay an additional 2000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Urgent - Within a day",
+          "Normal - Within 10 days (Faizabad Of?ice)"
+        ]
+      },
+      "notes": [
+        "Online license renewal portals are available, only for overseas Pakistanis"
+      ],
+      "regulations": [
+        "Motor Vehicles Ordinance, 1965 Motor Vehicle Rules, 1969",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "Islamabad TrafNic Police Licensing Rules & Standing Orders"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/1330855f-5ac1-49ba-97b8-3ad3c7cc1612",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 38
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_039",
+      "service_name": {
+        "en": "Learner Permit Issuance Service",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Learner Permit Issuance service allows residents of Islamabad to obtain a provisional driving permit that authorizes them to practice driving before applying for a full driving license. The permit is issued by the Islamabad TrafNic Police upon submission of required documents, medical Nitness certiNication, and payment of the",
+      "required_documents": [
+        {
+          "text": "CNIC’s copy",
+          "is_mandatory": true
+        },
+        {
+          "text": "Approved medical Nitness certiNicate issued by a government doctor and",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Learner Permit Issuance Service for single category - 1,000 PKR + 500PKR",
+          "Learner Permit Issuance Service for double category - 2,000 PKR + 500PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "The permit is speciNically for practice driving and is pre-requisite to the full",
+        "Learner Permit Renewal/ Duplicate service is also avalible"
+      ],
+      "regulations": [
+        "Motor Vehicles Ordinance, 1965 Motor Vehicle Rules, 1969",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "Islamabad TrafNic Police Licensing Rules & Standing Orders"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/f1733958-fc29-4e54-b1ba-e83b806c6685",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 39
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_040",
+      "service_name": {
+        "en": "Tenant Registration Service",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Tenant Registration service enables landlords and tenants to register their rental arrangement with the Islamabad Police to ensure transparency and lawful occupancy in the capital territory. The process records key details of the owner, tenant, and rental agreement to assist police in maintaining security and traceability of residence.",
+      "required_documents": [
+        {
+          "text": "Tenant’s CNIC’s copy (Tenant should be present in person along with family",
+          "is_mandatory": true
+        },
+        {
+          "text": "Owner’s CNIC’s copy",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of the rent agreement on afNidavit",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The tenant (applicant)",
+        "The property owner (landlord)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "500 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents and criminal",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of a completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Tenant registration is mandatory in the Islamabad Capital Territory for all",
+        "After registration, landlords and tenants should keep the registration certiNicate",
+        "Online registration is available via the ICTP mobile app for convenience Tenant"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "ICT Police Rules & Standing Orders (internal operational rules used for service"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/f135221a-8fc8-4b4c-a383-e6d516b3f45e",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 40
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_041",
+      "service_name": {
+        "en": "Missing/Lost Reports",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Missing/Lost Reports service allows individuals to register a loss or disappearance of personal documents, valuables, vehicle documents or other items with the Islamabad Police for record. It ensures the recorded status of lost items and aids in recovery or prevention of misuse.",
+      "required_documents": [
+        {
+          "text": "CNIC/ Islamabad driving license (except property document) (Form avalible on",
+          "is_mandatory": true
+        },
+        {
+          "text": "For missing/lost vehicle documents: CNIC, photos (black and white or color) of",
+          "is_mandatory": true
+        },
+        {
+          "text": "Bank and property related reports",
+          "is_mandatory": true
+        },
+        {
+          "text": "For missing/lost other items: passport, educational documents, departmental",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant (owner of the lost/missing item)",
+        "Legal representative"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "The service is meant to help record and track lost or missing items, reducing risk",
+        "It is advisable to report losses promptly to enable effective information in case of"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "ICT Police Rules & Standing Orders (internal operational rules used for service"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/3ad8f617-f9ff-4af3-8135-25718f2f58cf",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 41
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_042",
+      "service_name": {
+        "en": "Foreigner Registration",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "Foreigner Registration is a mandatory process for certain foreign nationals staying in Pakistan, requiring them to register their presence with the local authorities. The purpose of this service is to document the stay of foreign visitors, ensure compliance with immigration laws, maintain security records, and verify residency details.",
+      "required_documents": [
+        {
+          "text": "Passport + valid visa",
+          "is_mandatory": true
+        },
+        {
+          "text": "Residential proof in Islamabad (rental agreement, utility bill, etc.)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Passport+ Visa",
+          "is_mandatory": true
+        },
+        {
+          "text": "A witness CNIC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Sponsor CNIC (if applicable)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Residential proof in Islamabad (rental agreement, utility bill, etc.)",
+          "is_mandatory": true
+        },
+        {
+          "text": "If staying in a hotel or rest house: a CertiNicate/attestation from the hotel/ rest-",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicant"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Foreigner registration - 1,000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately",
+          "Travel/ Exit permit.",
+          "Passport",
+          "valid visa",
+          "Registration CertiNicate issued by police.",
+          "The applicant",
+          "Free of cost",
+          "Immediately"
+        ]
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 42
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_044",
+      "service_name": {
+        "en": "Servant/Employee Registration",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "Servant Registration is a mandatory process for registering domestic servants and household employees working or residing in private premises within the Islamabad Capital Territory. The purpose of this service is to document servant identity details, support security and veriNication requirements, maintain ofNicial police records, and",
+      "required_documents": [
+        {
+          "text": "Servant’s CNIC/ passport (for foreigners)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Owner/employer’s CNIC/ passport (for foreigners)",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The domestic worker/servant (applicant)",
+        "The employer/household owner (who hires the servant)"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant (servant) and employer applies to the service center VeriNication",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Registration is important for security reasons: domestic servants should be",
+        "Employer and servant both must participate in the process"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "ICT Police Rules & Standing Orders (internal operational rules used for service"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/ab2a9fe1-0e08-4c71-98ea-04fa8fc8bf49",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 44
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_045",
+      "service_name": {
+        "en": "Copy of FIR",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "A Copy of FIR (First Information Report) is issued by Islamabad Police to relevant stakeholders who needs an ofNicial copy of an FIR registered at any police station within Islamabad Capital Territory. This service allows citizens to obtain certiNied copies for legal, administrative, or personal reference purposes.",
+      "required_documents": [
+        {
+          "text": "Applicant’s CNIC / passport (for foreigners)",
+          "is_mandatory": true
+        },
+        {
+          "text": "FIR Number, Police Station details and Registration year",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney or representative letter",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Stakeholders themselves apply",
+        "Legal representatives with Power of Attorney or representative letter"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents Issuance of a",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Only the concerned person or authorized individual may request the FIR copy",
+        "Some FIRs may require additional departmental approval depending on case"
+      ],
+      "regulations": [
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980 ICT Police Rules &"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/de26dd47-4eca-4ce5-9378-8641d00b2af8",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 45
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_046",
+      "service_name": {
+        "en": "Crime/Incident Report",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The Crime/Incident Report service allows any individual to report a crime or incident to Islamabad Capital Territory Police (ICTP). Reports are received immediately and registered without the need for any documents. The service is governed by the Code of Criminal Procedure and Police regulations, ensuring timely police response and",
+      "required_documents": [
+        {
+          "text": "No documents are required for reporting a crime or incident",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The individual themselves (person reporting the crime/incident)"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication of the incident and forward the incident report to concerned police",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of E-tag to the citizen",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Information is entered into the ICTP system for ofNicial record",
+        "Cases may be forwarded to relevant ofNices depending on the matter No speciNic"
+      ],
+      "regulations": [
+        "No documents are required for reporting a crime or incident",
+        "The individual themselves (person reporting the crime/incident)",
+        "Free of charge",
+        "The applicant applies to the service center",
+        "VeriNication of the incident and forward the incident report to concerned police",
+        "Issuance of E-tag to the citizen",
+        "Immediately",
+        "Information is entered into the ICTP system for ofNicial record",
+        "Cases may be forwarded to relevant ofNices depending on the matter No speciNic",
+        "Police Act, 1861",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "ICT Police Rules & Standing Orders (internal operational rules used for service"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/3d245443-e620-4a65-ae58-42737469abfd",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 46
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_047",
+      "service_name": {
+        "en": "E-Challan Review Requests",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_POLICE",
+        "name": "Islamabad Capital Territory Police",
+        "code": "POLICE"
+      },
+      "availability_status": "available",
+      "summary": "The E-Challan Review Request service allows individuals to challenge or seek correction of an issued electronic trafNic challan. Requests are reviewed by Islamabad Capital Territory Police (ICTP) based on enforcement data from Safe City cameras and related records.",
+      "required_documents": [
+        {
+          "text": "CNIC",
+          "is_mandatory": true
+        },
+        {
+          "text": "E-Challan",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The individuals themselves",
+        "Legal representative - Power of Attorney"
+      ],
+      "payment_model": {
+        "type": "free",
+        "currency": "PKR",
+        "entries": [
+          "Free of charge"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of documents VeriNication from",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Investigation result will be sent to the citizen through the SMS",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Same day"
+        ]
+      },
+      "notes": [
+        "All applicant information is entered into the ICTP system Request is veriNied"
+      ],
+      "regulations": [
+        "Motor Vehicles Ordinance, 1965 Motor Vehicle Rules, 1969",
+        "Islamabad Capital Territory (Administration) Order, 1980",
+        "Islamabad TrafNic Police Licensing Rules & Standing Orders"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/f607a172-7358-436f-b579-93e69d48d36a",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 47
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_049",
+      "service_name": {
+        "en": "Approval of Building Plans",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "A formal approval issued by the Capital Development Authority (CDA) confirming that proposed architectural and structural plans comply with the Islamabad Capital Territory Building Control Regulations (2020, amended 2023) and are authorized for construction. List of required documents",
+      "required_documents": [
+        {
+          "text": "6 copies of structural & 6 copies of Architectural drawings",
+          "is_mandatory": true
+        },
+        {
+          "text": "Form A-I, AII (with one photocopy) duly signed/ stamped",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Allotment Letter duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of NIC duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Possession Letter duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Indemnity Bond from the Allotee duly attested from Notary Public on Rs. 30/-",
+          "is_mandatory": true
+        },
+        {
+          "text": "Soundness and Stability CertiOicate by the engineer",
+          "is_mandatory": true
+        },
+        {
+          "text": "Calculation Book",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photograph of vacant plot must be attached",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Scrutiny Fee for Residential Rs. 6/- per square feet",
+          "Scrutiny Fee for Commercial Rs. 6/- per square feet"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "21 days"
+        ]
+      },
+      "notes": [],
+      "regulations": [
+        "6 copies of structural & 6 copies of Architectural drawings",
+        "Form A-I, AII (with one photocopy) duly signed/ stamped",
+        "Photocopy of Allotment Letter duly attested",
+        "Photocopy of NIC duly attested",
+        "Photocopy of Possession Letter duly attested",
+        "Indemnity Bond from the Allotee duly attested from Notary Public on Rs. 30/-",
+        "Soundness and Stability CertiOicate by the engineer",
+        "Calculation Book",
+        "Photograph of vacant plot must be attached",
+        "Scrutiny Fee for Residential Rs. 6/- per square feet",
+        "Scrutiny Fee for Commercial Rs. 6/- per square feet",
+        "21 days"
+      ],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 49
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "stages"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_050",
+      "service_name": {
+        "en": "Completion CertiLicate",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "A formal certificate issued by Capital Development Authority (CDA) confirming that a building has been constructed in accordance with approved plans and regulations and is eligible for occupation. Without approval building plan, citizens cannot apply for completion certificate. List of required documents",
+      "required_documents": [
+        {
+          "text": "6 copies of drawings",
+          "is_mandatory": true
+        },
+        {
+          "text": "Form B-I, B-II with one photocopy",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Allotment Letter duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of NIC duly attested",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ascertained after survey by CDA OfOicials",
+          "Fee is accepted in form off Bank Draft on account of CDA"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "21 days"
+        ]
+      },
+      "notes": [],
+      "regulations": [
+        "6 copies of drawings",
+        "Form B-I, B-II with one photocopy",
+        "Photocopy of Allotment Letter duly attested",
+        "Photocopy of NIC duly attested",
+        "Ascertained after survey by CDA OfOicials",
+        "Fee is accepted in form off Bank Draft on account of CDA",
+        "21 days"
+      ],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 50
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "stages"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_051",
+      "service_name": {
+        "en": "NOC Issuance for Transfer",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "A formal No Objection CertiOicate (NOC) issued by the Capital Development Authority (CDA) conOirming that the property and its ownership documents meet CDA requirements for transfer and lease extension. List of required documents",
+      "required_documents": [
+        {
+          "text": "Application",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Allotment Letter/ Transfer Letter duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of NIC duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy if Allotment / Change of Title Letter",
+          "is_mandatory": true
+        },
+        {
+          "text": "For commercial: Markshare Map",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "For residential Rs. 10,000/-",
+          "For commercial Rs. 20,000/-",
+          "Fee is accepted in form off Bank Draft on account of CDA"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "7 days"
+        ]
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 51
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "stages"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_052",
+      "service_name": {
+        "en": "NOC Issuance for Lease Extension",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "A formal No Objection CertiOicate (NOC) issued by the Capital Development Authority (CDA) conOirming that the property and its ownership documents meet CDA requirements for transfer and lease extension. List of required documents",
+      "required_documents": [
+        {
+          "text": "Application",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Allotment Letter / Transfer Letter",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of NIC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Fresh Photographs",
+          "is_mandatory": true
+        },
+        {
+          "text": "Three specimen signatures",
+          "is_mandatory": true
+        },
+        {
+          "text": "Undertaking of Rs. 10/-",
+          "is_mandatory": true
+        },
+        {
+          "text": "NOC (BCS)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Paid Bill/ Vouchers of Revenue",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Ascertained after survey by CDA OfOicials",
+          "Fee is accepted in form off Bank Draft on account of CDA"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Within 14 days"
+        ]
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 52
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "stages"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_053",
+      "service_name": {
+        "en": "Demolition Permission",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "A formal permission issued by the Capital Development Authority (CDA) allowing the legal owner to demolish an existing building or structure in accordance with CDA regulations and safety requirements. List of required documents",
+      "required_documents": [
+        {
+          "text": "Application to Deputy Director Estate Management",
+          "is_mandatory": true
+        },
+        {
+          "text": "Paid bills / Voucher of Revenue Department",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photocopy of Transfer Letter & NIC duly attested",
+          "is_mandatory": true
+        },
+        {
+          "text": "Civil Engineer CertiOicate",
+          "is_mandatory": true
+        },
+        {
+          "text": "AfOidavit of Rs. 10/- & Indemnity Bond of Rs. 30/-",
+          "is_mandatory": true
+        },
+        {
+          "text": "Consent from neighbors",
+          "is_mandatory": true
+        },
+        {
+          "text": "Photograph oh house",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "For residential Rs. 10,000/-",
+          "For commercial Rs. 20,000/-",
+          "Fee is accepted in form of Bank Draft on account of CDA"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "26 days"
+        ]
+      },
+      "notes": [],
+      "regulations": [
+        "Application to Deputy Director Estate Management",
+        "Paid bills / Voucher of Revenue Department",
+        "Photocopy of Transfer Letter & NIC duly attested",
+        "Civil Engineer CertiOicate",
+        "AfOidavit of Rs. 10/- & Indemnity Bond of Rs. 30/-",
+        "Consent from neighbors",
+        "Photograph oh house",
+        "For residential Rs. 10,000/-",
+        "For commercial Rs. 20,000/-",
+        "Fee is accepted in form of Bank Draft on account of CDA",
+        "26 days"
+      ],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 53
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "stages"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_054",
+      "service_name": {
+        "en": "Death Registration",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "This service allows residents of the Islamabad Capital Territory to register the death of a Pakistani citizen and obtain an official, computerized death certificate, which is a foundational document for obtaining a NADRA Death Registration Certificate. List of required documents",
+      "required_documents": [
+        {
+          "text": "CNIC (Attested) of the Father and Mother",
+          "is_mandatory": true
+        },
+        {
+          "text": "Passport (Attested) of the Father and Mother (in case of Foreigners)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Original Death CertiNicate of Hospital/ Clinic / nursing Home /Doctor",
+          "is_mandatory": true
+        },
+        {
+          "text": "Residential proof of Islamabad",
+          "is_mandatory": true
+        },
+        {
+          "text": "Nikkah Nama in case of NIC of Female deceased is not registered with her husband",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney (if a legal representative applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Consent of all Legal Heirs on Judicial Stamp paper of Rs.10 is required in case of",
+          "is_mandatory": true
+        },
+        {
+          "text": "In Case of two windows separate afNidavit will be required",
+          "is_mandatory": true
+        },
+        {
+          "text": "FRC from NADRA.",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Parent",
+        "Legal Representative (on behalf)",
+        "Blood Relative (on behalf)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Death reported beyond one month but within one year - 210 PKR",
+          "Death reported after one year but within Nive year - 280 PKR",
+          "Death reported after Nive years - 730 PKR",
+          "Death reported beyond one month but within one year -420 PKR",
+          "Death reported after one year but within Nive year - 560 PKR",
+          "Death reported after Nive years - 1,460 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Application for the service through the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "VeriNication and conNirmation of the authenticity of the documents and physical site",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of the Ninalized document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 54
+      },
+      "content_completeness": {
+        "score_0_to_4": 3,
+        "missing_fields": [
+          "duration"
+        ]
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_058",
+      "service_name": {
+        "en": "Birth Registration",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_CDA",
+        "name": "Capital Development Authority",
+        "code": "CDA"
+      },
+      "availability_status": "available",
+      "summary": "This service allows residents of the Islamabad Capital Territory to register the birth of a child and obtain an ofNicial, computerized birth certiNicate, which is a foundational document for obtaining a NADRA Child Registration CertiNicate. List of required documents",
+      "required_documents": [
+        {
+          "text": "Copy of CNIC (Attested) of the Father and Mother of the Child",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Passport (Attested) of the Father and Mother (in case of Foreigners)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Original Birth CertiNicate of Hospital/ Clinic / nursing Home /Doctor (with Doctor’s",
+          "is_mandatory": true
+        },
+        {
+          "text": "Residential proof of Islamabad",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Nikkah Nama in case of NIC of Female deceased is not registered with her",
+          "is_mandatory": true
+        },
+        {
+          "text": "Power of Attorney (if a legal representative applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "NOC from ADCR OfNice HVC Branch F-8 Markaz Islamabad (In case of a child is under",
+          "is_mandatory": true
+        },
+        {
+          "text": "Midwife afNidavit from LHW/ LHV",
+          "is_mandatory": true
+        },
+        {
+          "text": "Vaccination card (for child under 5 years)",
+          "is_mandatory": true
+        },
+        {
+          "text": "School Report or proof of birth like FRC or B-Form (In case of a child is above 5 years",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Individuals themselves (if the applicant is above 18 years old)",
+        "Parent (if the applicant is under 18 years old)",
+        "Legal Representative (on behalf)",
+        "Blood Relative (on behalf)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "CertiNicate Fee - 50 PKR",
+          "Birth reported beyond one month but within one year - 60 PKR",
+          "Birth reported after one year but within Nive year - 180 PKR",
+          "Birth reported after Nive years - 630 PKR",
+          "Double rate will be charged"
+        ]
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 58
+      },
+      "content_completeness": {
+        "score_0_to_4": 2,
+        "missing_fields": [
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_063",
+      "service_name": {
+        "en": "Issuance of New, Duplicate and Renewal of ID cards",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "availability_status": "available",
+      "summary": "Issuance of Duplicate and Renewal of ID cards refers to applying for a new ID card when the original is lost or damaged, or renewing an ID card when its validity has expired. The process typically requires identity verification through biometric data. Once the application is approved, NADRA issues a new card with the same details as the previous one, for renewal of ID cards",
+      "required_documents": [
+        {
+          "text": "CNIC copy/ CNIC picture/ CNIC Number",
+          "is_mandatory": true
+        },
+        {
+          "text": "Child B-Form",
+          "is_mandatory": true
+        },
+        {
+          "text": "CNIC of father or mother or guardian",
+          "is_mandatory": true
+        },
+        {
+          "text": "Guardianship certificate in case guardian applies",
+          "is_mandatory": true
+        },
+        {
+          "text": "Change in Name (Spelling correction & Spouse Name Addition)",
+          "is_mandatory": true
+        },
+        {
+          "text": "No document required",
+          "is_mandatory": true
+        },
+        {
+          "text": "Full Name Change (Muhammad Amir to Amir Bashir)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Name change Affidavit (on 20 Rs. Stamp Paper) for above 18 years only",
+          "is_mandatory": true
+        },
+        {
+          "text": "Birth Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Change in Temporary Address",
+          "is_mandatory": true
+        },
+        {
+          "text": "Allotment letter in case house is government allotted",
+          "is_mandatory": true
+        },
+        {
+          "text": "Own Registry or utility bill in case house is owned by the applicant",
+          "is_mandatory": true
+        },
+        {
+          "text": "Rent Agreement with owner name and utility bill in case of rented house",
+          "is_mandatory": true
+        },
+        {
+          "text": "Change in Permanent Address",
+          "is_mandatory": true
+        },
+        {
+          "text": "Registry or utility bill (must be in name of applicant or his father/mother)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Change in Place of birth",
+          "is_mandatory": true
+        },
+        {
+          "text": "Valid passport or Computerized Birth Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Change in Date of Birth",
+          "is_mandatory": true
+        },
+        {
+          "text": "Birth certificate (for child below 18 years)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Matric Degree (for above 18 years)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Service Book and NOC from his department (in case of government employee)",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": []
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 63
+      },
+      "content_completeness": {
+        "score_0_to_4": 1,
+        "missing_fields": [
+          "payment",
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_066",
+      "service_name": {
+        "en": "Family Registration Certificate (FRC)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "availability_status": "available",
+      "summary": "Family Registration Certificate is an official document issued by NADRA that provides a complete record of a family’s members, including parents, siblings, spouse, and children. It is used for various administrative and legal purposes, such as applying for passports, enrolling children in schools, and verifying family relationships for government services.",
+      "required_documents": [
+        {
+          "text": "CNIC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Application by any blood relative / spouse / guardian",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicant",
+        "Any blood relative / spouse / guardian",
+        "Minor in family under 3 years, his presence is mandatory",
+        "Presence of minor (under 18 years) having CRC without picture (if applicable) (mandatory)"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "For \"By Birth, By Marriage and By Adoption\" categories - 1,000 PKR",
+          "For \"By All\" category - 2,000 1000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Application for the service through the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Verification and confirmation of the authenticity of the documents at the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of the completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately",
+          "24 hours"
+        ]
+      },
+      "notes": [
+        "FRC does not require renewal; however, if family information changes, the applicant must",
+        "Biometrics are mandatory for the applicant and minors without photos",
+        "Picture of minor is taken",
+        "Feedback channels: NCCMS, NADRA social media platforms and Call center 051-111 786"
+      ],
+      "regulations": [
+        "NADRA Ordinance, 2000",
+        "Schedule XI, Rule 19 of NIC Rules 2002"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/47150c92-9cb6-4104-a188-0ac49f8d4f82",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 66
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_067",
+      "service_name": {
+        "en": "Child Registration Certificate (CRC)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "availability_status": "available",
+      "summary": "The Child Registration Certificate (CRC) (also known as B-Form) is an official document issued by NADRA to register the birth of a child in Pakistan. It serves as a proof of birth and identity for children under the age of 18 and is often required for school enrollment, passport applications, and other official purposes. The CRC includes details such as the child’s full name, date of birth,",
+      "required_documents": [
+        {
+          "text": "ID card number of applicant (father or mother)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Guardianship certificate (if guardian applies)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Computerized Birth Certificate (verified) of UC / Municipal Committee / Cantonment",
+          "is_mandatory": true
+        },
+        {
+          "text": "Computerized Birth Certificate (verified) of UC / Municipal Committee / Cantonment",
+          "is_mandatory": true
+        },
+        {
+          "text": "S1 form or Citizenship / Naturalization certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Foreign detailed Birth Certificate",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicant (Father or Mother or Guardian)",
+        "Minor (if he is above 3 years)",
+        "Parent or guardian"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Normal - 50 PKR",
+          "Executive - 500 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies for the service through the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Verification and confirmation of the authenticity of documents are carried out at the service",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Taking photo of applicant and minor and signature of applicant",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 4,
+          "title": "Stage 4",
+          "description": "Biometric and IRIS of minor and applicant",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 5,
+          "title": "Stage 5",
+          "description": "Paying the fee (Online)",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 6,
+          "title": "Stage 6",
+          "description": "Acceptance of application",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 7,
+          "title": "Stage 7",
+          "description": "Notifying of the applicant about the completed document by SMS",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 8,
+          "title": "Stage 8",
+          "description": "Issuance of a completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Normal - 7 days",
+          "Executive - 1 day"
+        ]
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 67
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_069",
+      "service_name": {
+        "en": "Pakistan Origin Card (POC) New, Renewal and Duplicate",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "availability_status": "available",
+      "summary": "Pakistan Origin Card (POC) is issued to the eligible foreigners of Pakistani Origin to provide them secure and valid identity for their linkage with Pakistan. The POC Rules outlines the eligibility criteria, stating that individuals who have previously been Pakistani citizens or whose parents or grandparents were Pakistani nationals or foreign spouses of Pakistani nationals.",
+      "required_documents": [
+        {
+          "text": "CNIC/ NICOP/ POC",
+          "is_mandatory": true
+        },
+        {
+          "text": "Application",
+          "is_mandatory": true
+        },
+        {
+          "text": "NADRA identity number",
+          "is_mandatory": true
+        },
+        {
+          "text": "Valid Foreign passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Undertaking F (Sample available at the Center) document on Stamp paper of 20 PKR along",
+          "is_mandatory": true
+        },
+        {
+          "text": "Proof of Pakistani origin (Birth certificate of applicant or CNIC or NICOP of Pakistani",
+          "is_mandatory": true
+        },
+        {
+          "text": "Birth Certificate of applicant",
+          "is_mandatory": true
+        },
+        {
+          "text": "Foreign Valid Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Computerized Marriage Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Undertaking F (From Pakistani Spouse)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Birth Certificate of applicant",
+          "is_mandatory": true
+        },
+        {
+          "text": "Foreign Valid Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Computerized Marriage Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Undertaking G",
+          "is_mandatory": true
+        },
+        {
+          "text": "Computerized Death Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Prior Approval from Ministry of Interior in case of foreign male spouse in case of deceased",
+          "is_mandatory": true
+        },
+        {
+          "text": "Valid Foreign Passport",
+          "is_mandatory": true
+        },
+        {
+          "text": "Pakistani Passport / Domicile / Marriage Certificate / CNIC / NICOP or any other proof of",
+          "is_mandatory": true
+        },
+        {
+          "text": "CNIC/NICOP/Surrender Certificate",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": []
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": []
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 69
+      },
+      "content_completeness": {
+        "score_0_to_4": 1,
+        "missing_fields": [
+          "payment",
+          "stages",
+          "duration"
+        ]
+      },
+      "needs_manual_review": true
+    },
+    {
+      "service_id": "SRV_072",
+      "service_name": {
+        "en": "Biometric Verification",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_NADRA",
+        "name": "National Database and Registration Authority",
+        "code": "NADRA"
+      },
+      "availability_status": "available",
+      "summary": "Biometric verification is done through NADRA’s system (Verisys) to securely confirm a person’s identity using fingerprint or IRIS data, which is used by institutions like banks and telecoms. The process ensures that all identity dependent services are only provided to verified individuals, reducing fraud and identity theft.",
+      "required_documents": [
+        {
+          "text": "CNIC",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Individual themselves"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Depending on the Government Agency who requires biometric verification"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies for the service through the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Verification and confirmation of the authenticity of documents are carried out at the service",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of a completed document",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "This service is available to all citizens aged 18 years old and above",
+        "The service is not provided for foreigners and stateless people",
+        "The individual should apply for the service in person"
+      ],
+      "regulations": [
+        "NADRA Ordinance 2000",
+        "National Registration & Biometric Policy Framework, 2025",
+        "National Registration & Biometric Policy Framework, 2025 Pakistan",
+        "Telecommunication Authority (PTA) Regulations",
+        "www.nadra.gov.pk/"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/9fad3491-6a78-4a59-af9b-648682c5f27c",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 72
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_074",
+      "service_name": {
+        "en": "Domicile",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "availability_status": "available",
+      "summary": "____________________________________________________ A Domicile Certificate is an official document that certifies a person’s permanent residence in the Islamabad Capital Territory. It is often required for university admissions, government employment, and other administrative purposes. Applicants must typically",
+      "required_documents": [
+        {
+          "text": "For the applicants who attained the age of 21 years (major)",
+          "is_mandatory": true
+        },
+        {
+          "text": "At least one address of Islamabad should be written on CNIC.",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of CNIC of Applicant, Date of issue of CNIC should be one year old.",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Proof of Residence in Islamabad",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of utility bill (Electricity or Gas) of the residence",
+          "is_mandatory": true
+        },
+        {
+          "text": "One Passport size photograph",
+          "is_mandatory": true
+        },
+        {
+          "text": "Affidavit Check specimen for major and minor.",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The individual themselves or any representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Service fee - 320 PKR (200 for the services + 120 for biometric verification)"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Verification and confirmation of the authenticity of documents",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Biometric verification data is collected when the final document is picked up",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "3 working days"
+        ]
+      },
+      "notes": [
+        "In case of domicile cancellation from any other district, the applicant ha to wait",
+        "The individual themselves or any representative",
+        "Service fee - 320 PKR (200 for the services + 120 for biometric verification)",
+        "The applicant applies to the service center",
+        "Verification and confirmation of the authenticity of documents",
+        "Biometric verification data is collected when the final document is picked up",
+        "3 working days",
+        "A person cannot hold a domicile certificate from more than one city at a time.",
+        "Individuals relocating from other provinces who have updated their CNIC are",
+        "The certificate may be required for jobs, admissions, and legal processes Child's"
+      ],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 74
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_076",
+      "service_name": {
+        "en": "Divorce Registration",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "availability_status": "available",
+      "summary": "____________________________________________________ The Divorce Certificate is issued under Section 7 of MFL 1961 Arbitration Council Family Muslim Ordinance. This service applies to court or arbitration rulings from Islamabad courts. It is also provided if the woman's/marriage records are registered in",
+      "required_documents": [
+        {
+          "text": "Copy of CNIC (Groom and Bride)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of passport (if groom or bride is foreigner)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Divorce Effeteness Certificate",
+          "is_mandatory": true
+        },
+        {
+          "text": "Application from (available on website)",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "Applicants themselves or any representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Service fee - 320 PKR (200 for the services + 120 for biometric verification)"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "Get a token from que machine and wait for your turn",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Fill up Application Form",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Upon your turn submit documents on counter and get a receipt.",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 4,
+          "title": "Stage 4",
+          "description": "Your documents will be sent to Competent Authority for Approval/ Signature.",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 5,
+          "title": "Stage 5",
+          "description": "Re-visit CFC (second visit)",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 6,
+          "title": "Stage 6",
+          "description": "Get your Certificate from concerned counter",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "1 working day"
+        ]
+      },
+      "notes": [
+        "No forwarding to any other institution"
+      ],
+      "regulations": [
+        "Rule 7 of MFLO 1961 – Arbitration Council Family Muslim Law",
+        "Internal Standard Operating Procedure (SOP)"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/24a06f2d-7990-4654-b3a3-67472de6e4c9",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 76
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_077",
+      "service_name": {
+        "en": "Marriage Registration Certificate",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "availability_status": "available",
+      "summary": "____________________________________________________ The Marriage Certificate is issued under Section 5 of 1961 Muslim Family Law Ordinance. An internal Standard Operating Procedure (SOP) governs all procedures, required documents, payments, and deadlines.",
+      "required_documents": [
+        {
+          "text": "Copy of CNIC (Groom and Bride)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of CNIC (Father s of Groom and Bride)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Passport (if groom or bride is foreigner)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Application Form (available on website)",
+          "is_mandatory": true
+        },
+        {
+          "text": "Copy of Nikah Nama (Nikah Nama must be Registered in Islamabad Sectors)",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicants (Bride and Groom) or any representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "Service fee - 320 PKR (200 for the services + 120 for biometric verification)"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Verification and confirmation of the authenticity of documents",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 3,
+          "title": "Stage 3",
+          "description": "Issuance of the Marriage Registration Certificate",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "1 working day"
+        ]
+      },
+      "notes": [
+        "No applications are entertained for those who are under 18 years old"
+      ],
+      "regulations": [
+        "Section 5 of Muslim Family Law Ordinance, 1961"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/157a293f-f823-4ccc-9984-ab5c0c19e837",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 77
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_078",
+      "service_name": {
+        "en": "Recreational Fishing License",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "availability_status": "available",
+      "summary": "____________________________________________________ The Recreational Fishing License service in the DC (Deputy Commissioner) office of Islamabad refers to a permit issued by the Fisheries Department under the Islamabad Capital Territory (ICT) Administration for angling in Rawal Dam.",
+      "required_documents": [
+        {
+          "text": "Copy of CNIC",
+          "is_mandatory": true
+        }
+      ],
+      "required_participants": [
+        "The applicants themselves",
+        "Representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": [
+          "1000 PKR"
+        ]
+      },
+      "process_stages": [
+        {
+          "stage_no": 1,
+          "title": "Stage 1",
+          "description": "The applicant applies to the service center",
+          "expected_time": ""
+        },
+        {
+          "stage_no": 2,
+          "title": "Stage 2",
+          "description": "Issuance of a Fishing License",
+          "expected_time": ""
+        }
+      ],
+      "duration_model": {
+        "type": "immediate",
+        "entries": [
+          "Immediately"
+        ]
+      },
+      "notes": [
+        "Everyone may apply for this service",
+        "No forwarding to any other institution",
+        "Only two (2) fishing rods and three (3) hooks are permitted per license holder.",
+        "This permit is valid strictly from sunrise to sunset.",
+        "A maximum of three (3) large fish may be caught under one license during the",
+        "The catching of small fish is strictly prohibited. Any violation of this condition",
+        "Seasonal fishing service exclusive to Rawal Dam."
+      ],
+      "regulations": [
+        "The West Pakistan Fisheries Ordinance, 1961",
+        "The Punjab Fisheries Ordinance, 1961",
+        "Regulation of Fishing Act, 1975",
+        "Fisheries Act, 1897"
+      ],
+      "workflow_url": "https://modeler.camunda.io/share/d5ae572c-b9df-4595-a3a2-b8c8a202b",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 78
+      },
+      "content_completeness": {
+        "score_0_to_4": 4,
+        "missing_fields": []
+      },
+      "needs_manual_review": false
+    },
+    {
+      "service_id": "SRV_079",
+      "service_name": {
+        "en": "Motor Vehicle Token Tax (Token Tax)",
+        "ur": "",
+        "ps": ""
+      },
+      "department": {
+        "id": "DEPT_DC",
+        "name": "Deputy Commissioner Office Islamabad",
+        "code": "DCO"
+      },
+      "availability_status": "available",
+      "summary": "____________________________________________________ Motor Vehicle Token Tax (commonly called Token Tax) is an annual tax imposed on registered motor vehicles under the applicable motor vehicle laws. It is collected by the Excise & Taxation authority to maintain the legal registration and road-use status of a",
+      "required_documents": [],
+      "required_participants": [
+        "The applicant themselves or any representative"
+      ],
+      "payment_model": {
+        "type": "conditional",
+        "currency": "PKR",
+        "entries": []
+      },
+      "process_stages": [],
+      "duration_model": {
+        "type": "conditional",
+        "entries": [
+          "Immediate (processed on the spot)"
+        ]
+      },
+      "notes": [],
+      "regulations": [],
+      "workflow_url": "",
+      "source": {
+        "pdf": "Services Catalog Feb, 2026.pdf",
+        "page": 79
+      },
+      "content_completeness": {
+        "score_0_to_4": 1,
+        "missing_fields": [
+          "required_documents",
+          "payment",
+          "stages"
+        ]
+      },
+      "needs_manual_review": true
+    }
+  ]
+}
